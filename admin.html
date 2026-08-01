@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin | Diocese of Boac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { maroon:'#6a1f2b', 'maroon-deep':'#4a1420', gold:'#b4863f', 'gold-light':'#d9b877',
+      parchment:'#f6f0e4', 'parchment-dark':'#ece2cd', ink:'#2a2420', 'ink-soft':'#5c5147', white:'#fffdf9',
+      sidebar:'#3d1017' },
+    fontFamily: { sans:['Inter','sans-serif'], fraunces:['Fraunces','serif'], mono:['IBM Plex Mono','monospace'] },
+  }}}
+</script>
+<style>
+  ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-thumb{background:#b4863f;border-radius:6px}
+  .badge{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
+</style>
+</head>
+<body class="font-sans bg-parchment text-ink min-h-screen">
+
+<!-- ===== Login screen ===== -->
+<div id="loginScreen" class="max-w-[400px] mx-auto mt-24 bg-white border border-parchment-dark rounded-xl p-8 shadow-sm">
+  <h1 class="font-fraunces font-bold text-maroon-deep text-xl mb-1">Super Admin Login</h1>
+  <!-- <p id="storageWarning" class="text-ink-soft text-sm mb-5 hidden">⚠️ Persistent storage isn't available in this view — you can preview the editor, but changes won't be saved.</p> -->
+  <input id="adminPass" type="password" placeholder="Password" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 mb-3 text-sm">
+  <button onclick="tryLogin()" class="w-full bg-maroon text-white font-semibold text-sm rounded-md py-2.5 hover:bg-maroon-deep transition">Log In</button>
+  <p class="text-ink-soft text-xs mt-3">Hint: boac2026</p>
+</div>
+
+<!-- ===== Admin shell ===== -->
+<div id="adminScreen" class="hidden flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-[264px] shrink-0 bg-sidebar text-parchment-dark flex flex-col fixed h-screen overflow-y-auto">
+    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <img src="https://scontent.fmnl7-1.fna.fbcdn.net/v/t39.30808-6/490021778_4069473220042983_7205200907177214759_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGZ-ubotmnTtGeralBsySXduWcAdAkmU125ZwB0CSZTXeHcXM42VmFEaetIL_d2oZOrGIbDOsKuul1pChEAAYm6&_nc_ohc=xZIoE43t1nUQ7kNvwEGEbmJ&_nc_oc=Ado5kpreyQVB7_2HktJZynzDUeIZFrKyMe85d-fzYYx5dr7RStrCvBq8cHKecNC1WHE&_nc_zt=23&_nc_ht=scontent.fmnl7-1.fna&_nc_gid=5rwExUF7pZD61YXw9KBegg&_nc_ss=7b2a8&oh=00_AQH_ypNEv3DmZNKUGczr2wh_Uv4yERgOM3NjVIbwo0dVsQ&oe=6A714946" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
+      <div>
+        <div class="font-fraunces font-bold text-white text-[0.95rem] leading-tight">Diocese of Boac</div>
+        <div class="text-[0.65rem] tracking-[0.14em] uppercase text-gold-light font-semibold">Super Admin</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 text-sm">
+      <div class="px-3 text-[0.65rem] tracking-[0.12em] uppercase text-parchment-dark/50 font-semibold mb-2 mt-1">Main</div>
+      <button data-tab="dashboard" onclick="selectTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left">
+        <span>📊</span><span>Dashboard</span>
+      </button>
+
+      <div class="px-3 text-[0.65rem] tracking-[0.12em] uppercase text-parchment-dark/50 font-semibold mb-2 mt-4">Pages</div>
+      <button data-tab="home" onclick="selectTab('home')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>🏠</span><span>Home Hero</span></button>
+      <button data-tab="history" onclick="selectTab('history')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>📜</span><span>History</span></button>
+      <button data-tab="bishop" onclick="selectTab('bishop')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>✝️</span><span>Bishop of Boac</span></button>
+      <button data-tab="visionMission" onclick="selectTab('visionMission')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>🎯</span><span>Vision &amp; Mission</span></button>
+      <button data-tab="formerBishops" onclick="selectTab('formerBishops')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>🕯️</span><span>Former Bishops</span></button>
+      <button data-tab="curia" onclick="selectTab('curia')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>🏛️</span><span>Curia</span></button>
+      <button data-tab="bulletin" onclick="selectTab('bulletin')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>📰</span><span>Bulletin</span></button>
+      <button data-tab="gallery" onclick="selectTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>🖼️</span><span>Gallery Page</span></button>
+      <button data-tab="contact" onclick="selectTab('contact')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>📞</span><span>Contact</span></button>
+      <button data-tab="privacy" onclick="selectTab('privacy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>🔒</span><span>Privacy Policy</span></button>
+
+      <div class="px-3 text-[0.65rem] tracking-[0.12em] uppercase text-parchment-dark/50 font-semibold mb-2 mt-4">Content</div>
+      <button data-tab="news" onclick="selectTab('news')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>📢</span><span>Announcements</span></button>
+      <button data-tab="events" onclick="selectTab('events')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>📅</span><span>Events</span></button>
+      <button data-tab="parishes" onclick="selectTab('parishes')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>⛪</span><span>Parishes</span></button>
+      <button data-tab="clergy" onclick="selectTab('clergy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span>👤</span><span>Clergy Directory</span></button>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-white/10">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold-light">🛡️</div>
+        <div>
+          <div class="text-white text-sm font-semibold leading-tight">Super Admin</div>
+          <div class="text-[0.7rem] text-gold-light">Super Administrator</div>
+        </div>
+      </div>
+      <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition text-sm text-parchment-dark">
+        <span>🚪</span><span>Logout</span>
+      </button>
+      <a href="index.html" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition text-sm text-parchment-dark mt-1">
+        <span>←</span><span>Back to Site</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 ml-[264px] p-8">
+    <div id="panel"></div>
+  </main>
+</div>
+
+<script src="site-data.js"></script>
+<script>
+const ADMIN_PASS = 'boac2026';
+let storageAvailable = true;
+
+const PROSE_TABS = {
+  home: { label:'Home Hero', icon:'🏠', dkey:DKEYS.home, subtitle:'Edit the homepage headline and welcome message', fields:[['headline','Hero Headline'],['subtext','Hero Subtext']] },
+  history: { label:'History', icon:'📜', dkey:DKEYS.history, subtitle:'Edit the History page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  bishop: { label:'Bishop of Boac', icon:'✝️', dkey:DKEYS.bishop, subtitle:'Edit the Bishop of Boac page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  visionMission: { label:'Vision & Mission', icon:'🎯', dkey:DKEYS.visionMission, subtitle:'Edit the Vision & Mission page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  formerBishops: { label:'Former Bishops', icon:'🕯️', dkey:DKEYS.formerBishops, subtitle:'Edit the Former Bishops page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  curia: { label:'Curia', icon:'🏛️', dkey:DKEYS.curia, subtitle:'Edit the Curia page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  bulletin: { label:'Bulletin', icon:'📰', dkey:DKEYS.bulletin, subtitle:"Edit the Bishop's bulletin message", fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  gallery: { label:'Gallery Page', icon:'🖼️', dkey:DKEYS.gallery, subtitle:'Edit the Gallery photo insert', fields:[['image','Photo URL']] },
+  contact: { label:'Contact', icon:'📞', dkey:DKEYS.contact, subtitle:'Edit contact details shown on the Contact page', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  privacy: { label:'Privacy Policy', icon:'🔒', dkey:DKEYS.privacy, subtitle:'Edit the Privacy Policy page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+};
+
+const LIST_TABS = {
+  news: { label:'Announcements', icon:'📢', dkey:DKEYS.news, subtitle:'Publish, edit, or delete announcements system-wide', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['body','Body']], titleField:'title' },
+  events: { label:'Events', icon:'📅', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['desc','Description']], titleField:'title' },
+  parishes: { label:'Parishes', icon:'⛪', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['address','Address']], titleField:'name' },
+  clergy: { label:'Clergy Directory', icon:'👤', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL']], titleField:'name' },
+};
+
+let currentTab = 'dashboard';
+let editingId = null;
+
+function tryLogin(){
+  if(document.getElementById('adminPass').value === ADMIN_PASS){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminScreen').classList.remove('hidden');
+    document.getElementById('adminScreen').classList.add('flex');
+    selectTab('dashboard');
+  } else { alert('Incorrect password.'); }
+}
+function logout(){
+  document.getElementById('adminScreen').classList.add('hidden');
+  document.getElementById('adminScreen').classList.remove('flex');
+  document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+function setActiveNav(key){
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    const active = b.dataset.tab === key;
+    b.classList.toggle('bg-maroon', active);
+    b.classList.toggle('text-white', active);
+    b.classList.toggle('font-semibold', active);
+  });
+}
+
+async function selectTab(key){
+  currentTab = key; editingId = null;
+  setActiveNav(key);
+  if(key === 'dashboard') return renderDashboard();
+  if(PROSE_TABS[key]) return renderProsePanel(key);
+  if(LIST_TABS[key]) return renderListPanel(key);
+}
+
+async function renderDashboard(){
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  const [news, events, parishes, clergy] = await Promise.all([
+    dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy)
+  ]);
+  const counts = { news:(news||[]).length, events:(events||[]).length, parishes:(parishes||[]).length, clergy:(clergy||[]).length };
+  panel.innerHTML = `
+    <div class="mb-8">
+      <h1 class="font-fraunces font-bold text-maroon-deep text-2xl flex items-center gap-2">📊 Dashboard</h1>
+      <p class="text-ink-soft text-sm mt-1">Overview of all content across the Diocese of Boac website</p>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      ${statCard('📢', counts.news, 'Announcements', 'news')}
+      ${statCard('📅', counts.events, 'Events', 'events')}
+      ${statCard('⛪', counts.parishes, 'Parishes', 'parishes')}
+      ${statCard('👤', counts.clergy, 'Clergy Listed', 'clergy')}
+    </div>
+    <div class="mt-8 bg-white border border-parchment-dark rounded-xl p-6">
+      <h3 class="font-fraunces font-bold text-maroon-deep mb-2">Getting Started</h3>
+      <p class="text-ink-soft text-sm">Use the sidebar to edit any page's text under <strong>Pages</strong>, or manage announcements, events, parishes, and clergy under <strong>Content</strong>. Changes save immediately and appear live on the public site.</p>
+    </div>`;
+}
+
+function statCard(icon, value, label, tabKey){
+  return `<button onclick="selectTab('${tabKey}')" class="text-left bg-white border border-parchment-dark rounded-xl p-5 hover:border-gold hover:shadow-md transition">
+    <div class="w-10 h-10 rounded-lg bg-parchment flex items-center justify-center text-lg mb-3">${icon}</div>
+    <div class="text-2xl font-bold text-maroon-deep">${value}</div>
+    <div class="text-ink-soft text-sm">${label}</div>
+  </button>`;
+}
+
+async function renderProsePanel(key){
+  const tab = PROSE_TABS[key];
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  const existing = await dGet(tab.dkey) || {};
+  panel.innerHTML = `
+    <div class="flex justify-between items-start mb-8 flex-wrap gap-3">
+      <div>
+        <h1 class="font-fraunces font-bold text-maroon-deep text-2xl flex items-center gap-2">${tab.icon} ${tab.label}</h1>
+        <p class="text-ink-soft text-sm mt-1">${tab.subtitle}</p>
+      </div>
+    </div>
+    <div class="bg-white border border-parchment-dark rounded-xl p-6 max-w-[720px]">
+      ${tab.fields.map(([k,label])=>`
+        <div class="mb-4">
+          <label class="text-xs text-ink-soft font-semibold block mb-1.5">${label}</label>
+          ${k==='body' || k==='subtext' ?
+            `<textarea id="f_${k}" rows="6" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm">${existing[k]||''}</textarea>` :
+            `<input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm">`
+          }
+        </div>`).join('')}
+      <button onclick="saveProse('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-6 py-2.5 hover:bg-maroon-deep transition">Save Changes</button>
+      <span id="saveMsg" class="ml-3 text-sm text-maroon-deep"></span>
+    </div>`;
+}
+
+async function saveProse(key){
+  const tab = PROSE_TABS[key];
+  const data = {};
+  tab.fields.forEach(([k])=> data[k] = document.getElementById('f_'+k).value);
+  if(storageAvailable) await dSet(tab.dkey, data);
+  const msg = document.getElementById('saveMsg');
+  msg.textContent = storageAvailable ? 'Saved ✓' : 'Preview only — storage unavailable';
+  setTimeout(()=> msg.textContent='', 2500);
+}
+
+async function renderListPanel(key){
+  const tab = LIST_TABS[key];
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  const items = await dGet(tab.dkey) || [];
+  panel.innerHTML = `
+    <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
+      <div>
+        <h1 class="font-fraunces font-bold text-maroon-deep text-2xl flex items-center gap-2">${tab.icon} ${tab.label} Management</h1>
+        <p class="text-ink-soft text-sm mt-1">${tab.subtitle}</p>
+      </div>
+      <button onclick="openForm('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-5 py-2.5 hover:bg-maroon-deep transition whitespace-nowrap">+ New ${tab.label.replace(/s$/,'').replace(' Directory','')}</button>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      ${statCard(tab.icon, items.length, 'Total Entries', key)}
+      <div class="bg-white border border-parchment-dark rounded-xl p-5">
+        <div class="w-10 h-10 rounded-lg bg-parchment flex items-center justify-center text-lg mb-3">🕒</div>
+        <div class="text-2xl font-bold text-maroon-deep">${items.length ? 1 : 0}</div>
+        <div class="text-ink-soft text-sm">Recently Added</div>
+      </div>
+      <div class="bg-white border border-parchment-dark rounded-xl p-5">
+        <div class="w-10 h-10 rounded-lg bg-parchment flex items-center justify-center text-lg mb-3">🌐</div>
+        <div class="text-2xl font-bold text-maroon-deep">${items.length}</div>
+        <div class="text-ink-soft text-sm">Live on Site</div>
+      </div>
+    </div>
+
+    <div id="formSlot"></div>
+
+    <div class="space-y-4" id="itemsList">
+      ${items.length ? items.map(it => itemCard(key, tab, it)).join('') : `<div class="bg-white border border-parchment-dark rounded-xl p-8 text-center text-ink-soft text-sm">No entries yet. Click "+ New" to add one.</div>`}
+    </div>`;
+}
+
+function itemCard(key, tab, item){
+  const title = item[tab.titleField] || '(untitled)';
+  const sub = item.body || item.desc || item.address || '';
+  return `<div class="bg-white border border-parchment-dark rounded-xl p-5">
+    <div class="flex justify-between items-start gap-4 flex-wrap">
+      <div class="min-w-0">
+        <span class="badge bg-parchment text-maroon-deep mb-2">${tab.label}</span>
+        <h3 class="font-fraunces font-bold text-maroon-deep text-lg">${title}</h3>
+        ${sub ? `<p class="text-ink-soft text-sm mt-1">${sub}</p>` : ''}
+        ${item.date ? `<p class="text-ink-soft text-xs mt-2 font-mono">📅 ${item.date}</p>` : ''}
+      </div>
+      <div class="flex gap-2 shrink-0">
+        <button onclick="openForm('${key}','${item.id}')" class="bg-gold-light/40 text-maroon-deep text-xs font-semibold px-3 py-2 rounded-md hover:bg-gold-light transition">✏️ Edit</button>
+        <button onclick="deleteListItem('${key}','${item.id}')" class="bg-red-50 text-red-700 text-xs font-semibold px-3 py-2 rounded-md hover:bg-red-100 transition">🗑️ Delete</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function openForm(key, id){
+  editingId = id || null;
+  const tab = LIST_TABS[key];
+  let existing = {};
+  if(id){
+    const items = await dGet(tab.dkey) || [];
+    existing = items.find(x=>x.id===id) || {};
+  }
+  const slot = document.getElementById('formSlot');
+  slot.innerHTML = `
+    <div class="bg-white border-2 border-gold rounded-xl p-6 mb-6">
+      <h3 class="font-fraunces font-bold text-maroon-deep mb-4">${id ? 'Edit' : 'Add New'} ${tab.label.replace(/s$/,'')}</h3>
+      <div class="grid sm:grid-cols-2 gap-3 mb-3">
+        ${tab.fields.map(([k,label])=>`
+          <div class="${['body','desc','address'].includes(k) ? 'sm:col-span-2':''}">
+            <label class="text-xs text-ink-soft font-semibold block mb-1.5">${label}</label>
+            ${['body','desc','address'].includes(k) ?
+              `<textarea id="nf_${k}" rows="3" class="w-full border border-parchment-dark rounded-md px-3 py-2 text-sm">${existing[k]||''}</textarea>` :
+              `<input id="nf_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-parchment-dark rounded-md px-3 py-2 text-sm">`
+            }
+          </div>`).join('')}
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="saveListItem('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-5 py-2.5 hover:bg-maroon-deep transition">${id ? 'Save Changes' : 'Add'}</button>
+        <button onclick="closeForm()" class="text-ink-soft text-sm font-semibold px-3">Cancel</button>
+        <span id="formMsg" class="text-sm text-maroon-deep"></span>
+      </div>
+    </div>`;
+  slot.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function closeForm(){
+  editingId = null;
+  document.getElementById('formSlot').innerHTML = '';
+}
+
+async function saveListItem(key){
+  const tab = LIST_TABS[key];
+  const data = {};
+  tab.fields.forEach(([k])=> data[k] = (document.getElementById('nf_'+k)?.value || '').trim());
+  if(!data[tab.fields[0][0]]){ alert('Please fill in the first field.'); return; }
+
+  let items = await dGet(tab.dkey) || [];
+  if(editingId){
+    items = items.map(it => it.id === editingId ? {...it, ...data} : it);
+  } else {
+    items.push({ id: key[0] + Date.now(), ...data });
+  }
+  if(storageAvailable) await dSet(tab.dkey, items);
+  closeForm();
+  renderListPanel(key);
+}
+
+async function deleteListItem(key, id){
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
+  const tab = LIST_TABS[key];
+  let items = await dGet(tab.dkey) || [];
+  items = items.filter(x=>x.id!==id);
+  if(storageAvailable) await dSet(tab.dkey, items);
+  renderListPanel(key);
+}
+
+(async () => {
+  try{
+    if (window.storage && typeof window.storage.set === 'function') {
+      await window.storage.set('__probe__', '1', true);
+    } else {
+      localStorage.setItem('__probe__', '1');
+    }
+    storageAvailable = true;
+  }catch(e){
+    storageAvailable = false;
+    const warning = document.getElementById('storageWarning');
+    if (warning) warning.classList.remove('hidden');
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Diocese of Boac</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          },
+          fontFamily: {
+            newsreader: ['Newsreader', 'serif'],
+            fraunces: ['Fraunces', 'serif'],
+            mono: ['IBM Plex Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-mono text-[0.7rem] sm:text-[0.72rem] tracking-[0.14em] sm:tracking-[0.16em] uppercase text-gold font-medium;
+      }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="font-newsreader text-ink bg-parchment leading-relaxed overflow-x-hidden">
+
+  <!-- ===== Utility bar ===== -->
+  <div class="bg-maroon-deep text-parchment-dark font-mono text-[0.7rem] sm:text-[0.74rem] tracking-[0.03em]">
+    <div class="max-w-[1180px] mx-auto px-4 sm:px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
+      <span>Sacred Heart Pastoral Center &middot; Boac, 4900 Marinduque</span>
+      <div class="flex gap-4 sm:gap-[18px] flex-wrap justify-center">
+        <a href="#" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Facebook</a>
+        <a href="#" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">YouTube</a>
+        <a href="#" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Instagram</a>
+        <a href="contact.html" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Contact Us</a>
+        <a href="admin.html" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Header / Nav ===== -->
+  <header class="bg-white border-b border-parchment-dark sticky top-0 z-50">
+    <div class="max-w-[1180px] mx-auto px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between gap-4 relative">
+      <a href="index.html" class="flex items-center gap-3 sm:gap-[14px]">
+        <img src="https://scontent.fmnl7-1.fna.fbcdn.net/v/t39.30808-6/490021778_4069473220042983_7205200907177214759_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGZ-ubotmnTtGeralBsySXduWcAdAkmU125ZwB0CSZTXeHcXM42VmFEaetIL_d2oZOrGIbDOsKuul1pChEAAYm6&_nc_ohc=xZIoE43t1nUQ7kNvwEGEbmJ&_nc_oc=Ado5kpreyQVB7_2HktJZynzDUeIZFrKyMe85d-fzYYx5dr7RStrCvBq8cHKecNC1WHE&_nc_zt=23&_nc_ht=scontent.fmnl7-1.fna&_nc_gid=5rwExUF7pZD61YXw9KBegg&_nc_ss=7b2a8&oh=00_AQH_ypNEv3DmZNKUGczr2wh_Uv4yERgOM3NjVIbwo0dVsQ&oe=6A714946" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
+        <div>
+          <h1 class="font-fraunces font-semibold text-maroon-deep text-base sm:text-[1.15rem] tracking-[0.01em] leading-tight">Diocese of Boac</h1>
+          <span class="font-mono text-[0.62rem] sm:text-[0.68rem] tracking-[0.1em] sm:tracking-[0.12em] uppercase text-ink-soft block">Official Diocesan Website</span>
+        </div>
+      </a>
+
+      <button id="menu-toggle" class="lg:hidden p-2 rounded text-maroon hover:bg-parchment focus:outline-none" aria-label="Toggle menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <nav id="main-nav" class="hidden lg:flex flex-col lg:flex-row absolute lg:relative top-full left-0 right-0 lg:top-auto lg:left-auto lg:right-auto bg-white lg:bg-transparent border-b lg:border-none border-parchment-dark shadow-lg lg:shadow-none p-4 lg:p-0 gap-1 lg:gap-[2px] z-50">
+        <div class="group relative">
+          <button class="w-full lg:w-auto text-left font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] bg-transparent cursor-pointer text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">Diocesan Info</button>
+          <div class="lg:absolute top-full left-0 bg-white lg:border border-parchment-dark min-w-[210px] lg:shadow-[0_12px_28px_rgba(42,36,32,0.12)] hidden group-hover:block lg:group-hover:opacity-100 lg:group-hover:visible py-1.5 z-[60] pl-4 lg:pl-0">
+            <a href="history.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">History</a>
+            <a href="vision-mission.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Vision &amp; Mission</a>
+            <a href="bishop.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Bishop of Boac</a>
+            <a href="former-bishops.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Former Bishops</a>
+            <a href="curia.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Curia</a>
+          </div>
+        </div>
+        <div class="group relative">
+          <button class="w-full lg:w-auto text-left font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] bg-transparent cursor-pointer text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">Bulletin</button>
+          <div class="lg:absolute top-full left-0 bg-white lg:border border-parchment-dark min-w-[210px] lg:shadow-[0_12px_28px_rgba(42,36,32,0.12)] hidden group-hover:block lg:group-hover:opacity-100 lg:group-hover:visible py-1.5 z-[60] pl-4 lg:pl-0">
+            <a href="bulletin.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Message from the Bishop</a>
+            <a href="events.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Events</a>
+          </div>
+        </div>
+        <div><a href="news.html" class="block font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">News</a></div>
+        <div class="group relative">
+          <button class="w-full lg:w-auto text-left font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] bg-transparent cursor-pointer text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">Directories</button>
+          <div class="lg:absolute top-full left-0 bg-white lg:border border-parchment-dark min-w-[210px] lg:shadow-[0_12px_28px_rgba(42,36,32,0.12)] hidden group-hover:block lg:group-hover:opacity-100 lg:group-hover:visible py-1.5 z-[60] pl-4 lg:pl-0">
+            <a href="parishes.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Parishes</a>
+            <a href="clergy.html" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">Clergy Directory</a>
+          </div>
+        </div>
+        <div><a href="gallery.html" class="block font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">Gallery</a></div>
+        <div><a href="contact.html" class="block font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">Contact</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="relative bg-maroon-deep text-parchment overflow-hidden py-14 sm:py-16 px-4 sm:px-6">
+    <div class="absolute inset-0 opacity-[0.07]" style="background-image: radial-gradient(circle at 85% 20%, #d9b877, transparent 55%);"></div>
+    <div class="max-w-[1180px] mx-auto relative z-10">
+      <span class="eyebrow text-gold-light">Legal</span>
+      <h2 id="page-title" class="font-fraunces font-semibold text-white text-3xl sm:text-4xl md:text-[2.6rem] mt-2">Privacy Policy</h2>
+    </div>
+  </section>
+
+  <section class="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
+    <div id="page-body" class="max-w-[820px] mx-auto text-ink-soft text-base sm:text-[1.02rem] leading-relaxed space-y-5"></div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer id="contact" class="bg-maroon-deep text-parchment-dark pt-12 sm:pt-14 px-4 sm:px-6 pb-6">
+    <div class="max-w-[1180px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr] gap-8 sm:gap-10">
+      <div class="sm:col-span-2 md:col-span-1">
+        <div class="flex items-center gap-3 mb-3.5">
+          <img src="https://scontent.fmnl7-1.fna.fbcdn.net/v/t39.30808-6/490021778_4069473220042983_7205200907177214759_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGZ-ubotmnTtGeralBsySXduWcAdAkmU125ZwB0CSZTXeHcXM42VmFEaetIL_d2oZOrGIbDOsKuul1pChEAAYm6&_nc_ohc=xZIoE43t1nUQ7kNvwEGEbmJ&_nc_oc=Ado5kpreyQVB7_2HktJZynzDUeIZFrKyMe85d-fzYYx5dr7RStrCvBq8cHKecNC1WHE&_nc_zt=23&_nc_ht=scontent.fmnl7-1.fna&_nc_gid=5rwExUF7pZD61YXw9KBegg&_nc_ss=7b2a8&oh=00_AQH_ypNEv3DmZNKUGczr2wh_Uv4yERgOM3NjVIbwo0dVsQ&oe=6A714946" alt="Logo" class="w-[38px] h-[38px] rounded-full object-cover border border-gold shadow-md"/>
+          <h1 class="text-white text-base font-fraunces font-semibold">Diocese of Boac</h1>
+        </div>
+        <p class="text-sm sm:text-[0.92rem] mb-1.5">Sacred Heart Pastoral Center</p>
+        <p class="text-sm sm:text-[0.92rem] mb-1.5">Boac, 4900 Marinduque, Philippines</p>
+        <p class="text-sm sm:text-[0.92rem] mb-1.5">Email: info@dioceseofboac.com</p>
+        <p class="text-sm sm:text-[0.92rem]">Phone: (042) 332-1014</p>
+      </div>
+      <div>
+        <h5 class="font-mono text-[0.74rem] tracking-[0.1em] uppercase text-gold-light mb-3 sm:mb-4">Diocesan Info</h5>
+        <a href="history.html" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">History</a>
+        <a href="bishop.html" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">Bishop</a>
+        <a href="curia.html" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">Curia</a>
+        <a href="privacy.html" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">Privacy Policy</a>
+      </div>
+      <div>
+        <h5 class="font-mono text-[0.74rem] tracking-[0.1em] uppercase text-gold-light mb-3 sm:mb-4">Connect</h5>
+        <a href="#" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">Facebook</a>
+        <a href="#" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">YouTube</a>
+        <a href="#" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">Instagram</a>
+        <a href="#" class="block text-sm sm:text-[0.92rem] py-1 opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity">TikTok</a>
+      </div>
+    </div>
+    <div class="max-w-[1180px] mx-auto mt-8 sm:mt-10 pt-4 sm:pt-5 border-t border-white/10 flex justify-between flex-wrap gap-2 font-mono text-[0.7rem] sm:text-[0.72rem] opacity-70">
+      <span>&copy; 2026 Diocese of Boac. Template design.</span>
+      <span>v1.0.0</span>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const nav = document.getElementById('main-nav');
+    toggle.addEventListener('click', () => { nav.classList.toggle('hidden'); });
+  </script>
+  <script src="site-data.js"></script>
+  <script>
+    if (SiteData && SiteData.privacy && SiteData.privacy.pageTitle) {
+      document.title = SiteData.privacy.pageTitle;
+    }
+    hydrateProse(DKEYS.privacy, 'page-title', 'page-body');
+  </script>
+</body>
+</html>
