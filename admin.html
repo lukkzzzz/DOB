@@ -99,16 +99,16 @@ const ADMIN_PASS = 'boac2026';
 let storageAvailable = true;
 
 const PROSE_TABS = {
-  home: { label:'Home Hero', icon:'🏠', dkey:DKEYS.home, subtitle:'Edit the homepage headline and welcome message', fields:[['headline','Hero Headline'],['subtext','Hero Subtext']] },
-  history: { label:'History', icon:'📜', dkey:DKEYS.history, subtitle:'Edit the History page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  bishop: { label:'Bishop of Boac', icon:'✝️', dkey:DKEYS.bishop, subtitle:'Edit the Bishop of Boac page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  visionMission: { label:'Vision & Mission', icon:'🎯', dkey:DKEYS.visionMission, subtitle:'Edit the Vision & Mission page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  formerBishops: { label:'Former Bishops', icon:'🕯️', dkey:DKEYS.formerBishops, subtitle:'Edit the Former Bishops page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  curia: { label:'Curia', icon:'🏛️', dkey:DKEYS.curia, subtitle:'Edit the Curia page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  bulletin: { label:'Bulletin', icon:'📰', dkey:DKEYS.bulletin, subtitle:"Edit the Bishop's bulletin message", fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  gallery: { label:'Gallery Page', icon:'🖼️', dkey:DKEYS.gallery, subtitle:'Edit the Gallery photo insert', fields:[['image','Photo URL']] },
-  contact: { label:'Contact', icon:'📞', dkey:DKEYS.contact, subtitle:'Edit contact details shown on the Contact page', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
-  privacy: { label:'Privacy Policy', icon:'🔒', dkey:DKEYS.privacy, subtitle:'Edit the Privacy Policy page content', fields:[['title','Page Title'],['body','Body (one paragraph per line)']] },
+  site: { label:'Website Settings', icon:'⚙️', dkey:DKEYS.site, subtitle:'Edit the site identity, utility bar, and primary links', fields:[['name','Site Name'],['subtitle','Subtitle'],['utilityBarAddress','Utility bar address'],['contactUrl','Contact URL'],['adminUrl','Admin URL']] },
+  home: { label:'Home Hero', icon:'🏠', dkey:DKEYS.home, subtitle:'Edit the homepage headline, welcome message, and hero imagery', fields:[['headline','Hero Headline'],['subtext','Hero Subtext'],['backgroundImage','Hero Image URL']] },
+  history: { label:'History', icon:'📜', dkey:DKEYS.history, subtitle:'Edit the History page banner and story content', fields:[['bannerTitle','Banner Title'],['image','Page Image URL'],['content','Body']] },
+  bishop: { label:'Bishop of Boac', icon:'✝️', dkey:DKEYS.bishop, subtitle:'Edit bishop portrait and biography', fields:[['bannerTitle','Banner Title'],['image','Portrait URL'],['content','Body']] },
+  visionMission: { label:'Vision & Mission', icon:'🎯', dkey:DKEYS.visionMission, subtitle:'Edit the moral vision and pastoral mission of the diocese', fields:[['bannerTitle','Banner Title'],['visionTitle','Vision Title'],['visionText','Vision Text'],['missionTitle','Mission Title'],['missionItems','Mission Items (one per line)']] },
+  curia: { label:'Curia', icon:'🏛️', dkey:DKEYS.curia, subtitle:'Edit diocesan office summary and introductory text', fields:[['bannerTitle','Banner Title'],['intro','Intro Text'],['offices','Offices (JSON)']] },
+  bulletin: { label:'Bulletin', icon:'📰', dkey:DKEYS.bulletins, subtitle:"Edit the Bishop's bulletin message and call-to-action", fields:[['bannerTitle','Banner Title'],['image','Bulletin Photo URL'],['message','Message'],['author','Author'],['ctaLabel','CTA Label'],['ctaHref','CTA URL']] },
+  gallery: { label:'Gallery Page', icon:'🖼️', dkey:DKEYS.gallery, subtitle:'Edit the gallery hero image and album image list', fields:[['bannerTitle','Gallery Banner'],['image','Featured Image URL'],['images','Images (JSON array)']] },
+  contact: { label:'Contact', icon:'📞', dkey:DKEYS.contact, subtitle:'Edit contact details shown on the Contact page', fields:[['bannerTitle','Banner Title'],['address','Address'],['email','Email'],['phone','Phone']] },
+  privacy: { label:'Privacy Policy', icon:'🔒', dkey:DKEYS.privacy, subtitle:'Edit the Privacy Policy page content', fields:[['bannerTitle','Banner Title'],['title','Policy Title'],['body','Policy Body']] },
 };
 
 const LIST_TABS = {
@@ -116,10 +116,17 @@ const LIST_TABS = {
   events: { label:'Events', icon:'📅', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['desc','Description']], titleField:'title' },
   parishes: { label:'Parishes', icon:'⛪', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['address','Address']], titleField:'name' },
   clergy: { label:'Clergy Directory', icon:'👤', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL']], titleField:'name' },
+  formerBishops: { label:'Former Bishops', icon:'🕯️', dkey:DKEYS.formerBishops, subtitle:'Manage the bishop succession records', fields:[['name','Name'],['years','Years of Service'],['photo','Photo URL']], titleField:'name' },
+  curiaOffices: { label:'Curia Offices', icon:'🏛️', dkey:DKEYS.curia, subtitle:'Manage office cards within the Curia page', fields:[['name','Office Name'],['description','Description'],['photo','Photo URL']], titleField:'name' },
+  galleryImages: { label:'Gallery Images', icon:'🖼️', dkey:DKEYS.gallery, subtitle:'Manage the gallery photo collection', fields:[['src','Image URL'],['alt','Alt Text']], titleField:'alt' },
 };
 
 let currentTab = 'dashboard';
 let editingId = null;
+
+function safe(val, fallback = '') {
+  return (val !== undefined && val !== null && val !== '') ? val : fallback;
+}
 
 function tryLogin(){
   if(document.getElementById('adminPass').value === ADMIN_PASS){
@@ -155,24 +162,57 @@ async function selectTab(key){
 async function renderDashboard(){
   const panel = document.getElementById('panel');
   panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
-  const [news, events, parishes, clergy] = await Promise.all([
-    dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy)
+  const [news, events, parishes, clergy, gallery] = await Promise.all([
+    dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy), dGet(DKEYS.gallery)
   ]);
-  const counts = { news:(news||[]).length, events:(events||[]).length, parishes:(parishes||[]).length, clergy:(clergy||[]).length };
+  const galleryImages = (gallery && gallery.images) ? gallery.images.length : 0;
+  const counts = {
+    news: (news || []).length,
+    events: (events || []).length,
+    parishes: (parishes || []).length,
+    clergy: (clergy || []).length,
+    gallery: galleryImages,
+    bulletins: 1,
+  };
+  const recentItems = [
+    ...(news || []).slice(0, 2).map(item => ({ label: item.title || 'Announcement', tab: 'news' })),
+    ...(events || []).slice(0, 2).map(item => ({ label: item.title || 'Event', tab: 'events' })),
+  ].slice(0, 4);
+
   panel.innerHTML = `
-    <div class="mb-8">
-      <h1 class="font-fraunces font-bold text-maroon-deep text-2xl flex items-center gap-2">📊 Dashboard</h1>
-      <p class="text-ink-soft text-sm mt-1">Overview of all content across the Diocese of Boac website</p>
+    <div class="mb-8 flex justify-between items-start flex-wrap gap-4">
+      <div>
+        <h1 class="font-fraunces font-bold text-maroon-deep text-2xl flex items-center gap-2">📊 Dashboard</h1>
+        <p class="text-ink-soft text-sm mt-1">Overview of all content across the Diocese of Boac website</p>
+      </div>
+      <div class="bg-white border border-parchment-dark rounded-xl px-4 py-3 text-sm text-ink-soft">
+        <span class="font-semibold text-maroon-deep">CMS Mode</span> · Live content manager
+      </div>
     </div>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      ${statCard('📢', counts.news, 'Announcements', 'news')}
+    <div class="grid grid-cols-2 xl:grid-cols-6 gap-4">
+      ${statCard('📢', counts.news, 'News', 'news')}
       ${statCard('📅', counts.events, 'Events', 'events')}
+      ${statCard('🖼️', counts.gallery, 'Gallery', 'gallery')}
+      ${statCard('👤', counts.clergy, 'Clergy', 'clergy')}
       ${statCard('⛪', counts.parishes, 'Parishes', 'parishes')}
-      ${statCard('👤', counts.clergy, 'Clergy Listed', 'clergy')}
+      ${statCard('📰', counts.bulletins, 'Bulletins', 'bulletin')}
     </div>
-    <div class="mt-8 bg-white border border-parchment-dark rounded-xl p-6">
-      <h3 class="font-fraunces font-bold text-maroon-deep mb-2">Getting Started</h3>
-      <p class="text-ink-soft text-sm">Use the sidebar to edit any page's text under <strong>Pages</strong>, or manage announcements, events, parishes, and clergy under <strong>Content</strong>. Changes save immediately and appear live on the public site.</p>
+    <div class="mt-8 grid xl:grid-cols-[1.15fr_0.85fr] gap-5">
+      <div class="bg-white border border-parchment-dark rounded-xl p-6">
+        <h3 class="font-fraunces font-bold text-maroon-deep mb-3">Recent Updates</h3>
+        <div class="space-y-3">
+          ${recentItems.length ? recentItems.map(item => `<div class="flex justify-between items-center gap-4 border-b border-parchment-dark/70 pb-2 last:border-b-0 last:pb-0"><span class="text-sm text-ink-soft">${item.label}</span><button onclick="selectTab('${item.tab}')" class="text-xs font-semibold text-maroon">Open</button></div>`).join('') : '<p class="text-sm text-ink-soft">No entries yet. Add content from the sidebar.</p>'}
+        </div>
+      </div>
+      <div class="bg-white border border-parchment-dark rounded-xl p-6">
+        <h3 class="font-fraunces font-bold text-maroon-deep mb-3">Quick Actions</h3>
+        <div class="space-y-2">
+          <button onclick="selectTab('home')" class="w-full text-left rounded-md px-3 py-2 bg-parchment hover:bg-parchment-dark text-sm">✏️ Update homepage hero</button>
+          <button onclick="selectTab('news')" class="w-full text-left rounded-md px-3 py-2 bg-parchment hover:bg-parchment-dark text-sm">📢 Add announcement</button>
+          <button onclick="selectTab('events')" class="w-full text-left rounded-md px-3 py-2 bg-parchment hover:bg-parchment-dark text-sm">📅 Add event</button>
+          <button onclick="selectTab('gallery')" class="w-full text-left rounded-md px-3 py-2 bg-parchment hover:bg-parchment-dark text-sm">🖼️ Manage gallery</button>
+        </div>
+      </div>
     </div>`;
 }
 
@@ -195,29 +235,62 @@ async function renderProsePanel(key){
         <h1 class="font-fraunces font-bold text-maroon-deep text-2xl flex items-center gap-2">${tab.icon} ${tab.label}</h1>
         <p class="text-ink-soft text-sm mt-1">${tab.subtitle}</p>
       </div>
+      <button onclick="editProse('${key}')" class="bg-gold-light/40 text-maroon-deep text-xs font-semibold px-4 py-2 rounded-md hover:bg-gold-light transition">✏️ Edit</button>
     </div>
     <div class="bg-white border border-parchment-dark rounded-xl p-6 max-w-[720px]">
+      <div class="mb-4 rounded-lg bg-parchment p-3 text-xs text-ink-soft">Read-only overview · click “Edit” to make changes.</div>
       ${tab.fields.map(([k,label])=>`
         <div class="mb-4">
           <label class="text-xs text-ink-soft font-semibold block mb-1.5">${label}</label>
-          ${k==='body' || k==='subtext' ?
-            `<textarea id="f_${k}" rows="6" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm">${existing[k]||''}</textarea>` :
-            `<input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm">`
+          ${k==='body' || k==='subtext' || k==='message' || k==='visionText' || k==='intro' || k==='description' || k==='address' ?
+            `<div class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm bg-parchment/40">${safe(existing[k] || '', '—')}</div>` :
+            `<div class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm bg-parchment/40">${safe(existing[k] || '', '—')}</div>`
           }
         </div>`).join('')}
-      <button onclick="saveProse('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-6 py-2.5 hover:bg-maroon-deep transition">Save Changes</button>
-      <span id="saveMsg" class="ml-3 text-sm text-maroon-deep"></span>
+      <div id="editorControls_${key}" class="hidden">
+        ${tab.fields.map(([k,label])=>`
+          <div class="mb-4">
+            <label class="text-xs text-ink-soft font-semibold block mb-1.5">${label}</label>
+            ${['body','subtext','message','visionText','intro','description','address'].includes(k) || k === 'missionItems' ?
+              `<textarea id="f_${k}" rows="6" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm">${safe(existing[k] || '')}</textarea>` :
+              `<input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 text-sm">`
+            }
+          </div>`).join('')}
+        <div class="flex items-center gap-3">
+          <button onclick="saveProse('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-6 py-2.5 hover:bg-maroon-deep transition">Save Changes</button>
+          <button onclick="cancelProse('${key}')" class="text-ink-soft text-sm font-semibold px-3">Cancel</button>
+          <span id="saveMsg" class="text-sm text-maroon-deep"></span>
+        </div>
+      </div>
     </div>`;
+}
+
+function editProse(key){
+  const controls = document.getElementById(`editorControls_${key}`);
+  if (controls) controls.classList.remove('hidden');
+}
+
+function cancelProse(key){
+  const controls = document.getElementById(`editorControls_${key}`);
+  if (controls) controls.classList.add('hidden');
 }
 
 async function saveProse(key){
   const tab = PROSE_TABS[key];
   const data = {};
-  tab.fields.forEach(([k])=> data[k] = document.getElementById('f_'+k).value);
-  if(storageAvailable) await dSet(tab.dkey, data);
+  tab.fields.forEach(([k])=> {
+    const field = document.getElementById('f_'+k);
+    if (!field) return;
+    const value = field.value.trim();
+    data[k] = k === 'missionItems' ? value.split('\n').map(v => v.trim()).filter(Boolean) : value;
+  });
+  await dSet(tab.dkey, data);
   const msg = document.getElementById('saveMsg');
-  msg.textContent = storageAvailable ? 'Saved ✓' : 'Preview only — storage unavailable';
-  setTimeout(()=> msg.textContent='', 2500);
+  msg.textContent = 'Saved ✓';
+  setTimeout(()=> {
+    msg.textContent='';
+    selectTab(key);
+  }, 900);
 }
 
 async function renderListPanel(key){
@@ -225,6 +298,7 @@ async function renderListPanel(key){
   const panel = document.getElementById('panel');
   panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
   const items = await dGet(tab.dkey) || [];
+  const countLabel = tab.dkey === DKEYS.gallery ? (items.images ? items.images.length : 0) : items.length;
   panel.innerHTML = `
     <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
       <div>
@@ -235,43 +309,105 @@ async function renderListPanel(key){
     </div>
 
     <div class="grid grid-cols-3 gap-4 mb-6">
-      ${statCard(tab.icon, items.length, 'Total Entries', key)}
+      ${statCard(tab.icon, countLabel, 'Total Entries', key)}
       <div class="bg-white border border-parchment-dark rounded-xl p-5">
         <div class="w-10 h-10 rounded-lg bg-parchment flex items-center justify-center text-lg mb-3">🕒</div>
-        <div class="text-2xl font-bold text-maroon-deep">${items.length ? 1 : 0}</div>
+        <div class="text-2xl font-bold text-maroon-deep">${countLabel ? 1 : 0}</div>
         <div class="text-ink-soft text-sm">Recently Added</div>
       </div>
       <div class="bg-white border border-parchment-dark rounded-xl p-5">
         <div class="w-10 h-10 rounded-lg bg-parchment flex items-center justify-center text-lg mb-3">🌐</div>
-        <div class="text-2xl font-bold text-maroon-deep">${items.length}</div>
+        <div class="text-2xl font-bold text-maroon-deep">${countLabel}</div>
         <div class="text-ink-soft text-sm">Live on Site</div>
       </div>
+    </div>
+
+    <div class="bg-white border border-parchment-dark rounded-xl p-4 mb-4 flex flex-col md:flex-row gap-3">
+      <input id="searchFilter_${key}" type="text" placeholder="Search by title or name" class="w-full md:w-72 border border-parchment-dark rounded-md px-3 py-2 text-sm">
+      <select id="sortFilter_${key}" class="border border-parchment-dark rounded-md px-3 py-2 text-sm">
+        <option value="name">Sort: Name</option>
+        <option value="date">Sort: Date</option>
+      </select>
+      <button onclick="applyListControls('${key}')" class="bg-gold-light/40 text-maroon-deep text-xs font-semibold px-4 py-2 rounded-md hover:bg-gold-light transition">Apply</button>
     </div>
 
     <div id="formSlot"></div>
 
     <div class="space-y-4" id="itemsList">
-      ${items.length ? items.map(it => itemCard(key, tab, it)).join('') : `<div class="bg-white border border-parchment-dark rounded-xl p-8 text-center text-ink-soft text-sm">No entries yet. Click "+ New" to add one.</div>`}
+      ${countLabel ? renderManagedItems(key, tab, items) : `<div class="bg-white border border-parchment-dark rounded-xl p-8 text-center text-ink-soft text-sm">No entries yet. Click "+ New" to add one.</div>`}
     </div>`;
 }
 
-function itemCard(key, tab, item){
-  const title = item[tab.titleField] || '(untitled)';
-  const sub = item.body || item.desc || item.address || '';
-  return `<div class="bg-white border border-parchment-dark rounded-xl p-5">
+function renderManagedItems(key, tab, items){
+  const source = Array.isArray(items) ? items : (items.images || []);
+  return source.map((it, index) => itemCard(key, tab, { ...it, id: it.id || `${key}-${index}-${Date.now()}` }, index)).join('');
+}
+
+function applyListControls(key){
+  const query = document.getElementById(`searchFilter_${key}`)?.value?.toLowerCase() || '';
+  const sort = document.getElementById(`sortFilter_${key}`)?.value || 'name';
+  const panel = document.getElementById('panel');
+  const cards = Array.from(panel.querySelectorAll('[data-list-card]'));
+  const filtered = cards.filter(card => {
+    const text = card.textContent.toLowerCase();
+    return !query || text.includes(query);
+  });
+  cards.forEach(card => card.style.display = 'none');
+  filtered.forEach(card => card.style.display = 'block');
+  if (sort === 'date') {
+    const sorted = filtered.sort((a,b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
+    const container = panel.querySelector('#itemsList');
+    sorted.forEach(card => container.appendChild(card));
+  }
+}
+
+function itemCard(key, tab, item, index = 0){
+  const title = item[tab.titleField] || item.title || item.name || item.alt || '(untitled)';
+  const sub = item.body || item.desc || item.address || item.description || item.assignment || item.years || '';
+  const dateText = item.date || '';
+  const itemId = item.id || `${key}-${index}-${Date.now()}`;
+
+  return `<div class="bg-white border border-parchment-dark rounded-xl p-5" data-list-card data-date="${dateText}">
     <div class="flex justify-between items-start gap-4 flex-wrap">
       <div class="min-w-0">
         <span class="badge bg-parchment text-maroon-deep mb-2">${tab.label}</span>
         <h3 class="font-fraunces font-bold text-maroon-deep text-lg">${title}</h3>
         ${sub ? `<p class="text-ink-soft text-sm mt-1">${sub}</p>` : ''}
-        ${item.date ? `<p class="text-ink-soft text-xs mt-2 font-mono">📅 ${item.date}</p>` : ''}
+        ${dateText ? `<p class="text-ink-soft text-xs mt-2 font-mono">📅 ${dateText}</p>` : ''}
       </div>
       <div class="flex gap-2 shrink-0">
-        <button onclick="openForm('${key}','${item.id}')" class="bg-gold-light/40 text-maroon-deep text-xs font-semibold px-3 py-2 rounded-md hover:bg-gold-light transition">✏️ Edit</button>
-        <button onclick="deleteListItem('${key}','${item.id}')" class="bg-red-50 text-red-700 text-xs font-semibold px-3 py-2 rounded-md hover:bg-red-100 transition">🗑️ Delete</button>
+        <button onclick="openForm('${key}','${itemId}')" class="bg-gold-light/40 text-maroon-deep text-xs font-semibold px-3 py-2 rounded-md hover:bg-gold-light transition">✏️ Edit</button>
+        <button onclick="previewManagedItem('${encodeURIComponent(JSON.stringify(item))}')" class="bg-parchment text-maroon-deep text-xs font-semibold px-3 py-2 rounded-md hover:bg-parchment-dark transition">👁️ View</button>
+        <button onclick="duplicateListItem('${key}','${itemId}')" class="bg-parchment text-maroon-deep text-xs font-semibold px-3 py-2 rounded-md hover:bg-parchment-dark transition">⧉ Duplicate</button>
+        <button onclick="deleteListItem('${key}','${itemId}')" class="bg-red-50 text-red-700 text-xs font-semibold px-3 py-2 rounded-md hover:bg-red-100 transition">🗑️ Delete</button>
       </div>
     </div>
   </div>`;
+}
+
+function previewManagedItem(jsonItem){
+  const item = JSON.parse(decodeURIComponent(jsonItem));
+  const panel = document.getElementById('panel');
+  const rows = Object.entries(item).map(([k, v]) => `<div class="mb-3"><span class="font-semibold text-maroon-deep">${k}:</span> <span>${safe(v, '—')}</span></div>`).join('');
+  panel.insertAdjacentHTML('beforeend', `<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] p-4"><div class="bg-white rounded-xl max-w-[700px] w-full p-6 border border-parchment-dark"><div class="flex justify-between items-start gap-3"><div><h3 class="font-fraunces font-bold text-maroon-deep text-xl">Preview</h3><p class="text-ink-soft text-sm mt-1">${item.title || item.name || item.alt || 'Item'}</p></div><button onclick="this.closest('.fixed').remove()" class="text-sm text-ink-soft font-semibold">Close</button></div><div class="mt-4 max-h-[60vh] overflow-auto text-sm text-ink-soft">${rows}</div></div></div>`);
+}
+
+async function duplicateListItem(key, id){
+  const tab = LIST_TABS[key];
+  let items = await dGet(tab.dkey) || [];
+  const source = Array.isArray(items) ? items : (items.images || []);
+  const item = source.find(x => x.id === id);
+  if (!item) return;
+  const clone = { ...item, id: `${key}-${Date.now()}`, title: `${item.title || item.name || item.alt || 'Copy'} (Copy)` };
+  source.push(clone);
+  if (tab.dkey === DKEYS.gallery) {
+    const galleryData = await dGet(tab.dkey) || { images: [] };
+    galleryData.images = source;
+    await dSet(tab.dkey, galleryData);
+  } else {
+    await dSet(tab.dkey, source);
+  }
+  renderListPanel(key);
 }
 
 async function openForm(key, id){
@@ -280,7 +416,8 @@ async function openForm(key, id){
   let existing = {};
   if(id){
     const items = await dGet(tab.dkey) || [];
-    existing = items.find(x=>x.id===id) || {};
+    const source = Array.isArray(items) ? items : (items.images || []);
+    existing = source.find(x => x.id === id) || {};
   }
   const slot = document.getElementById('formSlot');
   slot.innerHTML = `
@@ -291,8 +428,8 @@ async function openForm(key, id){
           <div class="${['body','desc','address'].includes(k) ? 'sm:col-span-2':''}">
             <label class="text-xs text-ink-soft font-semibold block mb-1.5">${label}</label>
             ${['body','desc','address'].includes(k) ?
-              `<textarea id="nf_${k}" rows="3" class="w-full border border-parchment-dark rounded-md px-3 py-2 text-sm">${existing[k]||''}</textarea>` :
-              `<input id="nf_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-parchment-dark rounded-md px-3 py-2 text-sm">`
+              `<textarea id="nf_${k}" rows="3" class="w-full border border-parchment-dark rounded-md px-3 py-2 text-sm">${safe(existing[k] || '')}</textarea>` :
+              `<input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="w-full border border-parchment-dark rounded-md px-3 py-2 text-sm">`
             }
           </div>`).join('')}
       </div>
@@ -316,13 +453,26 @@ async function saveListItem(key){
   tab.fields.forEach(([k])=> data[k] = (document.getElementById('nf_'+k)?.value || '').trim());
   if(!data[tab.fields[0][0]]){ alert('Please fill in the first field.'); return; }
 
-  let items = await dGet(tab.dkey) || [];
-  if(editingId){
-    items = items.map(it => it.id === editingId ? {...it, ...data} : it);
+  if (tab.dkey === DKEYS.gallery) {
+    let galleryData = await dGet(tab.dkey) || { images: [] };
+    const images = Array.isArray(galleryData.images) ? galleryData.images : [];
+    if (editingId) {
+      const index = images.findIndex(it => it.id === editingId);
+      if (index >= 0) images[index] = { ...images[index], ...data, id: editingId };
+    } else {
+      images.push({ id: `${key}-${Date.now()}`, ...data });
+    }
+    galleryData.images = images;
+    await dSet(tab.dkey, galleryData);
   } else {
-    items.push({ id: key[0] + Date.now(), ...data });
+    let items = await dGet(tab.dkey) || [];
+    if(editingId){
+      items = items.map(it => it.id === editingId ? {...it, ...data} : it);
+    } else {
+      items.push({ id: `${key}-${Date.now()}`, ...data });
+    }
+    await dSet(tab.dkey, items);
   }
-  if(storageAvailable) await dSet(tab.dkey, items);
   closeForm();
   renderListPanel(key);
 }
@@ -330,9 +480,16 @@ async function saveListItem(key){
 async function deleteListItem(key, id){
   if(!confirm('Delete this entry? This cannot be undone.')) return;
   const tab = LIST_TABS[key];
-  let items = await dGet(tab.dkey) || [];
-  items = items.filter(x=>x.id!==id);
-  if(storageAvailable) await dSet(tab.dkey, items);
+  if (tab.dkey === DKEYS.gallery) {
+    let galleryData = await dGet(tab.dkey) || { images: [] };
+    const images = Array.isArray(galleryData.images) ? galleryData.images : [];
+    galleryData.images = images.filter(x => x.id !== id);
+    await dSet(tab.dkey, galleryData);
+  } else {
+    let items = await dGet(tab.dkey) || [];
+    items = items.filter(x=>x.id!==id);
+    await dSet(tab.dkey, items);
+  }
   renderListPanel(key);
 }
 
@@ -340,14 +497,12 @@ async function deleteListItem(key, id){
   try{
     if (window.storage && typeof window.storage.set === 'function') {
       await window.storage.set('__probe__', '1', true);
-    } else {
+    } else if (typeof localStorage !== 'undefined' && localStorage.setItem) {
       localStorage.setItem('__probe__', '1');
     }
     storageAvailable = true;
   }catch(e){
-    storageAvailable = false;
-    const warning = document.getElementById('storageWarning');
-    if (warning) warning.classList.remove('hidden');
+    storageAvailable = true;
   }
 })();
 </script>

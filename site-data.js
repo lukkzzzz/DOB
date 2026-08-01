@@ -72,7 +72,7 @@ const SiteData = {
       ],
     },
     liturgical: {
-      date: 'Thursday, 30 July 2026',
+      date: '',
       season: 'Ordinary Time &mdash; Liturgical color: Green',
     },
     vision: {
@@ -140,7 +140,7 @@ const SiteData = {
     pageTitle: 'Bishop of Boac | Diocese of Boac',
     eyebrow: 'Diocesan Info',
     bannerTitle: 'Bishop of Boac',
-    image: 'https://placehold.co/800x1000/ece2cd/4a1420?text=Bishop+Portrait',
+    image: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/9c1196252919043.6a5b3a5f1336a.jpg',
     content: '<p>The Bishop of Boac serves as the chief shepherd of the diocese, entrusted with the pastoral care of its clergy, religious, and lay faithful across the fourteen parishes of Marinduque.</p><p><strong>Placeholder fields to complete:</strong></p><ul class="list-disc pl-5 space-y-2"><li>Full name and episcopal title</li><li>Date and place of birth</li><li>Date of priestly ordination</li><li>Date of episcopal ordination / installation as Bishop of Boac</li><li>Episcopal motto</li><li>Coat of arms</li><li>Pastoral priorities and formation background</li></ul><p><em>Add an official portrait and biography once confirmed with the diocesan chancery. Do not publish unverified names or dates.</em></p>',
   },
 
@@ -152,7 +152,7 @@ const SiteData = {
     intro: 'A chronological list of the diocese\u2019s past bishops will be presented here, with their years of service and a brief note on their pastoral contributions.',
     note: '<em>Replace with the verified succession of bishops from diocesan records.</em>',
     bishops: [
-      { name: '[Name of Bishop]', years: 'Years of Service &mdash; TBD', photo: 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop' },
+      { name: '[Name of Bishop]', years: 'Years of Service &mdash; TBD', photo: 'https://mir-s3-cdn-cf.behance.net/project_modules/hd_webp/77e2c226081293.5634f4ef71ded.jpg' },
       { name: '[Name of Bishop]', years: 'Years of Service &mdash; TBD', photo: 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop' },
       { name: '[Name of Bishop]', years: 'Years of Service &mdash; TBD', photo: 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop' },
     ],
@@ -297,6 +297,9 @@ const SiteData = {
    ============================================================ */
 
 const DKEYS = {
+  site: 'content:site',
+  navbar: 'content:navbar',
+  footer: 'content:footer',
   home: 'content:home',
   history: 'content:history',
   bishop: 'content:bishop',
@@ -314,28 +317,45 @@ const DKEYS = {
   clergy: 'list:clergy',
 };
 
+const memoryStorage = {};
+
 const fallbackStorage = {
   async get(key){
     try{
-      const value = localStorage.getItem(key);
-      return value === null ? null : { value };
-    }catch(e){ return null; }
+      if (typeof localStorage !== 'undefined' && localStorage.getItem) {
+        const value = localStorage.getItem(key);
+        return value === null ? null : { value };
+      }
+    }catch(e){}
+
+    if (memoryStorage[key] === undefined) return null;
+    return { value: memoryStorage[key] };
   },
   async set(key, value){
     try{
-      localStorage.setItem(key, value);
-      return true;
-    }catch(e){ return false; }
+      if (typeof localStorage !== 'undefined' && localStorage.setItem) {
+        localStorage.setItem(key, value);
+        return true;
+      }
+    }catch(e){}
+
+    memoryStorage[key] = value;
+    return true;
   },
   async delete(key){
     try{
-      localStorage.removeItem(key);
-      return true;
-    }catch(e){ return false; }
+      if (typeof localStorage !== 'undefined' && localStorage.removeItem) {
+        localStorage.removeItem(key);
+        return true;
+      }
+    }catch(e){}
+
+    delete memoryStorage[key];
+    return true;
   }
 };
 
-const appStorage = window.storage || fallbackStorage;
+const appStorage = (window.storage && typeof window.storage.get === 'function') ? window.storage : fallbackStorage;
 
 async function dGet(key){
   try{

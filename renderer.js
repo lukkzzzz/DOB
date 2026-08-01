@@ -16,6 +16,73 @@ function safe(val, fallback) {
   return (val !== undefined && val !== null && val !== '') ? val : (fallback || '');
 }
 
+async function loadPageSnapshot(pageKey) {
+  const [siteData, navbarData, footerData, homeData, historyData, visionData, bishopData, formerData, clergyData, parishesData, curiaData, newsItems, eventsItems, galleryData, contactData, privacyData] = await Promise.all([
+    dGet(DKEYS.site),
+    dGet(DKEYS.navbar),
+    dGet(DKEYS.footer),
+    dGet(DKEYS.home),
+    dGet(DKEYS.history),
+    dGet(DKEYS.visionMission),
+    dGet(DKEYS.bishop),
+    dGet(DKEYS.formerBishops),
+    dGet(DKEYS.clergy),
+    dGet(DKEYS.parishes),
+    dGet(DKEYS.curia),
+    dGet(DKEYS.news),
+    dGet(DKEYS.events),
+    dGet(DKEYS.gallery),
+    dGet(DKEYS.contact),
+    dGet(DKEYS.privacy),
+  ]);
+
+  return {
+    site: siteData || SiteData.site,
+    navbar: navbarData || SiteData.navbar,
+    footer: footerData || SiteData.footer,
+    homepage: homeData || SiteData.homepage,
+    history: historyData || SiteData.history,
+    visionMission: visionData || SiteData.visionMission,
+    bishop: bishopData || SiteData.bishop,
+    formerBishops: formerData || SiteData.formerBishops,
+    clergy: clergyData || SiteData.clergy,
+    parishes: parishesData || SiteData.parishes,
+    curia: curiaData || SiteData.curia,
+    news: {
+      ...(SiteData.news || {}),
+      articles: (newsItems && newsItems.length ? newsItems : (SiteData.news || {}).articles || []),
+    },
+    events: {
+      ...(SiteData.events || {}),
+      events: (eventsItems && eventsItems.length ? eventsItems : (SiteData.events || {}).events || []),
+    },
+    gallery: galleryData || SiteData.gallery,
+    contact: contactData || SiteData.contact,
+    privacy: privacyData || SiteData.privacy,
+    bulletins: SiteData.bulletins,
+  };
+}
+
+function applySnapshotToSiteData(snapshot) {
+  const merged = snapshot || {};
+  if (merged.site) SiteData.site = { ...(SiteData.site || {}), ...merged.site };
+  if (merged.navbar) SiteData.navbar = { ...(SiteData.navbar || {}), ...merged.navbar };
+  if (merged.footer) SiteData.footer = { ...(SiteData.footer || {}), ...merged.footer };
+  if (merged.homepage) SiteData.homepage = { ...(SiteData.homepage || {}), ...merged.homepage };
+  if (merged.history) SiteData.history = { ...(SiteData.history || {}), ...merged.history };
+  if (merged.visionMission) SiteData.visionMission = { ...(SiteData.visionMission || {}), ...merged.visionMission };
+  if (merged.bishop) SiteData.bishop = { ...(SiteData.bishop || {}), ...merged.bishop };
+  if (merged.formerBishops) SiteData.formerBishops = { ...(SiteData.formerBishops || {}), ...merged.formerBishops };
+  if (merged.clergy) SiteData.clergy = { ...(SiteData.clergy || {}), ...merged.clergy };
+  if (merged.parishes) SiteData.parishes = { ...(SiteData.parishes || {}), ...merged.parishes };
+  if (merged.curia) SiteData.curia = { ...(SiteData.curia || {}), ...merged.curia };
+  if (merged.news) SiteData.news = { ...(SiteData.news || {}), ...merged.news };
+  if (merged.events) SiteData.events = { ...(SiteData.events || {}), ...merged.events };
+  if (merged.gallery) SiteData.gallery = { ...(SiteData.gallery || {}), ...merged.gallery };
+  if (merged.contact) SiteData.contact = { ...(SiteData.contact || {}), ...merged.contact };
+  if (merged.privacy) SiteData.privacy = { ...(SiteData.privacy || {}), ...merged.privacy };
+}
+
 /* ── Utility Bar ─────────────────────────────────────────── */
 
 function renderUtilityBar() {
@@ -146,8 +213,8 @@ function renderProseSection(html) {
 
 /* ── Homepage ────────────────────────────────────────────── */
 
-function renderHomepage() {
-  const hp = SiteData.homepage || {};
+function renderHomepage(data = {}) {
+  const hp = (data.homepage || SiteData.homepage || {});
   const hero = hp.hero || {};
   const lit = hp.liturgical || {};
   const vis = hp.vision || {};
@@ -155,8 +222,14 @@ function renderHomepage() {
   const ns = hp.newsSection || {};
   const es = hp.eventsSection || {};
   const dir = hp.directories || {};
-  const newsData = SiteData.news || {};
-  const eventsData = SiteData.events || {};
+  const newsData = data.news || SiteData.news || {};
+  const eventsData = data.events || SiteData.events || {};
+  const liveDateText = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(new Date());
 
   const heroButtons = (hero.buttons || []).map(b => {
     if (b.style === 'primary') {
@@ -214,7 +287,7 @@ function renderHomepage() {
       <span class="w-2.5 h-2.5 rounded-full bg-maroon-deep shrink-0"></span>
       <strong class="font-semibold">Today</strong>
       <span class="opacity-50">&middot;</span>
-      <span>${safe(lit.date)}</span>
+      <span>${safe(lit.date || liveDateText)}</span>
       <span class="hidden sm:inline opacity-50">&middot;</span>
       <span class="w-full sm:w-auto">${safe(lit.season)}</span>
     </div>
@@ -280,8 +353,7 @@ function renderHomepage() {
 
 /* ── History ─────────────────────────────────────────────── */
 
-function renderHistory() {
-  const d = SiteData.history || {};
+function renderHistory(d = SiteData.history || {}) {
   const historyImage = safe(d.image, 'https://placehold.co/1200x700/ece2cd/4a1420?text=History+Photo');
   const html = `
     <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 items-start not-prose">
@@ -295,8 +367,7 @@ function renderHistory() {
 
 /* ── Vision & Mission ────────────────────────────────────── */
 
-function renderVisionMission() {
-  const d = SiteData.visionMission || {};
+function renderVisionMission(d = SiteData.visionMission || {}) {
   const items = (d.missionItems || []).map(i => `<li>${i}</li>`).join('');
   const html = `
     <h3 class="font-fraunces text-maroon-deep text-xl font-semibold italic">${safe(d.visionTitle, 'Vision')}</h3>
@@ -308,8 +379,7 @@ function renderVisionMission() {
 
 /* ── Bishop ──────────────────────────────────────────────── */
 
-function renderBishop() {
-  const d = SiteData.bishop || {};
+function renderBishop(d = SiteData.bishop || {}) {
   const bishopImage = safe(d.image, 'https://placehold.co/800x1000/ece2cd/4a1420?text=Bishop+Portrait');
   const html = `
     <div class="grid md:grid-cols-[320px_1fr] gap-6 md:gap-8 items-start not-prose">
@@ -323,8 +393,7 @@ function renderBishop() {
 
 /* ── Former Bishops ──────────────────────────────────────── */
 
-function renderFormerBishops() {
-  const d = SiteData.formerBishops || {};
+function renderFormerBishops(d = SiteData.formerBishops || {}) {
   const rows = (d.bishops || []).map(b => {
     const photo = safe(b.photo, 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop');
     return `<div class="p-4 flex flex-col sm:flex-row gap-4 items-start border-b border-parchment-dark last:border-b-0">
@@ -346,8 +415,7 @@ function renderFormerBishops() {
 
 /* ── Clergy ──────────────────────────────────────────────── */
 
-function renderClergy() {
-  const d = SiteData.clergy || {};
+function renderClergy(d = SiteData.clergy || {}) {
   const rows = (d.members || []).map(c => clergyRowHTML(c)).join('');
   const html = `<div class="divide-y divide-parchment-dark border-t border-b border-parchment-dark not-prose">${rows}</div>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
@@ -355,8 +423,7 @@ function renderClergy() {
 
 /* ── Parishes ────────────────────────────────────────────── */
 
-function renderParishes() {
-  const d = SiteData.parishes || {};
+function renderParishes(d = SiteData.parishes || {}) {
   const cards = (d.parishes || []).map(p => parishCardHTML(p)).join('');
   const html = `<div class="grid sm:grid-cols-2 gap-4 not-prose">${cards}</div>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
@@ -364,8 +431,7 @@ function renderParishes() {
 
 /* ── Curia ───────────────────────────────────────────────── */
 
-function renderCuria() {
-  const d = SiteData.curia || {};
+function renderCuria(d = SiteData.curia || {}) {
   const cards = (d.offices || []).map(o => {
     const photo = safe(o.photo, 'https://placehold.co/600x420/ece2cd/4a1420?text=Office+Photo');
     return `<div class="border border-parchment-dark overflow-hidden bg-white">
@@ -379,8 +445,7 @@ function renderCuria() {
 
 /* ── News ────────────────────────────────────────────────── */
 
-function renderNews() {
-  const d = SiteData.news || {};
+function renderNews(d = SiteData.news || {}) {
   const cards = (d.articles || []).map(n => newsCardPageHTML(n)).join('');
   const html = `<div class="grid sm:grid-cols-2 gap-6 not-prose">${cards}</div>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
@@ -388,8 +453,7 @@ function renderNews() {
 
 /* ── Events ──────────────────────────────────────────────── */
 
-function renderEvents() {
-  const d = SiteData.events || {};
+function renderEvents(d = SiteData.events || {}) {
   const rows = (d.events || []).map(e => eventRowPageHTML(e)).join('');
   const html = `<div class="divide-y divide-parchment-dark border-t border-b border-parchment-dark not-prose">${rows}</div>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
@@ -397,8 +461,7 @@ function renderEvents() {
 
 /* ── Gallery ─────────────────────────────────────────────── */
 
-function renderGallery() {
-  const d = SiteData.gallery || {};
+function renderGallery(d = SiteData.gallery || {}) {
   const featuredImage = safe(d.image, 'https://placehold.co/1200x700/ece2cd/4a1420?text=Gallery+Photo');
   const imgs = (d.images || []).map(img =>
     `<img src="${safe(img.src)}" alt="${safe(img.alt, 'Photo')}" class="w-full aspect-square object-cover">`
@@ -413,8 +476,7 @@ function renderGallery() {
 
 /* ── Bulletins ───────────────────────────────────────────── */
 
-function renderBulletins() {
-  const d = SiteData.bulletins || {};
+function renderBulletins(d = SiteData.bulletins || {}) {
   const bulletinImage = safe(d.image, 'https://placehold.co/900x600/ece2cd/4a1420?text=Bulletin+Photo');
   const html = `
     <div class="grid md:grid-cols-[1fr_0.9fr] gap-6 md:gap-8 items-start not-prose">
@@ -432,8 +494,7 @@ function renderBulletins() {
 
 /* ── Contact ─────────────────────────────────────────────── */
 
-function renderContact() {
-  const d = SiteData.contact || {};
+function renderContact(d = SiteData.contact || {}) {
   const html = `
     <p><strong>Address:</strong> ${safe(d.address)}</p>
     <p><strong>Email:</strong> ${safe(d.email)}</p>
@@ -519,17 +580,20 @@ function getPageTitle(pageKey) {
 
 /* ── Master Init ─────────────────────────────────────────── */
 
-function initPage(pageKey) {
+async function initPage(pageKey) {
+  const pageSnapshot = await loadPageSnapshot(pageKey);
+  applySnapshotToSiteData(pageSnapshot);
+
   // Set page title
   document.title = getPageTitle(pageKey);
 
   // Render utility bar
   const utilBar = document.getElementById('utility-bar');
-  if (utilBar) utilBar.innerHTML = renderUtilityBar();
+  if (utilBar) utilBar.innerHTML = renderUtilityBar(SiteData.site || {});
 
   // Render navbar
   const header = document.getElementById('site-header');
-  if (header) header.outerHTML = renderNavbar();
+  if (header) header.outerHTML = renderNavbar(SiteData.navbar || {}, SiteData.site || {});
 
   // Render page content
   const content = document.getElementById('page-content');
@@ -540,7 +604,7 @@ function initPage(pageKey) {
 
   // Render footer
   const footer = document.getElementById('site-footer');
-  if (footer) footer.outerHTML = renderFooter();
+  if (footer) footer.outerHTML = renderFooter(SiteData.footer || {});
 
   // Init menu toggle
   initMenuToggle();
