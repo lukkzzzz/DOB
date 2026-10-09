@@ -10,54 +10,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            maroon: '#6a1f2b',
-            'maroon-deep': '#4a1420',
-            gold: '#b4863f',
-            'gold-light': '#d9b877',
-            parchment: '#f6f0e4',
-            'parchment-dark': '#ece2cd',
-            ink: '#2a2420',
-            'ink-soft': '#5c5147',
-            white: '#fffdf9',
-          },
-          fontFamily: {
-            newsreader: ['Newsreader', 'serif'],
-            fraunces: ['Fraunces', 'serif'],
-            mono: ['IBM Plex Mono', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
-  <style type="text/tailwindcss">
+  <script src="tailwind-config.js"></script>
+    <style type="text/tailwindcss">
     @layer utilities {
-      .eyebrow {
-        @apply font-mono text-[0.7rem] sm:text-[0.72rem] tracking-[0.14em] sm:tracking-[0.16em] uppercase text-gold font-medium;
-      }
+      .eyebrow { @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-brand-red; }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
     }
     html { scroll-behavior: smooth; }
   </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body class="font-newsreader text-ink bg-parchment leading-relaxed overflow-x-hidden">
 
-  <!-- ===== Utility bar ===== -->
-  <div class="bg-maroon-deep text-parchment-dark font-mono text-[0.7rem] sm:text-[0.74rem] tracking-[0.03em]">
-    <div class="max-w-[1180px] mx-auto px-4 sm:px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
-      <span>Sacred Heart Pastoral Center &middot; Boac, 4900 Marinduque</span>
-      <div class="flex gap-4 sm:gap-[18px] flex-wrap justify-center">
-        <a href="#" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Facebook</a>
-        <a href="#" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">YouTube</a>
-        <a href="#" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Instagram</a>
-        <a href="contact.html" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Contact Us</a>
-        <a href="admin.html" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Admin</a>
-      </div>
-    </div>
-  </div>
+<body class="font-sans bg-brand-white text-brand-black min-h-screen leading-[1.7] overflow-x-hidden">
 
   <!-- ===== Header / Nav ===== -->
   <header class="bg-white border-b border-parchment-dark sticky top-0 z-50">

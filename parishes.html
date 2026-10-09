@@ -13,41 +13,22 @@
     rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            maroon: '#6a1f2b',
-            'maroon-deep': '#4a1420',
-            gold: '#b4863f',
-            'gold-light': '#d9b877',
-            parchment: '#f6f0e4',
-            'parchment-dark': '#ece2cd',
-            ink: '#2a2420',
-            'ink-soft': '#5c5147',
-            white: '#fffdf9',
-          },
-          fontFamily: {
-            newsreader: ['Newsreader', 'serif'],
-            fraunces: ['Fraunces', 'serif'],
-            mono: ['IBM Plex Mono', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
-  <style type="text/tailwindcss">
+  <script src="tailwind-config.js"></script>
+    <style type="text/tailwindcss">
     @layer utilities {
-      .eyebrow {
-        @apply font-mono text-[0.7rem] sm:text-[0.72rem] tracking-[0.14em] sm:tracking-[0.16em] uppercase text-gold font-medium;
-      }
+      .eyebrow { @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-brand-red; }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
     }
     html { scroll-behavior: smooth; }
   </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="font-newsreader text-ink bg-parchment leading-relaxed overflow-x-hidden">
+<body class="font-sans bg-brand-white text-brand-black min-h-screen leading-[1.7] overflow-x-hidden">
 
   <div id="utility-bar"></div>
   <header id="site-header"></header>

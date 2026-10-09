@@ -1,0 +1,458 @@
+
+--- 1978.html (Tailwind config) ---
+tailwind.config = { theme: { extend: {
+    colors: { maroon:'#6a1f2b', 'maroon-deep':'#4a0f20', gold:'#b4863f', 'gold-light':'#d9b877',
+      parchment:'#f6f0e4', 'parchment-dark':'#ece2cd', cream:'#fcfaf8', border:'#E7DFD3', ink:'#2a2420', 'ink-soft':'#5c5147', white:'#fffdf9',
+      sidebar:'#4a0f20' }
+
+--- 1978.html (Style tag) ---
+<style>
+  ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-thumb{background:#b4863f;border-radius:6px}
+  .badge{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
+  .badge { font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 9999px; display: inline-block; }
+  .lucide { stroke-width: 1.5; width: 18px; height: 18px; }
+  .sidebar-section { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem; padding-left: 0.75rem; }
+  .nav-btn { height: 40px; }
+  .nav-btn:focus-visible { outline: 2px solid #b4863f; outline-offset: -2px; }
+</style>
+
+--- bishop.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- bishop.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- bulletin.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- bulletin.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- clergy.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- clergy.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- contact.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- contact.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- curia.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- curia.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- events.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- events.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- former-bishops.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- former-bishops.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- gallery.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- gallery.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- history.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- history.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- index.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- index.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- news.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- news.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- parishes.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- parishes.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- privacy.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- privacy.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+
+--- renderer.js (Inline styles) ---
+style="background-image: radial-gradient(circle at 85% 20%, #d9b877, transparent 55%);"
+style="background-image: url('${safe(hero.backgroundImage)}');"
+
+--- renderer.js (SVGs with fill/stroke) ---
+Found 3 SVGs
+
+--- vision-mission.html (Tailwind config) ---
+tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: '#6a1f2b',
+            'maroon-deep': '#4a1420',
+            gold: '#b4863f',
+            'gold-light': '#d9b877',
+            parchment: '#f6f0e4',
+            'parchment-dark': '#ece2cd',
+            ink: '#2a2420',
+            'ink-soft': '#5c5147',
+            white: '#fffdf9',
+          }
+
+--- vision-mission.html (Style tag) ---
+<style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow {
+        @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-gold;
+      }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>

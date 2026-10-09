@@ -20,6 +20,17 @@
   ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-thumb{background:#b4863f;border-radius:6px}
   .badge{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
 </style>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .eyebrow { @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-brand-red; }
+      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
+      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
+      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
+      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
+      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
 <body class="font-sans bg-parchment text-ink min-h-screen">
 

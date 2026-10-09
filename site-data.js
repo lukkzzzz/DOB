@@ -382,36 +382,36 @@ const fmtDate = d => {
 };
 
 function newsCardHTML(n){
-  return `<article class="bg-white border border-parchment-dark transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col">
-    <div class="h-44 sm:h-48 relative overflow-hidden bg-parchment-dark">
+  return `<article class="bg-brand-white border border-brand-tint transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col">
+    <div class="h-44 sm:h-48 relative overflow-hidden bg-brand-tint">
       <img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover">
     </div>
     <div class="p-5 flex-1 flex flex-col justify-between">
       <div>
-        <span class="font-mono text-[0.7rem] tracking-[0.06em] text-gold uppercase">${fmtDate(n.date)}</span>
-        <h4 class="font-fraunces font-semibold text-maroon-deep leading-tight text-base sm:text-[1.08rem] my-2">${n.title || ''}</h4>
+        <span class="font-sans text-[0.7rem] tracking-[0.06em] text-brand-red uppercase">${fmtDate(n.date)}</span>
+        <h4 class="heading-3 text-brand-black leading-tight text-base sm:text-[1.08rem] my-2">${n.title || ''}</h4>
       </div>
-      <a href="news.html" class="font-mono text-[0.72rem] tracking-[0.06em] uppercase text-maroon border-b border-gold self-start mt-3">Read More</a>
+      <a href="news.html" class="eyebrow text-brand-red border-b border-brand-yellow self-start mt-3">Read More</a>
     </div>
   </article>`;
 }
 
 function newsCardPageHTML(n){
-  return `<article class="border border-parchment-dark">
-    <div class="h-40 bg-parchment-dark"><img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover"></div>
-    <div class="p-4"><span class="font-mono text-xs text-gold uppercase">${fmtDate(n.date)}</span><h4 class="font-fraunces font-semibold text-maroon-deep my-2">${n.title || ''}</h4></div>
+  return `<article class="border border-brand-tint">
+    <div class="h-40 bg-brand-tint"><img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover"></div>
+    <div class="p-4"><span class="font-sans text-xs text-brand-red uppercase">${fmtDate(n.date)}</span><h4 class="heading-3 text-brand-black my-2">${n.title || ''}</h4></div>
   </article>`;
 }
 
 function eventRowHTML(e){
   const d = new Date(e.date+'T00:00:00');
   return `<div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 sm:py-5">
-    <div class="font-mono text-left sm:text-center shrink-0 sm:w-[70px] flex sm:block items-baseline gap-2 sm:gap-0">
-      <span class="text-2xl sm:text-[1.6rem] font-semibold text-gold-light block leading-none">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span>
+    <div class="font-sans font-semibold text-left sm:text-center shrink-0 sm:w-[70px] flex sm:block items-baseline gap-2 sm:gap-0">
+      <span class="text-2xl sm:text-[1.6rem] font-semibold text-brand-yellow block leading-none">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span>
       <span class="text-[0.7rem] tracking-[0.1em] uppercase text-parchment-dark">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span>
     </div>
     <div>
-      <h4 class="font-fraunces font-semibold leading-tight text-white text-base sm:text-[1.08rem] mb-1">${e.title || ''}</h4>
+      <h4 class="font-serif text-h3 text-brand-white leading-[1.25] mb-1">${e.title || ''}</h4>
       <p class="text-parchment-dark text-sm sm:text-[0.92rem]">${e.description || e.desc || ''}</p>
     </div>
   </div>`;
@@ -421,24 +421,24 @@ function eventRowPageHTML(e){
   const d = new Date(e.date+'T00:00:00');
   const image = safe(e.image, 'https://placehold.co/600x420/ece2cd/4a1420?text=Event+Photo');
   return `<div class="flex flex-col sm:flex-row gap-4 py-5 items-start">
-    <div class="w-full sm:w-[140px] shrink-0 bg-parchment-dark overflow-hidden">
+    <div class="w-full sm:w-[140px] shrink-0 bg-brand-tint overflow-hidden">
       <img src="${image}" alt="${safe(e.title, 'Event photo')}" class="w-full aspect-[16/10] object-cover">
     </div>
     <div class="flex-1 flex items-center gap-6">
-      <div class="font-mono text-center shrink-0 w-[70px]"><span class="text-2xl font-semibold text-maroon block">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span><span class="text-[0.7rem] uppercase text-ink-soft">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span></div>
-      <div><h4 class="font-fraunces font-semibold text-maroon-deep">${e.title || ''}</h4><p class="text-sm">${e.description || e.desc || ''}</p></div>
+      <div class="font-sans font-semibold text-center shrink-0 w-[70px]"><span class="text-2xl font-semibold text-brand-red block">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span><span class="text-[0.7rem] uppercase text-brand-black/70">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span></div>
+      <div><h4 class="heading-3 text-brand-black">${e.title || ''}</h4><p class="text-small max-w-[65ch]">${e.description || e.desc || ''}</p></div>
     </div>
   </div>`;
 }
 
 function parishCardHTML(p){
   const photo = safe(p.photo, 'https://placehold.co/800x600/ece2cd/4a1420?text=Parish+Photo');
-  return `<div class="border border-parchment-dark overflow-hidden bg-white">
-    <div class="h-40 bg-parchment-dark"><img src="${photo}" alt="${safe(p.name, 'Parish photo')}" class="w-full h-full object-cover"></div>
+  return `<div class="border border-brand-tint overflow-hidden bg-brand-white">
+    <div class="h-40 bg-brand-tint"><img src="${photo}" alt="${safe(p.name, 'Parish photo')}" class="w-full h-full object-cover"></div>
     <div class="p-4">
-      <h4 class="font-fraunces font-semibold text-maroon-deep">${p.name || ''}</h4>
-      <p class="text-sm">${p.town || ''}${p.vicariate ? ' &middot; ' + p.vicariate : ''}</p>
-      ${p.priest ? `<p class="text-sm text-ink-soft">Parish Priest: ${p.priest}</p>` : ''}
+      <h4 class="heading-3 text-brand-black">${p.name || ''}</h4>
+      <p class="text-small max-w-[65ch]">${p.town || ''}${p.vicariate ? ' &middot; ' + p.vicariate : ''}</p>
+      ${p.priest ? `<p class="text-sm text-brand-black/70">Parish Priest: ${p.priest}</p>` : ''}
     </div>
   </div>`;
 }
@@ -446,11 +446,11 @@ function parishCardHTML(p){
 function clergyRowHTML(c){
   const photo = safe(c.photo, 'https://placehold.co/600x800/ece2cd/4a1420?text=Clergy+Portrait');
   return `<div class="py-4 flex flex-col sm:flex-row gap-4 items-start">
-    <div class="w-full sm:w-[120px] shrink-0 bg-parchment-dark overflow-hidden">
+    <div class="w-full sm:w-[120px] shrink-0 bg-brand-tint overflow-hidden">
       <img src="${photo}" alt="${safe(c.name, 'Clergy portrait')}" class="w-full aspect-[4/5] object-cover">
     </div>
     <div class="flex-1">
-      <span class="font-fraunces font-semibold text-maroon-deep block">${c.name || ''}</span>
+      <span class="heading-3 text-brand-black block">${c.name || ''}</span>
       <span class="text-sm">${c.role || ''}${c.assignment ? ' — ' + c.assignment : ''}</span>
     </div>
   </div>`;
