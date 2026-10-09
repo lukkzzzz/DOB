@@ -91,12 +91,13 @@ function renderUtilityBar() {
     `<a href="${safe(l.url, '#')}" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">${safe(l.label)}</a>`
   ).join('');
 
-  return `<div class="bg-maroon-deep text-parchment-dark font-sans text-[0.75rem] tracking-wide">
+  return `<div class="bg-maroon-deep text-parchment-dark font-mono text-[0.7rem] sm:text-[0.74rem] tracking-[0.03em]">
     <div class="max-w-[1180px] mx-auto px-4 sm:px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
       <span>${safe(s.utilityBarAddress)}</span>
       <div class="flex gap-4 sm:gap-[18px] flex-wrap justify-center">
         ${socials}
         <a href="${safe(s.contactUrl, 'contact.html')}" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Contact Us</a>
+        ${s.adminUrl ? `<a href="${s.adminUrl}" class="opacity-85 hover:opacity-100 hover:text-gold-light transition-opacity duration-200">Admin</a>` : ''}
       </div>
     </div>
   </div>`;
@@ -112,16 +113,16 @@ function renderNavbar() {
   const menuItems = items.map(item => {
     if (item.children && item.children.length) {
       const subs = item.children.map(c =>
-        `<a href="${safe(c.href, '#')}" class="block px-[18px] py-[7px] font-sans text-[0.92rem] text-ink-soft hover:text-maroon">${safe(c.label)}</a>`
+        `<a href="${safe(c.href, '#')}" class="block px-[18px] py-[7px] font-newsreader text-[0.92rem] text-ink-soft hover:text-maroon">${safe(c.label)}</a>`
       ).join('');
       return `<div class="group relative">
-        <button class="w-full lg:w-auto text-left nav-link px-[14px] py-[10px] bg-transparent cursor-pointer text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">${safe(item.label)}</button>
+        <button class="w-full lg:w-auto text-left font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] bg-transparent cursor-pointer text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">${safe(item.label)}</button>
         <div class="lg:absolute top-full left-0 bg-white lg:border border-parchment-dark min-w-[210px] lg:shadow-[0_12px_28px_rgba(42,36,32,0.12)] hidden group-hover:block lg:group-hover:opacity-100 lg:group-hover:visible py-1.5 z-[60] pl-4 lg:pl-0">
           ${subs}
         </div>
       </div>`;
     }
-    return `<div><a href="${safe(item.href, '#')}" class="block nav-link px-[14px] py-[10px] text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">${safe(item.label)}</a></div>`;
+    return `<div><a href="${safe(item.href, '#')}" class="block font-mono text-[0.76rem] tracking-[0.06em] uppercase px-[14px] py-[10px] text-ink font-medium hover:text-maroon hover:bg-parchment lg:hover:bg-transparent transition-colors duration-200">${safe(item.label)}</a></div>`;
   }).join('');
 
   return `<header class="bg-white border-b border-parchment-dark sticky top-0 z-50">
@@ -129,8 +130,8 @@ function renderNavbar() {
       <a href="index.html" class="flex items-center gap-3 sm:gap-[14px]">
         <img src="${safe(s.logoUrl)}" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
         <div>
-          <h1 class="heading-3 text-maroon-deep text-base sm:text-[1.15rem] tracking-[0.01em] leading-tight">${safe(s.name, 'Diocese of Boac')}</h1>
-          <span class="eyebrow text-ink-soft block">${safe(s.subtitle, 'Official Diocesan Website')}</span>
+          <h1 class="font-fraunces font-semibold text-maroon-deep text-base sm:text-[1.15rem] tracking-[0.01em] leading-tight">${safe(s.name, 'Diocese of Boac')}</h1>
+          <span class="font-mono text-[0.62rem] sm:text-[0.68rem] tracking-[0.1em] sm:tracking-[0.12em] uppercase text-ink-soft block">${safe(s.subtitle, 'Official Diocesan Website')}</span>
         </div>
       </a>
 
@@ -165,7 +166,7 @@ function renderFooter() {
       <div class="sm:col-span-2 md:col-span-1">
         <div class="flex items-center gap-3 mb-3.5">
           <img src="${safe(f.logoUrl)}" alt="Logo" class="w-[38px] h-[38px] rounded-full object-cover border border-gold shadow-md"/>
-          <h1 class="text-white text-base font-serif font-semibold">${safe(f.name, 'Diocese of Boac')}</h1>
+          <h1 class="text-white text-base font-fraunces font-semibold">${safe(f.name, 'Diocese of Boac')}</h1>
         </div>
         <p class="text-sm sm:text-[0.92rem] mb-1.5">${safe(f.addressLine1)}</p>
         <p class="text-sm sm:text-[0.92rem] mb-1.5">${safe(f.addressLine2)}</p>
@@ -173,15 +174,15 @@ function renderFooter() {
         <p class="text-sm sm:text-[0.92rem]">${safe(f.phone)}</p>
       </div>
       <div>
-        <h5 class="eyebrow text-gold-light mb-3 sm:mb-4">Diocesan Info</h5>
+        <h5 class="font-mono text-[0.74rem] tracking-[0.1em] uppercase text-gold-light mb-3 sm:mb-4">Diocesan Info</h5>
         ${infoLinks}
       </div>
       <div>
-        <h5 class="eyebrow text-gold-light mb-3 sm:mb-4">Connect</h5>
+        <h5 class="font-mono text-[0.74rem] tracking-[0.1em] uppercase text-gold-light mb-3 sm:mb-4">Connect</h5>
         ${socialLinks}
       </div>
     </div>
-    <div class="max-w-[1180px] mx-auto mt-8 sm:mt-10 pt-4 sm:pt-5 border-t border-white/10 flex justify-between flex-wrap gap-2 font-sans text-[0.7rem] sm:text-[0.72rem] opacity-70">
+    <div class="max-w-[1180px] mx-auto mt-8 sm:mt-10 pt-4 sm:pt-5 border-t border-white/10 flex justify-between flex-wrap gap-2 font-mono text-[0.7rem] sm:text-[0.72rem] opacity-70">
       <span>${safe(f.copyright)}</span>
       <span>${safe(f.version)}</span>
     </div>
@@ -195,7 +196,7 @@ function renderPageBanner(eyebrow, title) {
     <div class="absolute inset-0 opacity-[0.07]" style="background-image: radial-gradient(circle at 85% 20%, #d9b877, transparent 55%);"></div>
     <div class="max-w-[1180px] mx-auto relative z-10">
       <span class="eyebrow text-gold-light">${safe(eyebrow)}</span>
-      <h2 class="heading-1 text-maroon-deep mt-2">${safe(title)}</h2>
+      <h2 class="font-fraunces font-semibold text-white text-3xl sm:text-4xl md:text-[2.6rem] mt-2">${safe(title)}</h2>
     </div>
   </section>`;
 }
@@ -232,9 +233,9 @@ function renderHomepage(data = {}) {
 
   const heroButtons = (hero.buttons || []).map(b => {
     if (b.style === 'primary') {
-      return `<a href="${safe(b.href, '#')}" class="btn py-3.5 px-6 rounded-sm font-medium text-center transition-all duration-200 bg-gold text-maroon-deep hover:bg-gold-light">${safe(b.label)}</a>`;
+      return `<a href="${safe(b.href, '#')}" class="font-mono text-[0.76rem] tracking-[0.08em] uppercase py-3.5 px-6 rounded-sm font-medium text-center transition-all duration-200 bg-gold text-maroon-deep hover:bg-gold-light">${safe(b.label)}</a>`;
     }
-    return `<a href="${safe(b.href, '#')}" class="btn py-3.5 px-6 rounded-sm font-medium text-center transition-all duration-200 border border-white/50 text-parchment hover:border-gold-light hover:text-gold-light">${safe(b.label)}</a>`;
+    return `<a href="${safe(b.href, '#')}" class="font-mono text-[0.76rem] tracking-[0.08em] uppercase py-3.5 px-6 rounded-sm font-medium text-center transition-all duration-200 border border-white/50 text-parchment hover:border-gold-light hover:text-gold-light">${safe(b.label)}</a>`;
   }).join('');
 
   const articles = (newsData.articles || []).slice(0, 3);
@@ -246,10 +247,10 @@ function renderHomepage(data = {}) {
       </div>
       <div class="p-5 flex-1 flex flex-col justify-between">
         <div>
-          <span class="font-sans text-[0.7rem] tracking-[0.06em] text-gold uppercase">${fmtDate(n.date)}</span>
-          <h4 class="heading-3 text-maroon-deep leading-tight text-base sm:text-[1.08rem] my-2">${safe(n.title)}</h4>
+          <span class="font-mono text-[0.7rem] tracking-[0.06em] text-gold uppercase">${fmtDate(n.date)}</span>
+          <h4 class="font-fraunces font-semibold text-maroon-deep leading-tight text-base sm:text-[1.08rem] my-2">${safe(n.title)}</h4>
         </div>
-        <a href="news.html" class="eyebrow text-maroon border-b border-gold self-start mt-3">Read More</a>
+        <a href="news.html" class="font-mono text-[0.72rem] tracking-[0.06em] uppercase text-maroon border-b border-gold self-start mt-3">Read More</a>
       </div>
     </article>`;
   }).join('');
@@ -260,8 +261,8 @@ function renderHomepage(data = {}) {
 
   const dirCards = (dir.items || []).map(d =>
     `<a href="${safe(d.href, '#')}" class="block bg-white border border-parchment-dark p-5 sm:py-6 sm:px-[22px] transition-all duration-200 hover:border-gold hover:-translate-y-1">
-      <span class="eyebrow text-gold">${safe(d.number)}</span>
-      <h4 class="heading-3 text-maroon-deep leading-tight text-base sm:text-[1.08rem] mt-2 mb-1.5">${safe(d.title)}</h4>
+      <span class="font-mono text-[0.72rem] text-gold tracking-[0.06em]">${safe(d.number)}</span>
+      <h4 class="font-fraunces font-semibold text-maroon-deep leading-tight text-base sm:text-[1.08rem] mt-2 mb-1.5">${safe(d.title)}</h4>
       <p class="text-sm sm:text-[0.9rem] text-ink-soft">${safe(d.description)}</p>
     </a>`
   ).join('');
@@ -272,7 +273,7 @@ function renderHomepage(data = {}) {
     <div class="absolute inset-0 bg-gradient-to-r from-maroon-deep/95 via-maroon-deep/85 to-maroon-deep/65 pointer-events-none"></div>
     <div class="max-w-[1180px] mx-auto relative z-10">
       <span class="eyebrow text-gold-light block mb-2 sm:mb-3">${safe(hero.eyebrow)}</span>
-      <h2 id="hero-headline" class="heading-1 text-white max-w-[15ch] mb-4 sm:mb-6">${safe(hero.headline)}</h2>
+      <h2 id="hero-headline" class="font-fraunces font-medium text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white max-w-[15ch] leading-tight mb-4 sm:mb-6 italic">${safe(hero.headline)}</h2>
       <p id="hero-subtext" class="max-w-[50ch] text-base sm:text-lg text-parchment-dark mb-6 sm:mb-8 leading-relaxed">${safe(hero.subtext)}</p>
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-[14px]">
         ${heroButtons}
@@ -282,7 +283,7 @@ function renderHomepage(data = {}) {
 
   <!-- Liturgical strip -->
   <div class="bg-gold text-maroon-deep">
-    <div class="max-w-[1180px] mx-auto py-2.5 px-4 sm:px-6 flex items-center gap-2 sm:gap-3 flex-wrap font-sans text-[0.72rem] sm:text-[0.78rem]">
+    <div class="max-w-[1180px] mx-auto py-2.5 px-4 sm:px-6 flex items-center gap-2 sm:gap-3 flex-wrap font-mono text-[0.72rem] sm:text-[0.78rem]">
       <span class="w-2.5 h-2.5 rounded-full bg-maroon-deep shrink-0"></span>
       <strong class="font-semibold">Today</strong>
       <span class="opacity-50">&middot;</span>
@@ -297,12 +298,12 @@ function renderHomepage(data = {}) {
     <div class="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
       <div>
         <span class="eyebrow block mb-2">${safe(vis.eyebrow, 'Vision')}</span>
-        <h4 class="heading-3 text-maroon-deep mb-3 mb-3">${safe(vis.title)}</h4>
+        <h4 class="font-fraunces font-semibold text-maroon-deep leading-tight text-xl sm:text-2xl italic mb-3">${safe(vis.title)}</h4>
         <p class="text-ink-soft text-base sm:text-[1.02rem]">${safe(vis.text)}</p>
       </div>
       <div>
         <span class="eyebrow block mb-2">${safe(mis.eyebrow, 'Mission')}</span>
-        <h4 class="heading-3 text-maroon-deep mb-3 mb-3">${safe(mis.title)}</h4>
+        <h4 class="font-fraunces font-semibold text-maroon-deep leading-tight text-xl sm:text-2xl italic mb-3">${safe(mis.title)}</h4>
         <ol class="pl-5 text-ink-soft text-base sm:text-[1.02rem] list-decimal space-y-1.5">
           ${missionItems}
         </ol>
@@ -315,7 +316,7 @@ function renderHomepage(data = {}) {
     <div class="max-w-[1180px] mx-auto">
       <div class="mb-8 sm:mb-10 max-w-[60ch]">
         <span class="eyebrow">${safe(ns.eyebrow)}</span>
-        <h3 class="heading-2 text-maroon-deep">${safe(ns.title)}</h3>
+        <h3 class="font-fraunces font-semibold text-maroon-deep leading-tight text-2xl sm:text-3xl md:text-4xl mt-1.5">${safe(ns.title)}</h3>
       </div>
       <div id="home-news-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
         ${newsCards}
@@ -328,7 +329,7 @@ function renderHomepage(data = {}) {
     <div class="max-w-[1180px] mx-auto">
       <div class="mb-8 sm:mb-10 max-w-[60ch]">
         <span class="eyebrow !text-gold-light">${safe(es.eyebrow)}</span>
-        <h3 class="heading-2 text-maroon-deep">${safe(es.title)}</h3>
+        <h3 class="font-fraunces font-semibold leading-tight text-2xl sm:text-3xl md:text-4xl mt-1.5 text-white">${safe(es.title)}</h3>
       </div>
       <div class="divide-y divide-white/10">
         ${eventItems}
@@ -341,7 +342,7 @@ function renderHomepage(data = {}) {
     <div class="max-w-[1180px] mx-auto">
       <div class="mb-8 sm:mb-10 max-w-[60ch]">
         <span class="eyebrow">${safe(dir.eyebrow)}</span>
-        <h3 class="heading-2 text-maroon-deep">${safe(dir.title)}</h3>
+        <h3 class="font-fraunces font-semibold text-maroon-deep leading-tight text-2xl sm:text-3xl md:text-4xl mt-1.5">${safe(dir.title)}</h3>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         ${dirCards}
@@ -369,9 +370,9 @@ function renderHistory(d = SiteData.history || {}) {
 function renderVisionMission(d = SiteData.visionMission || {}) {
   const items = (d.missionItems || []).map(i => `<li>${i}</li>`).join('');
   const html = `
-    <h3 class="heading-3 text-maroon-deep">${safe(d.visionTitle, 'Vision')}</h3>
+    <h3 class="font-fraunces text-maroon-deep text-xl font-semibold italic">${safe(d.visionTitle, 'Vision')}</h3>
     <p>${safe(d.visionText)}</p>
-    <h3 class="heading-3 text-maroon-deep pt-4">${safe(d.missionTitle, 'Mission')}</h3>
+    <h3 class="font-fraunces text-maroon-deep text-xl font-semibold italic pt-4">${safe(d.missionTitle, 'Mission')}</h3>
     <ol class="list-decimal pl-5 space-y-2">${items}</ol>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
 }
@@ -382,15 +383,8 @@ function renderBishop(d = SiteData.bishop || {}) {
   const bishopImage = safe(d.image, 'https://placehold.co/800x1000/ece2cd/4a1420?text=Bishop+Portrait');
   const html = `
     <div class="grid md:grid-cols-[320px_1fr] gap-6 md:gap-8 items-start not-prose">
-      <div class="flex flex-col gap-6">
-        <div class="bg-parchment-dark border border-parchment-dark overflow-hidden rounded-md shadow-sm">
-          <img src="${bishopImage}" alt="${safe(d.bannerTitle, 'Bishop portrait')}" class="w-full h-full object-cover aspect-[4/5]">
-        </div>
-        ${d.coatOfArms ? `
-        <div class="bg-white border border-parchment-dark p-6 rounded-md shadow-sm flex flex-col items-center justify-center">
-          <img src="${safe(d.coatOfArms)}" alt="Coat of Arms" class="w-40 h-auto object-contain">
-          <span class="text-gold mt-4 text-xs font-semibold uppercase tracking-widest text-center">Coat of Arms</span>
-        </div>` : ''}
+      <div class="bg-parchment-dark border border-parchment-dark overflow-hidden">
+        <img src="${bishopImage}" alt="${safe(d.bannerTitle, 'Bishop portrait')}" class="w-full h-full object-cover aspect-[4/5]">
       </div>
       <div class="space-y-4">${safe(d.content)}</div>
     </div>`;
@@ -400,152 +394,23 @@ function renderBishop(d = SiteData.bishop || {}) {
 /* ── Former Bishops ──────────────────────────────────────── */
 
 function renderFormerBishops(d = SiteData.formerBishops || {}) {
-  setTimeout(async () => {
-    try {
-      const res = await fetch('database/api_bishops.php');
-      const data = await res.json();
-      const container = document.getElementById('bishops-container');
-      if (!container) return;
-      if (!data.ok) throw new Error(data.error);
-      
-      window.loadedBishops = data.bishops; // Store for modal access
-
-      if (data.bishops.length === 0) {
-        container.innerHTML = '<p class="text-ink-soft">No former bishops found.</p>';
-        return;
-      }
-
-      const cards = data.bishops.map(b => {
-        const photo = b.photo || 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop';
-        return `
-          <button onclick="openBishopModal(${b.id})" class="text-left group relative bg-white border border-parchment-dark shadow-sm hover:shadow-md hover:border-gold transition-all duration-300 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-gold flex flex-col h-full">
-            <div class="aspect-[4/5] w-full bg-parchment-dark overflow-hidden relative">
-              <img src="${safe(photo)}" alt="${safe(b.full_name)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-              <div class="absolute inset-0 bg-maroon opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-              ${b.coat_of_arms ? `<div class="absolute bottom-3 right-3 w-16 h-16 bg-white p-1.5 rounded-full shadow-md border border-parchment-dark flex items-center justify-center transition-transform group-hover:scale-110"><img src="${safe(b.coat_of_arms)}" alt="Coat of Arms" class="w-full h-full object-contain"></div>` : ''}
-            </div>
-            <div class="p-6 flex-1 flex flex-col">
-              <h3 class="font-serif text-maroon-deep text-xl font-semibold mb-1 group-hover:text-maroon transition-colors">${safe(b.full_name)}</h3>
-              <p class="text-ink-soft text-sm font-medium mb-4">${b.start_year} &mdash; ${b.end_year || 'Present'}</p>
-              
-              <div class="mt-auto pt-4 border-t border-parchment-dark flex items-center justify-between text-gold">
-                <span class="text-[0.8125rem] font-sans font-semibold uppercase tracking-wider">Read Profile</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-              </div>
-            </div>
-          </button>
-        `;
-      }).join('');
-      
-      // We use a grid instead of rows
-      container.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8';
-      container.innerHTML = cards;
-    } catch(e) {
-      const container = document.getElementById('bishops-container');
-      if (container) container.innerHTML = `<p class="text-red-600">Error loading bishops: ${e.message}</p>`;
-    }
-  }, 0);
-
-  const html = `
-    <div class="max-w-3xl mx-auto text-center mb-12">
-      <p class="text-lg leading-relaxed">${safe(d.intro)}</p>
-    </div>
-    
-    <div id="bishops-container" class="mt-8 text-center"><p class="text-ink-soft">Loading bishops...</p></div>
-    
-    <div id="bishop-modal-root"></div>
-    
-    <div class="mt-16 pt-8 border-t border-parchment-dark text-center">
-      <p class="text-small text-ink-soft max-w-2xl mx-auto">${safe(d.note)}</p>
+  const rows = (d.bishops || []).map(b => {
+    const photo = safe(b.photo, 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop');
+    return `<div class="p-4 flex flex-col sm:flex-row gap-4 items-start border-b border-parchment-dark last:border-b-0">
+      <div class="w-full sm:w-[120px] shrink-0 bg-parchment-dark overflow-hidden">
+        <img src="${photo}" alt="${safe(b.name, 'Former bishop portrait')}" class="w-full aspect-[4/5] object-cover">
+      </div>
+      <div class="flex-1">
+        <span class="font-fraunces text-maroon-deep font-semibold block">${safe(b.name)}</span>
+        <span class="text-sm">${safe(b.years)}</span>
+      </div>
     </div>`;
-  return renderPageBanner(d.eyebrow, d.bannerTitle) + `<section class="py-16 md:py-24 px-5 max-w-[1200px] mx-auto">${html}</section>`;
-}
-
-function closeBishopModal() {
-  const root = document.getElementById('bishop-modal-root');
-  if (root) root.innerHTML = '';
-  document.body.style.overflow = '';
-}
-
-function openBishopModal(id) {
-  const bishop = (window.loadedBishops || []).find(b => b.id == id);
-  if (!bishop) return;
-  
-  const root = document.getElementById('bishop-modal-root');
-  if (!root) return;
-  
-  const photo = bishop.photo || 'https://placehold.co/600x800/ece2cd/4a1420?text=Former+Bishop';
-  
-  // Conditionally render fields
-  const renderField = (label, value) => {
-    if (!value || String(value).trim() === '') return '';
-    return `
-      <div class="mb-4">
-        <span class="block text-[0.75rem] font-sans font-semibold uppercase tracking-[0.1em] text-gold mb-1">${label}</span>
-        <span class="block text-ink">${safe(value)}</span>
-      </div>
-    `;
-  };
-
-  const renderProse = (label, value) => {
-    if (!value || String(value).trim() === '') return '';
-    return `
-      <div class="mt-8 border-t border-parchment-dark pt-6">
-        <h4 class="font-serif text-maroon-deep text-xl font-semibold mb-3">${label}</h4>
-        <div class="prose prose-sm prose-p:text-ink prose-p:leading-relaxed max-w-none">${safe(value).replace(/\n/g, '<br>')}</div>
-      </div>
-    `;
-  };
-
-  document.body.style.overflow = 'hidden';
-  
-  root.innerHTML = `
-    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-ink/80 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="bmodal-overlay" onclick="if(event.target === this) closeBishopModal()">
-      <div class="bg-parchment w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row relative translate-y-4 transition-transform duration-300" id="bmodal-content">
-        
-        <button onclick="closeBishopModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-ink hover:bg-white hover:text-maroon transition shadow-sm focus:outline-none focus:ring-2 focus:ring-maroon" aria-label="Close modal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-
-        <div class="md:w-2/5 bg-parchment-dark relative shrink-0 flex flex-col justify-center items-center overflow-hidden">
-          <div class="absolute inset-0">
-            <img src="${safe(photo)}" alt="${safe(bishop.full_name)}" class="w-full h-full object-cover opacity-90">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-ink/70"></div>
-          </div>
-          ${bishop.coat_of_arms ? `<div class="relative z-10 p-6 flex flex-col items-center justify-center mt-auto w-full"><img src="${safe(bishop.coat_of_arms)}" alt="Coat of Arms" class="w-40 h-40 object-contain drop-shadow-xl"><p class="text-gold-light mt-3 text-sm tracking-widest uppercase font-semibold">Coat of Arms</p></div>` : ''}
-          <!-- Mobile header overlay -->
-          <div class="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink/90 to-transparent p-6 pt-20">
-            <h2 class="font-serif text-3xl font-semibold text-white mb-1">${safe(bishop.full_name)}</h2>
-            <p class="text-gold-light font-medium">${bishop.start_year} &mdash; ${bishop.end_year || 'Present'}</p>
-          </div>
-        </div>
-        
-        <div class="md:w-3/5 overflow-y-auto p-6 md:p-10 custom-scrollbar bg-white">
-          <div class="hidden md:block mb-8 pb-6 border-b border-parchment-dark">
-            <h2 class="font-serif text-4xl font-semibold text-maroon-deep mb-2">${safe(bishop.full_name)}</h2>
-            <p class="text-gold font-medium text-lg">${bishop.start_year} &mdash; ${bishop.end_year || 'Present'}</p>
-          </div>
-          
-          <div class="grid sm:grid-cols-2 gap-x-6 gap-y-2">
-            ${renderField('Date of Birth', bishop.dob)}
-            ${renderField('Place of Birth', bishop.pob)}
-            ${renderField('Date of Ordination', bishop.ordination_date)}
-            ${renderField('Episcopal Motto', bishop.episcopal_motto)}
-          </div>
-          
-          ${renderProse('Biography', bishop.biography)}
-          ${renderProse('Pastoral Contributions', bishop.contributions)}
-          
-        </div>
-      </div>
-    </div>
-  `;
-  
-  // Trigger animations
-  setTimeout(() => {
-    document.getElementById('bmodal-overlay').classList.remove('opacity-0');
-    document.getElementById('bmodal-content').classList.remove('translate-y-4');
-  }, 10);
+  }).join('');
+  const html = `
+    <p>${safe(d.intro)}</p>
+    <div class="border border-parchment-dark mt-4">${rows}</div>
+    <p class="text-sm">${safe(d.note)}</p>`;
+  return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
 }
 
 /* ── Clergy ──────────────────────────────────────────────── */
@@ -571,7 +436,7 @@ function renderCuria(d = SiteData.curia || {}) {
     const photo = safe(o.photo, 'https://placehold.co/600x420/ece2cd/4a1420?text=Office+Photo');
     return `<div class="border border-parchment-dark overflow-hidden bg-white">
       <div class="h-40 bg-parchment-dark"><img src="${photo}" alt="${safe(o.name, 'Curia office')}" class="w-full h-full object-cover"></div>
-      <div class="p-4"><h4 class="heading-3 text-maroon-deep mb-1">${safe(o.name)}</h4><p class="text-small max-w-[65ch]">${safe(o.description)}</p></div>
+      <div class="p-4"><h4 class="font-fraunces font-semibold text-maroon-deep mb-1">${safe(o.name)}</h4><p class="text-sm">${safe(o.description)}</p></div>
     </div>`;
   }).join('');
   const html = `<p>${safe(d.intro)}</p><div class="grid sm:grid-cols-2 gap-4 mt-4">${cards}</div>`;
@@ -620,8 +485,8 @@ function renderBulletins(d = SiteData.bulletins || {}) {
       </div>
       <div class="space-y-4">
         <p class="italic">${safe(d.message)}</p>
-        <p class="text-small max-w-[65ch]">${safe(d.author)}</p>
-        <p class="pt-4 max-w-[65ch]"><a href="${safe(d.ctaHref, 'events.html')}" class="eyebrow text-maroon border-b border-gold">${safe(d.ctaLabel, 'View the Diocesan Calendar &rarr;')}</a></p>
+        <p class="text-sm">${safe(d.author)}</p>
+        <p class="pt-4"><a href="${safe(d.ctaHref, 'events.html')}" class="font-mono text-xs uppercase text-maroon border-b border-gold">${safe(d.ctaLabel, 'View the Diocesan Calendar &rarr;')}</a></p>
       </div>
     </div>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
@@ -634,15 +499,6 @@ function renderContact(d = SiteData.contact || {}) {
     <p><strong>Address:</strong> ${safe(d.address)}</p>
     <p><strong>Email:</strong> ${safe(d.email)}</p>
     <p><strong>Phone:</strong> ${safe(d.phone)}</p>`;
-  return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
-}
-
-/* ── Privacy Policy ──────────────────────────────────────── */
-
-function renderPrivacy(d = SiteData.privacy || {}) {
-  const html = `
-    <h3 class="heading-3 text-maroon-deep">${safe(d.title, 'Privacy Policy')}</h3>
-    <p class="whitespace-pre-line">${safe(d.body)}</p>`;
   return renderPageBanner(d.eyebrow, d.bannerTitle) + renderProseSection(html);
 }
 
@@ -700,7 +556,6 @@ const PAGE_RENDERERS = {
   gallery: renderGallery,
   bulletins: renderBulletins,
   contact: renderContact,
-  privacy: renderPrivacy,
 };
 
 /* Page title map (pulled from SiteData) */
@@ -719,7 +574,6 @@ function getPageTitle(pageKey) {
     gallery: (SiteData.gallery || {}).pageTitle,
     bulletins: (SiteData.bulletins || {}).pageTitle,
     contact: (SiteData.contact || {}).pageTitle,
-    privacy: (SiteData.privacy || {}).pageTitle,
   };
   return map[pageKey] || 'Diocese of Boac';
 }
