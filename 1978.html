@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin | Diocese of Boac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { maroon:'#6a1f2b', 'maroon-deep':'#4a0f20', gold:'#b4863f', 'gold-light':'#d9b877',
+      parchment:'#f6f0e4', 'parchment-dark':'#ece2cd', cream:'#fcfaf8', border:'#E7DFD3', ink:'#2a2420', 'ink-soft':'#5c5147', white:'#fffdf9',
+      sidebar:'#4a0f20' },
+    fontFamily: { sans:['Inter','sans-serif'], serif:['Playfair Display','serif'] },
+  }}}
+</script>
+<style>
+  ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-thumb{background:#b4863f;border-radius:6px}
+  .badge{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
+  .badge { font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 9999px; display: inline-block; }
+  .lucide { stroke-width: 1.5; width: 18px; height: 18px; }
+  .sidebar-section { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem; padding-left: 0.75rem; }
+  .nav-btn { height: 40px; }
+  .nav-btn:focus-visible { outline: 2px solid #b4863f; outline-offset: -2px; }
+</style>
+</head>
+<body class="font-sans bg-parchment text-ink min-h-screen">
+
+<!-- ===== Login screen ===== -->
+<div id="loginScreen" class="max-w-[400px] mx-auto mt-24 bg-white border border-parchment-dark rounded-xl p-8 shadow-sm">
+  <h1 class="font-sans font-semibold text-ink text-xl mb-1">Super Admin Login</h1>
+  <!-- <p id="storageWarning" class="text-ink-soft text-sm mb-5 hidden">⚠️ Persistent storage isn't available in this view — you can preview the editor, but changes won't be saved.</p> -->
+  <input id="adminPass" type="password" placeholder="Password" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 mb-3 text-sm">
+  <button onclick="tryLogin()" class="w-full bg-maroon text-white font-semibold text-sm rounded-md py-2.5 hover:bg-maroon-deep transition">Log In</button>
+  <p class="text-ink-soft text-xs mt-3">Hint: boac2026</p>
+</div>
+
+<!-- ===== Admin shell ===== -->
+<div id="adminScreen" class="hidden flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-[256px] shrink-0 bg-sidebar text-parchment-dark flex flex-col fixed h-screen overflow-y-auto z-40 transition-transform -translate-x-full lg:translate-x-0">
+    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <img id="admin-logo" src="images/logo.jpg" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
+      <div>
+        <div class="font-serif font-bold text-white text-[0.95rem] leading-tight">Diocese of Boac</div>
+        <div class="text-[0.65rem] tracking-[0.14em] uppercase text-gold-light font-semibold">Super Admin</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 text-sm">
+      <div class="sidebar-section">Main</div>
+      <button data-tab="dashboard" onclick="selectTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left">
+        <span><i data-lucide="layout-dashboard"></i></span><span>Dashboard</span>
+      </button>
+
+      <div class="sidebar-section">Pages</div>
+      <button data-tab="home" onclick="selectTab('home')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="home"></i></span><span>Home Hero</span></button>
+      <button data-tab="history" onclick="selectTab('history')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="book-open"></i></span><span>History</span></button>
+      <button data-tab="bishop" onclick="selectTab('bishop')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="user"></i></span><span>Bishop of Boac</span></button>
+      <button data-tab="visionMission" onclick="selectTab('visionMission')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="target"></i></span><span>Vision &amp; Mission</span></button>
+      <button data-tab="formerBishops" onclick="selectTab('formerBishops')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="history"></i></span><span>Former Bishops</span></button>
+      <button data-tab="curia" onclick="selectTab('curia')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="building"></i></span><span>Curia</span></button>
+      <button data-tab="bulletin" onclick="selectTab('bulletin')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="file-text"></i></span><span>Bulletin</span></button>
+      <button data-tab="gallery" onclick="selectTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="image"></i></span><span>Gallery Page</span></button>
+      <button data-tab="contact" onclick="selectTab('contact')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="phone"></i></span><span>Contact</span></button>
+      <button data-tab="privacy" onclick="selectTab('privacy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="shield"></i></span><span>Privacy Policy</span></button>
+
+      <div class="sidebar-section">Content</div>
+      <button data-tab="news" onclick="selectTab('news')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="megaphone"></i></span><span>Announcements</span></button>
+      <button data-tab="events" onclick="selectTab('events')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="calendar"></i></span><span>Events</span></button>
+      <button data-tab="parishes" onclick="selectTab('parishes')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="map-pin"></i></span><span>Parishes</span></button>
+      <button data-tab="clergy" onclick="selectTab('clergy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="users"></i></span><span>Clergy Directory</span></button>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-white/10">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold-light">🛡️</div>
+        <div>
+          <div class="text-white text-sm font-semibold leading-tight">Super Admin</div>
+          <div class="text-[0.7rem] text-gold-light">Super Administrator</div>
+        </div>
+      </div>
+      <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition text-sm text-parchment-dark">
+        <span><i data-lucide="log-out"></i></span><span>Logout</span>
+      </button>
+      <a href="index.html" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition text-sm text-parchment-dark mt-1">
+        <span><i data-lucide="arrow-left"></i></span><span>Back to Site</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="lg:hidden bg-white border-b border-border p-4 flex items-center justify-between sticky top-0 z-30">
+      <div class="font-serif font-bold text-maroon-deep text-lg">Diocese of Boac</div>
+      <button onclick="document.getElementById('sidebar').classList.toggle('-translate-x-full')" class="p-2 border border-border rounded-md text-ink-soft"><i data-lucide="menu"></i></button>
+    </div>
+  <main class="flex-1 lg:ml-[256px] p-4 md:p-8">
+    <div id="panel"></div>
+  </main>
+</div>
+
+<script src="site-data.js?v=1791561757078"></script>
+<script>
+if (window.SiteData && document.getElementById('admin-logo')) {
+  document.getElementById('admin-logo').src = SiteData.site.logoUrl || 'images/logo.jpg';
+}
+const ADMIN_PASS = 'boac2026';
+let storageAvailable = true;
+
+const PROSE_TABS = {
+  site: { label:'Website Settings', icon:'<i data-lucide="settings"></i>', dkey:DKEYS.site, subtitle:'Edit the site identity, utility bar, and primary links', fields:[['name','Site Name'],['subtitle','Subtitle'],['utilityBarAddress','Utility bar address'],['contactUrl','Contact URL'],['adminUrl','Admin URL']] },
+  home: { label:'Home Hero', icon:'<i data-lucide="home"></i>', dkey:DKEYS.home, subtitle:'Edit the homepage headline, welcome message, and hero imagery', fields:[['headline','Hero Headline'],['subtext','Hero Subtext'],['backgroundImage','Hero Image URL']] },
+  history: { label:'History', icon:'<i data-lucide="book-open"></i>', dkey:DKEYS.history, subtitle:'Edit the History page banner and story content', fields:[['bannerTitle','Banner Title'],['image','Page Image URL'],['content','Body']] },
+  bishop: { label:'Bishop of Boac', icon:'<i data-lucide="user"></i>', dkey:DKEYS.bishop, subtitle:'Edit bishop portrait and biography', fields:[['bannerTitle','Banner Title'],['image','Portrait URL'],['coatOfArms','Coat of Arms URL'],['content','Body']] },
+  visionMission: { label:'Vision & Mission', icon:'<i data-lucide="target"></i>', dkey:DKEYS.visionMission, subtitle:'Edit the moral vision and pastoral mission of the diocese', fields:[['bannerTitle','Banner Title'],['visionTitle','Vision Title'],['visionText','Vision Text'],['missionTitle','Mission Title'],['missionItems','Mission Items (one per line)']] },
+  curia: { label:'Curia', icon:'<i data-lucide="building"></i>', dkey:DKEYS.curia, subtitle:'Edit diocesan office summary and introductory text', fields:[['bannerTitle','Banner Title'],['intro','Intro Text'],['offices','Offices (JSON)']] },
+  bulletin: { label:'Bulletin', icon:'<i data-lucide="file-text"></i>', dkey:DKEYS.bulletins, subtitle:"Edit the Bishop's bulletin message and call-to-action", fields:[['bannerTitle','Banner Title'],['image','Bulletin Photo URL'],['message','Message'],['author','Author'],['ctaLabel','CTA Label'],['ctaHref','CTA URL']] },
+  gallery: { label:'Gallery Page', icon:'<i data-lucide="image"></i>', dkey:DKEYS.gallery, subtitle:'Edit the gallery hero image and album image list', fields:[['bannerTitle','Gallery Banner'],['image','Featured Image URL'],['images','Images (JSON array)']] },
+  contact: { label:'Contact', icon:'<i data-lucide="phone"></i>', dkey:DKEYS.contact, subtitle:'Edit contact details shown on the Contact page', fields:[['bannerTitle','Banner Title'],['address','Address'],['email','Email'],['phone','Phone']] },
+  privacy: { label:'Privacy Policy', icon:'<i data-lucide="shield"></i>', dkey:DKEYS.privacy, subtitle:'Edit the Privacy Policy page content', fields:[['bannerTitle','Banner Title'],['title','Policy Title'],['body','Policy Body']] },
+};
+
+const LIST_TABS = {
+  news: { label:'Announcements', icon:'<i data-lucide="megaphone"></i>', dkey:DKEYS.news, subtitle:'Publish, edit, or delete announcements system-wide', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['body','Body']], titleField:'title', sourceField:null },
+  events: { label:'Events', icon:'<i data-lucide="calendar"></i>', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['desc','Description']], titleField:'title', sourceField:null },
+  parishes: { label:'Parishes', icon:'<i data-lucide="map-pin"></i>', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['address','Address']], titleField:'name', sourceField:null },
+  clergy: { label:'Clergy Directory', icon:'<i data-lucide="users"></i>', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL']], titleField:'name', sourceField:null },
+  curiaOffices: { label:'Curia Offices', icon:'<i data-lucide="building"></i>', dkey:DKEYS.curia, subtitle:'Manage office cards within the Curia page', fields:[['name','Office Name'],['description','Description'],['photo','Photo URL']], titleField:'name', sourceField:'offices' },
+  galleryImages: { label:'Gallery Images', icon:'<i data-lucide="image"></i>', dkey:DKEYS.gallery, subtitle:'Manage the gallery photo collection', fields:[['src','Image URL'],['alt','Alt Text']], titleField:'alt', sourceField:'images' },
+};
+
+let currentTab = 'dashboard';
+let editingId = null;
+
+function safe(val, fallback = '') {
+  return (val !== undefined && val !== null && val !== '') ? val : fallback;
+}
+
+function tryLogin(){
+  if(document.getElementById('adminPass').value === ADMIN_PASS){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminScreen').classList.remove('hidden');
+    document.getElementById('adminScreen').classList.add('flex');
+    selectTab('dashboard');
+  } else { alert('Incorrect password.'); }
+}
+function logout(){
+  document.getElementById('adminScreen').classList.add('hidden');
+  document.getElementById('adminScreen').classList.remove('flex');
+  document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+function setActiveNav(key){
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    const active = b.dataset.tab === key;
+    b.classList.toggle('bg-maroon', active);
+    b.classList.toggle('text-white', active);
+    b.classList.toggle('font-semibold', active);
+  });
+}
+
+async function selectTab(key){
+  currentTab = key; editingId = null;
+  setActiveNav(key);
+  if(key === 'dashboard') { renderDashboard(); setTimeout(()=>lucide.createIcons(), 0); return; }
+  if(key === 'formerBishops') { renderBishopsPanel(); return; }
+  if(PROSE_TABS[key]) { renderProsePanel(key).then(()=>lucide.createIcons()); return; }
+  if(LIST_TABS[key]) { renderListPanel(key).then(()=>lucide.createIcons()); return; }
+}
+
+async function renderDashboard(){
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  const [news, events, parishes, clergy, gallery] = await Promise.all([
+    dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy), dGet(DKEYS.gallery)
+  ]);
+  const galleryImages = (gallery && gallery.images) ? gallery.images.length : 0;
+  const counts = {
+    news: (news || []).length,
+    events: (events || []).length,
+    parishes: (parishes || []).length,
+    clergy: (clergy || []).length,
+    gallery: galleryImages,
+    bulletins: 1,
+  };
+  const recentItems = [
+    ...(news || []).slice(0, 2).map(item => ({ label: item.title || 'Announcement', tab: 'news', icon: 'megaphone' })),
+    ...(events || []).slice(0, 2).map(item => ({ label: item.title || 'Event', tab: 'events', icon: 'calendar' })),
+  ].slice(0, 4);
+
+  panel.innerHTML = `
+    <div class="mb-6 flex justify-between items-end flex-wrap gap-4 border-b border-border pb-4">
+      <div>
+        <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">Dashboard</h1>
+        <p class="text-ink-soft text-[0.875rem] mt-1">Overview of all content across the Diocese of Boac website</p>
+      </div>
+      <div class="bg-white border border-border shadow-sm rounded-md px-4 py-2.5 text-[0.875rem] text-ink-soft flex items-center gap-2">
+        <span class="font-semibold text-maroon-deep">CMS Mode</span> <span class="text-border">|</span>
+        <span id="dbStatus" class="inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-border inline-block"></span>
+          <span>Checking DB…</span>
+        </span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+      ${statCard('<i data-lucide="megaphone"></i>', counts.news, 'Announcements', 'news')}
+      ${statCard('<i data-lucide="calendar"></i>', counts.events, 'Events', 'events')}
+      ${statCard('<i data-lucide="image"></i>', counts.gallery, 'Gallery', 'gallery')}
+      ${statCard('<i data-lucide="users"></i>', counts.clergy, 'Clergy', 'clergy')}
+      ${statCard('<i data-lucide="map-pin"></i>', counts.parishes, 'Parishes', 'parishes')}
+      ${statCard('<i data-lucide="file-text"></i>', counts.bulletins, 'Bulletins', 'bulletin')}
+    </div>
+    <div class="mt-6 grid lg:grid-cols-[1.15fr_0.85fr] gap-6">
+      <div class="bg-white border border-border shadow-sm rounded-xl p-5">
+        <h3 class="font-sans font-semibold text-ink mb-4 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-ink-soft"></i> Recent Updates</h3>
+        <div class="space-y-3">
+          ${recentItems.length ? recentItems.map(item => `<div class="flex justify-between items-center gap-4 border-b border-border pb-3 last:border-b-0 last:pb-0"><div class="flex items-center gap-3"><i data-lucide="${item.icon}" class="w-4 h-4 text-ink-soft"></i><span class="text-[0.875rem] text-ink">${item.label}</span></div><button onclick="selectTab('${item.tab}')" class="text-xs font-semibold text-maroon hover:text-maroon-deep transition">Open</button></div>`).join('') : '<p class="text-[0.875rem] text-ink-soft">No entries yet. Add content from the sidebar.</p>'}
+        </div>
+      </div>
+      <div class="bg-white border border-border shadow-sm rounded-xl p-5">
+        <h3 class="font-sans font-semibold text-ink mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-ink-soft"></i> Quick Actions</h3>
+        <div class="space-y-2">
+          <button onclick="selectTab('home')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="pencil" class="w-4 h-4 text-ink-soft"></i> Update homepage hero</button>
+          <button onclick="selectTab('news')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="megaphone" class="w-4 h-4 text-ink-soft"></i> Add announcement</button>
+          <button onclick="selectTab('events')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="calendar" class="w-4 h-4 text-ink-soft"></i> Add event</button>
+          <button onclick="selectTab('galleryImages')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="image" class="w-4 h-4 text-ink-soft"></i> Manage gallery</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function statCard(icon, value, label, tabKey){
+  return `<button onclick="selectTab('${tabKey}')" class="text-left bg-white border border-border rounded-xl p-4 md:p-5 hover:border-gold hover:shadow-md transition focus-visible:ring-2 focus-visible:ring-gold group">
+    <div class="w-10 h-10 rounded-md bg-parchment text-maroon-deep flex items-center justify-center mb-3 group-hover:bg-gold/10 transition">${icon}</div>
+    <div class="text-2xl font-semibold text-ink">${value}</div>
+    <div class="text-ink-soft text-[0.875rem] mt-0.5">${label}</div>
+  </button>`;
+}
+
+// Fall back to hardcoded SiteData defaults so the admin can edit
+// content even before the auto-seeder has populated the DB.
+function getContentWithDefaults(dkey) {
+  const stored = dGet(dkey);
+  return stored.then(v => {
+    if (v !== null && v !== undefined) return v;
+    return defaultContentFor(dkey);
+  });
+}
+
+async function renderProsePanel(key){
+  const tab = PROSE_TABS[key];
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  const existing = await getContentWithDefaults(tab.dkey) || {};
+  panel.innerHTML = `
+    <div class="text-sm text-ink-soft mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${tab.label}</span></div>
+    <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-border pb-4">
+      <div>
+        <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">${tab.label}</h1>
+        <p class="text-ink-soft text-[0.875rem] mt-1">${tab.subtitle}</p>
+      </div>
+      <button onclick="editProse('${key}')" class="bg-parchment text-maroon-deep font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-parchment-dark transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="pencil" class="w-4 h-4"></i> Edit</button>
+    </div>
+    
+    <div class="bg-white border border-border shadow-sm rounded-xl p-6 max-w-[800px] relative">
+      <div id="readOnlyView_${key}">
+        <div class="mb-5 rounded-md bg-cream border border-border p-3 text-[0.8125rem] text-ink-soft flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> Read-only overview. Click "Edit" to make changes.</div>
+        ${tab.fields.map(([k,label])=>`
+          <div class="mb-5">
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+            <div class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink bg-cream/50 min-h-[42px]">${safe(existing[k] || '', '—')}</div>
+          </div>`).join('')}
+      </div>
+      
+      <div id="editorControls_${key}" class="hidden">
+        <div class="mb-5 rounded-md bg-gold/10 border border-gold/20 p-3 text-[0.8125rem] text-maroon-deep flex items-center gap-2"><i data-lucide="edit-3" class="w-4 h-4"></i> You are in edit mode. Be sure to save your changes.</div>
+        ${tab.fields.map(([k,label])=>`
+          <div class="mb-4">
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+            ${['body','subtext','message','visionText','intro','description','address'].includes(k) || k === 'missionItems' ?
+              `<textarea id="f_${k}" rows="5" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>` :
+              (['image', 'backgroundImage', 'photo', 'coatOfArms'].includes(k)) 
+    ? `<div class="flex gap-2">
+         <input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="flex-1 border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">
+         <label class="bg-parchment text-maroon-deep font-semibold text-sm rounded-md px-4 h-[42px] flex items-center gap-2 cursor-pointer hover:bg-parchment-dark transition border border-border">
+           <i data-lucide="upload" class="w-4 h-4"></i> Upload
+           <input type="file" class="hidden" accept="image/jpeg,image/png,image/webp" onchange="uploadProseFile(this, 'f_${k}')">
+         </label>
+       </div><div id="upload_msg_f_${k}" class="text-xs text-ink-soft mt-1 hidden"></div>`
+    : `<input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">`
+            }
+          </div>`).join('')}
+        <div class="flex items-center gap-3 pt-2">
+          <button onclick="saveProse('${key}')" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition focus-visible:ring-2 focus-visible:ring-gold">Save Changes</button>
+          <button onclick="cancelProse('${key}')" class="text-ink-soft text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-parchment rounded-md transition focus-visible:ring-2 focus-visible:ring-gold">Cancel</button>
+          <span id="saveMsg" class="text-[0.875rem] text-green-700 font-medium"></span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function editProse(key){
+  const controls = document.getElementById(`editorControls_${key}`);
+  const view = document.getElementById(`readOnlyView_${key}`);
+  if (controls) controls.classList.remove('hidden');
+  if (view) view.classList.add('hidden');
+}
+
+function cancelProse(key){
+  const controls = document.getElementById(`editorControls_${key}`);
+  const view = document.getElementById(`readOnlyView_${key}`);
+  if (controls) controls.classList.add('hidden');
+  if (view) view.classList.remove('hidden');
+}
+
+async function saveProse(key){
+  const tab = PROSE_TABS[key];
+  const data = {};
+  tab.fields.forEach(([k])=> {
+    const field = document.getElementById('f_'+k);
+    if (!field) return;
+    const value = field.value.trim();
+    data[k] = k === 'missionItems' ? value.split('\n').map(v => v.trim()).filter(Boolean) : value;
+  });
+  await dSet(tab.dkey, data);
+  const msg = document.getElementById('saveMsg');
+  msg.textContent = 'Saved ✓';
+  setTimeout(()=> {
+    msg.textContent='';
+    selectTab(key);
+  }, 900);
+}
+
+function listSource(items, tab){
+  if (!items) return [];
+  if (tab.sourceField && items[tab.sourceField]) return items[tab.sourceField];
+  return Array.isArray(items) ? items : [];
+}
+
+async function renderListPanel(key){
+  const tab = LIST_TABS[key];
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const source = listSource(items, tab);
+  const countLabel = source.length;
+  panel.innerHTML = `
+    <div class="text-sm text-ink-soft mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${tab.label}</span></div>
+    <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-border pb-4">
+      <div>
+        <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">${tab.label} Management</h1>
+        <p class="text-ink-soft text-[0.875rem] mt-1">${tab.subtitle}</p>
+      </div>
+      <button onclick="openForm('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-maroon-deep transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="plus"></i> New</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="bg-white border border-border rounded-xl p-3 mb-4 flex flex-col md:flex-row gap-3 shadow-sm items-center">
+      <div class="relative w-full md:w-72">
+        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft w-4 h-4"></i>
+        <input id="searchFilter_${key}" type="text" placeholder="Search..." class="w-full pl-9 pr-3 h-[40px] border border-border rounded-md text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold">
+      </div>
+      <select id="sortFilter_${key}" class="border border-border h-[40px] rounded-md px-3 text-sm focus:outline-none focus:border-gold w-full md:w-auto">
+        <option value="name">Sort: Name</option>
+        <option value="date">Sort: Date</option>
+      </select>
+      <button onclick="applyListControls('${key}')" class="bg-parchment text-maroon-deep text-sm font-semibold h-[40px] px-4 rounded-md hover:bg-parchment-dark transition">Apply</button>
+    </div>
+
+    <div id="formSlot"></div>
+
+    <div class="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
+      <!-- Desktop Table Header -->
+      <div class="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 px-5 py-3 border-b border-border text-xs font-semibold text-ink-soft uppercase tracking-wider bg-cream">
+         <div>Title</div>
+         <div>Category</div>
+         <div>Date</div>
+         <div>Status</div>
+         <div class="text-right">Actions</div>
+      </div>
+      <div class="flex flex-col" id="itemsList">
+        ${countLabel ? renderManagedItems(key, tab, items) : `<div class="p-8 text-center text-ink-soft text-sm">No entries yet.</div>`}
+      </div>
+    </div>`;
+}
+function renderManagedItems(key, tab, items){
+  const source = listSource(items, tab);
+  return source.map((it, index) => itemCard(key, tab, { ...it, id: it.id || `${key}-${index}-${Date.now()}` }, index)).join('');
+}
+
+function applyListControls(key){
+  const query = document.getElementById(`searchFilter_${key}`)?.value?.toLowerCase() || '';
+  const sort = document.getElementById(`sortFilter_${key}`)?.value || 'name';
+  const panel = document.getElementById('panel');
+  const cards = Array.from(panel.querySelectorAll('[data-list-card]'));
+  const filtered = cards.filter(card => {
+    const text = card.textContent.toLowerCase();
+    return !query || text.includes(query);
+  });
+  cards.forEach(card => card.style.display = 'none');
+  filtered.forEach(card => card.style.display = 'block');
+  if (sort === 'date') {
+    const sorted = filtered.sort((a,b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
+    const container = panel.querySelector('#itemsList');
+    sorted.forEach(card => container.appendChild(card));
+  }
+}
+
+function itemCard(key, tab, item, index = 0){
+  const title = item[tab.titleField] || item.title || item.name || item.alt || '(untitled)';
+  const sub = item.body || item.desc || item.address || item.description || item.assignment || item.years || '';
+  const dateText = item.date || '';
+  const itemId = item.id || `${key}-${index}-${Date.now()}`;
+
+  return `<div class="border-b border-border last:border-b-0 p-4 md:p-5 hover:bg-cream transition group relative" data-list-card data-date="${dateText}">
+    <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 md:gap-4 md:items-center">
+      <!-- Title -->
+      <div class="min-w-0">
+        <h3 class="font-sans font-semibold text-ink text-[0.875rem] truncate">${title}</h3>
+        ${sub ? `<p class="text-ink-soft text-xs truncate mt-1">${sub.substring(0, 80)}${sub.length>80?'...':''}</p>` : ''}
+      </div>
+      <!-- Category Badge -->
+      <div class="hidden md:block">
+         <span class="badge bg-parchment text-maroon-deep border border-gold/20">${tab.label}</span>
+      </div>
+      <!-- Date -->
+      <div class="text-[0.875rem] font-sans tabular-nums text-ink-soft">
+         ${dateText || '—'}
+      </div>
+      <!-- Status -->
+      <div class="hidden md:block">
+         <span class="badge bg-green-50 text-green-700 border border-green-200">Published</span>
+      </div>
+      <!-- Actions -->
+      <div class="flex justify-end gap-1 relative items-center">
+         <button aria-label="Edit" onclick="openForm('${key}','${itemId}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+         <button aria-label="View" onclick="previewManagedItem('${encodeURIComponent(JSON.stringify(item))}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="View"><i data-lucide="eye" class="w-4 h-4"></i></button>
+         
+         <div class="relative">
+           <button aria-label="More actions" onclick="document.getElementById('menu-${itemId}').classList.toggle('hidden')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
+           <div id="menu-${itemId}" class="hidden absolute right-0 top-full mt-1 bg-white border border-border shadow-md rounded-md w-36 z-20 py-1">
+             <button onclick="duplicateListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-ink hover:bg-parchment transition flex items-center gap-2"><i data-lucide="copy" class="w-4 h-4"></i> Duplicate</button>
+             <button onclick="if(confirm('Are you sure you want to delete this?')) deleteListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete</button>
+           </div>
+         </div>
+      </div>
+    </div>
+  </div>`;
+}
+function previewManagedItem(jsonItem){
+  const item = JSON.parse(decodeURIComponent(jsonItem));
+  const panel = document.getElementById('panel');
+  const rows = Object.entries(item).map(([k, v]) => `<div class="mb-3"><span class="font-semibold text-maroon-deep">${k}:</span> <span>${safe(v, '—')}</span></div>`).join('');
+  panel.insertAdjacentHTML('beforeend', `<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] p-4"><div class="bg-white rounded-xl max-w-[700px] w-full p-6 border border-parchment-dark"><div class="flex justify-between items-start gap-3"><div><h3 class="font-sans font-semibold text-ink text-xl">Preview</h3><p class="text-ink-soft text-sm mt-1">${item.title || item.name || item.alt || 'Item'}</p></div><button onclick="this.closest('.fixed').remove()" class="text-sm text-ink-soft font-semibold">Close</button></div><div class="mt-4 max-h-[60vh] overflow-auto text-sm text-ink-soft">${rows}</div></div></div>`);
+}
+
+async function duplicateListItem(key, id){
+  const tab = LIST_TABS[key];
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const source = listSource(items, tab);
+  const item = source.find(x => x.id === id);
+  if (!item) return;
+  const clone = { ...item, id: `${key}-${Date.now()}`, title: `${item.title || item.name || item.alt || 'Copy'} (Copy)` };
+  source.push(clone);
+  if (tab.sourceField) {
+    const container = Array.isArray(items) ? { list: items } : items;
+    if (tab.sourceField) container[tab.sourceField] = source;
+    await dSet(tab.dkey, Array.isArray(items) ? items : container);
+  } else {
+    await dSet(tab.dkey, source);
+  }
+  renderListPanel(key);
+}
+
+async function openForm(key, id){
+  editingId = id || null;
+  const tab = LIST_TABS[key];
+  let existing = {};
+  if(id){
+    let items = await getContentWithDefaults(tab.dkey) || [];
+    items = withListIds(items, tab.dkey);
+    const source = listSource(items, tab);
+    existing = source.find(x => x.id === id) || {};
+  }
+  const slot = document.getElementById('formSlot');
+  slot.innerHTML = `
+    <div class="bg-white border border-border shadow-sm rounded-xl p-6 mb-6 relative">
+      <h3 class="font-sans font-semibold text-ink mb-4 pb-3 border-b border-border">${id ? 'Edit' : 'Add New'} ${tab.label.replace(/s$/,'')}</h3>
+      <div class="grid sm:grid-cols-2 gap-4 mb-5">
+        ${tab.fields.map(([k,label])=>`
+          <div class="${['body','desc','address','description','years'].includes(k) ? 'sm:col-span-2':''}">
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+            ${['body','desc','address','description','years'].includes(k) ?
+              `<textarea id="nf_${k}" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>` :
+              `<input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">`
+            }
+          </div>`).join('')}
+      </div>
+      <div class="flex items-center gap-3 pt-2 border-t border-border mt-4 pt-4">
+        <button onclick="saveListItem('${key}')" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition focus-visible:ring-2 focus-visible:ring-gold">${id ? 'Save Changes' : 'Add'}</button>
+        <button onclick="closeForm()" class="text-ink-soft text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-parchment rounded-md transition focus-visible:ring-2 focus-visible:ring-gold">Cancel</button>
+        <span id="formMsg" class="text-[0.875rem] text-maroon-deep font-medium"></span>
+      </div>
+    </div>`;
+  slot.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function closeForm(){
+  editingId = null;
+  document.getElementById('formSlot').innerHTML = '';
+}
+
+async function saveListItem(key){
+  const tab = LIST_TABS[key];
+  const data = {};
+  tab.fields.forEach(([k])=> data[k] = (document.getElementById('nf_'+k)?.value || '').trim());
+  if(!data[tab.fields[0][0]]){ alert('Please fill in the first field.'); return; }
+
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+
+  const isNested = !!tab.sourceField;
+  let container;
+  if (isNested) {
+    container = Array.isArray(items) ? { [tab.sourceField]: items } : items;
+  } else {
+    container = { _list: items };
+  }
+  const source = isNested ? container[tab.sourceField] : container._list;
+
+  if (editingId) {
+    const index = source.findIndex(it => it.id === editingId);
+    if (index >= 0) source[index] = { ...source[index], ...data, id: editingId };
+  } else {
+    source.push({ id: `${key}-${Date.now()}`, ...data });
+  }
+
+  if (isNested) {
+    container[tab.sourceField] = source;
+    await dSet(tab.dkey, container);
+  } else {
+    await dSet(tab.dkey, source);
+  }
+  closeForm();
+  renderListPanel(key);
+}
+
+async function deleteListItem(key, id){
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
+  const tab = LIST_TABS[key];
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const isNested = !!tab.sourceField;
+  let source;
+  if (isNested) {
+    source = Array.isArray(items) ? items[tab.sourceField] : items[tab.sourceField];
+    source = source.filter(x => x.id !== id);
+    const container = Array.isArray(items) ? { [tab.sourceField]: source } : { ...items, [tab.sourceField]: source };
+    await dSet(tab.dkey, container);
+  } else {
+    source = items.filter(x => x.id !== id);
+    await dSet(tab.dkey, source);
+  }
+  renderListPanel(key);
+}
+
+async function checkDbStatus(){
+  const el = document.getElementById('dbStatus');
+  if(!el) return;
+  const dot = el.querySelector('.w-2');
+  const txt = el.querySelector('span:last-child');
+  try{
+    const r = await fetch('database/api.php?action=status', { method:'GET' });
+    const j = await r.json();
+    if(j && j.ok){
+      dot.classList.remove('bg-border'); dot.classList.add('bg-green-500');
+      txt.textContent = 'DB Connected';
+      txt.classList.remove('text-ink-soft');
+      txt.classList.add('text-green-700'); txt.classList.remove('text-ink-soft');
+    } else {
+      dot.classList.remove('bg-border'); dot.classList.add('bg-red-500');
+      txt.textContent = 'DB Offline';
+    }
+  }catch(e){
+    dot.classList.remove('bg-border'); dot.classList.add('bg-red-500');
+    txt.textContent = 'DB Offline';
+  }
+}
+
+
+/* ── SQL-Based Former Bishops ──────────────────────────────────────── */
+
+async function renderBishopsPanel() {
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
+  try {
+    const res = await fetch('database/api_bishops.php');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    const bishops = data.bishops || [];
+    
+    panel.innerHTML = `
+      <div class="text-sm text-ink-soft mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>Former Bishops</span></div>
+      <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-border pb-4">
+        <div>
+          <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">Former Bishops Management</h1>
+          <p class="text-ink-soft text-[0.875rem] mt-1">Manage the bishop succession records via MySQL</p>
+        </div>
+        <button onclick="openBishopForm()" class="bg-maroon text-white font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-maroon-deep transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> New</button>
+      </div>
+      <div id="formSlot"></div>
+      <div class="bg-white border border-border shadow-sm rounded-xl overflow-hidden">
+        <table class="w-full text-left text-[0.875rem]">
+          <thead class="bg-parchment text-ink-soft font-semibold border-b border-border">
+            <tr>
+              <th class="px-5 py-3 font-semibold">Photo</th>
+              <th class="px-5 py-3 font-semibold">Name</th>
+              <th class="px-5 py-3 font-semibold">Years</th>
+              <th class="px-5 py-3 text-right font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            ${bishops.map(b => `
+              <tr class="hover:bg-cream/30 transition">
+                <td class="px-5 py-3">
+                  <div class="w-10 h-10 bg-parchment border border-border rounded overflow-hidden">
+                    ${b.photo ? `<img src="${safe(b.photo)}" class="w-full h-full object-cover">` : `<i data-lucide="user" class="w-5 h-5 mx-auto mt-2.5 text-ink-soft"></i>`}
+                  </div>
+                </td>
+                <td class="px-5 py-3 font-medium text-ink">${safe(b.full_name)}</td>
+                <td class="px-5 py-3 text-ink-soft">${b.start_year} &mdash; ${b.end_year || 'Present'}</td>
+                <td class="px-5 py-3 text-right space-x-3">
+                  <button onclick="openBishopForm(${b.id})" class="text-maroon font-semibold hover:text-maroon-deep">Edit</button>
+                  <button onclick="deleteBishop(${b.id})" class="text-red-600 font-semibold hover:text-red-800">Delete</button>
+                </td>
+              </tr>
+            `).join('')}
+            ${bishops.length === 0 ? '<tr><td colspan="4" class="px-5 py-8 text-center text-ink-soft">No bishops found.</td></tr>' : ''}
+          </tbody>
+        </table>
+      </div>
+    `;
+    lucide.createIcons();
+  } catch(e) {
+    panel.innerHTML = `<p class="text-red-600">Error: ${e.message}</p>`;
+  }
+}
+
+async function openBishopForm(id = null) {
+  editingId = id;
+  const slot = document.getElementById('formSlot');
+  let b = {};
+  if (id) {
+    const res = await fetch('database/api_bishops.php');
+    const data = await res.json();
+    b = (data.bishops || []).find(x => x.id == id) || {};
+  }
+  
+  slot.innerHTML = `
+    <div class="bg-white border border-border shadow-sm rounded-xl p-6 mb-6 relative">
+      <h3 class="font-sans font-semibold text-ink mb-4 pb-3 border-b border-border">${id ? 'Edit Bishop' : 'Add New Bishop'}</h3>
+      <div class="grid sm:grid-cols-2 gap-4 mb-5 text-[0.875rem]">
+        <div>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Full Name *</label>
+          <input id="bf_full_name" value="${safe(b.full_name).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold focus:ring-1 focus:ring-gold transition">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Start Year *</label>
+            <input type="number" id="bf_start_year" value="${b.start_year || ''}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
+          </div>
+          <div>
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">End Year</label>
+            <input type="number" id="bf_end_year" value="${b.end_year || ''}" placeholder="Blank if present" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
+          </div>
+        </div>
+        <div>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Date of Birth</label>
+          <input id="bf_dob" value="${safe(b.dob).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
+        </div>
+        <div>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Place of Birth</label>
+          <input id="bf_pob" value="${safe(b.pob).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
+        </div>
+        <div>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Date of Ordination</label>
+          <input id="bf_ordination" value="${safe(b.ordination_date).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
+        </div>
+        <div>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Episcopal Motto</label>
+          <input id="bf_motto" value="${safe(b.episcopal_motto).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
+        </div>
+        <div class="sm:col-span-1">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Photo</label>
+<div class="sm:col-span-1">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Coat of Arms</label>
+          <div class="flex items-center gap-4">
+            <input type="file" id="bf_coat_file" accept="image/jpeg,image/png,image/webp" class="text-sm">
+            <input type="hidden" id="bf_coat_url" value="${safe(b.coat_of_arms)}">
+            ${b.coat_of_arms ? `<img src="${safe(b.coat_of_arms)}" class="h-12 w-12 object-contain rounded border border-border">` : ''}
+          </div>
+        </div>
+          <div class="flex items-center gap-4">
+            <input type="file" id="bf_photo_file" accept="image/jpeg,image/png,image/webp" class="text-sm">
+            <input type="hidden" id="bf_photo_url" value="${safe(b.photo)}">
+            ${b.photo ? `<img src="${safe(b.photo)}" class="h-12 w-12 object-cover rounded border border-border">` : ''}
+          </div>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Biography</label>
+          <textarea id="bf_bio" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 focus:border-gold">${safe(b.biography)}</textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Pastoral Contributions</label>
+          <textarea id="bf_contributions" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 focus:border-gold">${safe(b.contributions)}</textarea>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 pt-4 border-t border-border mt-4">
+        <button onclick="saveBishop()" id="bf_save_btn" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition">${id ? 'Save Changes' : 'Add Bishop'}</button>
+        <button onclick="closeForm()" class="text-ink-soft text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-parchment rounded-md transition">Cancel</button>
+        <span id="bf_msg" class="text-[0.875rem] font-medium ml-2"></span>
+      </div>
+    </div>`;
+  slot.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+async function saveBishop() {
+  const btn = document.getElementById('bf_save_btn');
+  const msg = document.getElementById('bf_msg');
+  btn.disabled = true;
+  msg.className = 'text-[0.875rem] font-medium ml-2 text-ink-soft';
+  msg.textContent = 'Saving...';
+  
+  try {
+    const fileInput = document.getElementById('bf_photo_file');
+    let photoUrl = document.getElementById('bf_photo_url').value;
+    let coatUrl = document.getElementById('bf_coat_url').value;
+    
+    // Upload image if selected
+    if (fileInput.files.length > 0) {
+      msg.textContent = 'Uploading photo...';
+      const fd = new FormData(); fd.append('file', fileInput.files[0]);
+      const uploadRes = await fetch('database/upload.php', { method: 'POST', body: fd });
+      const uploadData = await uploadRes.json();
+      if (!uploadData.ok) throw new Error(uploadData.error);
+      photoUrl = uploadData.url;
+    }
+    const coatInput = document.getElementById('bf_coat_file');
+    if (coatInput.files.length > 0) {
+      msg.textContent = 'Uploading coat of arms...';
+      const fd = new FormData(); fd.append('file', coatInput.files[0]);
+      const uploadRes = await fetch('database/upload.php', { method: 'POST', body: fd });
+      const uploadData = await uploadRes.json();
+      if (!uploadData.ok) throw new Error(uploadData.error);
+      coatUrl = uploadData.url;
+    }
+
+    const payload = {
+      id: editingId,
+      full_name: document.getElementById('bf_full_name').value,
+      start_year: document.getElementById('bf_start_year').value,
+      end_year: document.getElementById('bf_end_year').value,
+      dob: document.getElementById('bf_dob').value,
+      pob: document.getElementById('bf_pob').value,
+      ordination_date: document.getElementById('bf_ordination').value,
+      episcopal_motto: document.getElementById('bf_motto').value,
+      photo: photoUrl,
+      coat_of_arms: coatUrl,
+      biography: document.getElementById('bf_bio').value,
+      contributions: document.getElementById('bf_contributions').value
+    };
+
+    msg.textContent = 'Saving record...';
+    const res = await fetch('database/api_bishops.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    
+    closeForm();
+    renderBishopsPanel();
+  } catch (e) {
+    msg.className = 'text-[0.875rem] font-medium ml-2 text-red-600';
+    msg.textContent = e.message;
+    btn.disabled = false;
+  }
+}
+
+async function deleteBishop(id) {
+  if (!confirm('Delete this bishop?')) return;
+  try {
+    const res = await fetch('database/api_bishops.php?id=' + id, { method: 'DELETE' });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    renderBishopsPanel();
+  } catch (e) {
+    alert('Error: ' + e.message);
+  }
+}
+
+
+
+async function uploadProseFile(input, targetId) {
+  if (!input.files || input.files.length === 0) return;
+  const msg = document.getElementById('upload_msg_' + targetId);
+  msg.classList.remove('hidden');
+  msg.className = 'text-xs text-ink-soft mt-1';
+  msg.textContent = 'Uploading...';
+  
+  const fd = new FormData();
+  fd.append('file', input.files[0]);
+  
+  try {
+    const res = await fetch('database/upload.php', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    document.getElementById(targetId).value = data.url;
+    msg.className = 'text-xs text-green-700 mt-1';
+    msg.textContent = 'Uploaded successfully!';
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  } catch (e) {
+    msg.className = 'text-xs text-red-600 mt-1';
+    msg.textContent = 'Error: ' + e.message;
+  }
+}
+
+(async () => {
+  try{
+    if (window.storage && typeof window.storage.set === 'function') {
+      await window.storage.set('__probe__', '1', true);
+    } else if (typeof localStorage !== 'undefined' && localStorage.setItem) {
+      localStorage.setItem('__probe__', '1');
+    }
+    storageAvailable = true;
+  }catch(e){
+    storageAvailable = true;
+  }
+  // Ensure hardcoded defaults exist in the DB so the admin can edit them.
+  if (typeof seedContentIfNeeded === 'function') seedContentIfNeeded();
+  checkDbStatus();
+})();
+</script>
+</body>
+</html>
