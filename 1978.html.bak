@@ -20,17 +20,6 @@
   ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-thumb{background:#b4863f;border-radius:6px}
   .badge{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
 </style>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .eyebrow { @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-brand-red; }
-      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
-      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
-      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
-      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
-      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
-    }
-    html { scroll-behavior: smooth; }
-  </style>
 </head>
 <body class="font-sans bg-parchment text-ink min-h-screen">
 
@@ -49,7 +38,7 @@
   <!-- Sidebar -->
   <aside class="w-[264px] shrink-0 bg-sidebar text-parchment-dark flex flex-col fixed h-screen overflow-y-auto">
     <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-      <img src="https://scontent.fmnl7-1.fna.fbcdn.net/v/t39.30808-6/490021778_4069473220042983_7205200907177214759_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGZ-ubotmnTtGeralBsySXduWcAdAkmU125ZwB0CSZTXeHcXM42VmFEaetIL_d2oZOrGIbDOsKuul1pChEAAYm6&_nc_ohc=xZIoE43t1nUQ7kNvwEGEbmJ&_nc_oc=Ado5kpreyQVB7_2HktJZynzDUeIZFrKyMe85d-fzYYx5dr7RStrCvBq8cHKecNC1WHE&_nc_zt=23&_nc_ht=scontent.fmnl7-1.fna&_nc_gid=5rwExUF7pZD61YXw9KBegg&_nc_ss=7b2a8&oh=00_AQH_ypNEv3DmZNKUGczr2wh_Uv4yERgOM3NjVIbwo0dVsQ&oe=6A714946" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
+      <img id="admin-logo" src="images/logo.jpg" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
       <div>
         <div class="font-fraunces font-bold text-white text-[0.95rem] leading-tight">Diocese of Boac</div>
         <div class="text-[0.65rem] tracking-[0.14em] uppercase text-gold-light font-semibold">Super Admin</div>
@@ -106,6 +95,9 @@
 
 <script src="site-data.js"></script>
 <script>
+if (window.SiteData && document.getElementById('admin-logo')) {
+  document.getElementById('admin-logo').src = SiteData.site.logoUrl || 'images/logo.jpg';
+}
 const ADMIN_PASS = 'boac2026';
 let storageAvailable = true;
 
@@ -123,13 +115,13 @@ const PROSE_TABS = {
 };
 
 const LIST_TABS = {
-  news: { label:'Announcements', icon:'📢', dkey:DKEYS.news, subtitle:'Publish, edit, or delete announcements system-wide', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['body','Body']], titleField:'title' },
-  events: { label:'Events', icon:'📅', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['desc','Description']], titleField:'title' },
-  parishes: { label:'Parishes', icon:'⛪', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['address','Address']], titleField:'name' },
-  clergy: { label:'Clergy Directory', icon:'👤', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL']], titleField:'name' },
-  formerBishops: { label:'Former Bishops', icon:'🕯️', dkey:DKEYS.formerBishops, subtitle:'Manage the bishop succession records', fields:[['name','Name'],['years','Years of Service'],['photo','Photo URL']], titleField:'name' },
-  curiaOffices: { label:'Curia Offices', icon:'🏛️', dkey:DKEYS.curia, subtitle:'Manage office cards within the Curia page', fields:[['name','Office Name'],['description','Description'],['photo','Photo URL']], titleField:'name' },
-  galleryImages: { label:'Gallery Images', icon:'🖼️', dkey:DKEYS.gallery, subtitle:'Manage the gallery photo collection', fields:[['src','Image URL'],['alt','Alt Text']], titleField:'alt' },
+  news: { label:'Announcements', icon:'📢', dkey:DKEYS.news, subtitle:'Publish, edit, or delete announcements system-wide', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['body','Body']], titleField:'title', sourceField:null },
+  events: { label:'Events', icon:'📅', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['desc','Description']], titleField:'title', sourceField:null },
+  parishes: { label:'Parishes', icon:'⛪', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['address','Address']], titleField:'name', sourceField:null },
+  clergy: { label:'Clergy Directory', icon:'👤', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL']], titleField:'name', sourceField:null },
+  formerBishops: { label:'Former Bishops', icon:'🕯️', dkey:DKEYS.formerBishops, subtitle:'Manage the bishop succession records', fields:[['name','Name'],['years','Years of Service'],['photo','Photo URL']], titleField:'name', sourceField:'bishops' },
+  curiaOffices: { label:'Curia Offices', icon:'🏛️', dkey:DKEYS.curia, subtitle:'Manage office cards within the Curia page', fields:[['name','Office Name'],['description','Description'],['photo','Photo URL']], titleField:'name', sourceField:'offices' },
+  galleryImages: { label:'Gallery Images', icon:'🖼️', dkey:DKEYS.gallery, subtitle:'Manage the gallery photo collection', fields:[['src','Image URL'],['alt','Alt Text']], titleField:'alt', sourceField:'images' },
 };
 
 let currentTab = 'dashboard';
@@ -198,6 +190,10 @@ async function renderDashboard(){
       </div>
       <div class="bg-white border border-parchment-dark rounded-xl px-4 py-3 text-sm text-ink-soft">
         <span class="font-semibold text-maroon-deep">CMS Mode</span> · Live content manager
+        <span id="dbStatus" class="ml-2 inline-flex items-center gap-1.5 align-middle">
+          <span class="w-2 h-2 rounded-full bg-parchment-dark inline-block"></span>
+          <span class="text-ink-soft">Checking DB…</span>
+        </span>
       </div>
     </div>
     <div class="grid grid-cols-2 xl:grid-cols-6 gap-4">
@@ -235,11 +231,21 @@ function statCard(icon, value, label, tabKey){
   </button>`;
 }
 
+// Fall back to hardcoded SiteData defaults so the admin can edit
+// content even before the auto-seeder has populated the DB.
+function getContentWithDefaults(dkey) {
+  const stored = dGet(dkey);
+  return stored.then(v => {
+    if (v !== null && v !== undefined) return v;
+    return defaultContentFor(dkey);
+  });
+}
+
 async function renderProsePanel(key){
   const tab = PROSE_TABS[key];
   const panel = document.getElementById('panel');
   panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
-  const existing = await dGet(tab.dkey) || {};
+  const existing = await getContentWithDefaults(tab.dkey) || {};
   panel.innerHTML = `
     <div class="flex justify-between items-start mb-8 flex-wrap gap-3">
       <div>
@@ -304,12 +310,20 @@ async function saveProse(key){
   }, 900);
 }
 
+function listSource(items, tab){
+  if (!items) return [];
+  if (tab.sourceField && items[tab.sourceField]) return items[tab.sourceField];
+  return Array.isArray(items) ? items : [];
+}
+
 async function renderListPanel(key){
   const tab = LIST_TABS[key];
   const panel = document.getElementById('panel');
   panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
-  const items = await dGet(tab.dkey) || [];
-  const countLabel = tab.dkey === DKEYS.gallery ? (items.images ? items.images.length : 0) : items.length;
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const source = listSource(items, tab);
+  const countLabel = source.length;
   panel.innerHTML = `
     <div class="flex justify-between items-start mb-6 flex-wrap gap-3">
       <div>
@@ -350,7 +364,7 @@ async function renderListPanel(key){
 }
 
 function renderManagedItems(key, tab, items){
-  const source = Array.isArray(items) ? items : (items.images || []);
+  const source = listSource(items, tab);
   return source.map((it, index) => itemCard(key, tab, { ...it, id: it.id || `${key}-${index}-${Date.now()}` }, index)).join('');
 }
 
@@ -405,16 +419,17 @@ function previewManagedItem(jsonItem){
 
 async function duplicateListItem(key, id){
   const tab = LIST_TABS[key];
-  let items = await dGet(tab.dkey) || [];
-  const source = Array.isArray(items) ? items : (items.images || []);
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const source = listSource(items, tab);
   const item = source.find(x => x.id === id);
   if (!item) return;
   const clone = { ...item, id: `${key}-${Date.now()}`, title: `${item.title || item.name || item.alt || 'Copy'} (Copy)` };
   source.push(clone);
-  if (tab.dkey === DKEYS.gallery) {
-    const galleryData = await dGet(tab.dkey) || { images: [] };
-    galleryData.images = source;
-    await dSet(tab.dkey, galleryData);
+  if (tab.sourceField) {
+    const container = Array.isArray(items) ? { list: items } : items;
+    if (tab.sourceField) container[tab.sourceField] = source;
+    await dSet(tab.dkey, Array.isArray(items) ? items : container);
   } else {
     await dSet(tab.dkey, source);
   }
@@ -426,8 +441,9 @@ async function openForm(key, id){
   const tab = LIST_TABS[key];
   let existing = {};
   if(id){
-    const items = await dGet(tab.dkey) || [];
-    const source = Array.isArray(items) ? items : (items.images || []);
+    let items = await getContentWithDefaults(tab.dkey) || [];
+    items = withListIds(items, tab.dkey);
+    const source = listSource(items, tab);
     existing = source.find(x => x.id === id) || {};
   }
   const slot = document.getElementById('formSlot');
@@ -464,25 +480,30 @@ async function saveListItem(key){
   tab.fields.forEach(([k])=> data[k] = (document.getElementById('nf_'+k)?.value || '').trim());
   if(!data[tab.fields[0][0]]){ alert('Please fill in the first field.'); return; }
 
-  if (tab.dkey === DKEYS.gallery) {
-    let galleryData = await dGet(tab.dkey) || { images: [] };
-    const images = Array.isArray(galleryData.images) ? galleryData.images : [];
-    if (editingId) {
-      const index = images.findIndex(it => it.id === editingId);
-      if (index >= 0) images[index] = { ...images[index], ...data, id: editingId };
-    } else {
-      images.push({ id: `${key}-${Date.now()}`, ...data });
-    }
-    galleryData.images = images;
-    await dSet(tab.dkey, galleryData);
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+
+  const isNested = !!tab.sourceField;
+  let container;
+  if (isNested) {
+    container = Array.isArray(items) ? { [tab.sourceField]: items } : items;
   } else {
-    let items = await dGet(tab.dkey) || [];
-    if(editingId){
-      items = items.map(it => it.id === editingId ? {...it, ...data} : it);
-    } else {
-      items.push({ id: `${key}-${Date.now()}`, ...data });
-    }
-    await dSet(tab.dkey, items);
+    container = { _list: items };
+  }
+  const source = isNested ? container[tab.sourceField] : container._list;
+
+  if (editingId) {
+    const index = source.findIndex(it => it.id === editingId);
+    if (index >= 0) source[index] = { ...source[index], ...data, id: editingId };
+  } else {
+    source.push({ id: `${key}-${Date.now()}`, ...data });
+  }
+
+  if (isNested) {
+    container[tab.sourceField] = source;
+    await dSet(tab.dkey, container);
+  } else {
+    await dSet(tab.dkey, source);
   }
   closeForm();
   renderListPanel(key);
@@ -491,17 +512,43 @@ async function saveListItem(key){
 async function deleteListItem(key, id){
   if(!confirm('Delete this entry? This cannot be undone.')) return;
   const tab = LIST_TABS[key];
-  if (tab.dkey === DKEYS.gallery) {
-    let galleryData = await dGet(tab.dkey) || { images: [] };
-    const images = Array.isArray(galleryData.images) ? galleryData.images : [];
-    galleryData.images = images.filter(x => x.id !== id);
-    await dSet(tab.dkey, galleryData);
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const isNested = !!tab.sourceField;
+  let source;
+  if (isNested) {
+    source = Array.isArray(items) ? items[tab.sourceField] : items[tab.sourceField];
+    source = source.filter(x => x.id !== id);
+    const container = Array.isArray(items) ? { [tab.sourceField]: source } : { ...items, [tab.sourceField]: source };
+    await dSet(tab.dkey, container);
   } else {
-    let items = await dGet(tab.dkey) || [];
-    items = items.filter(x=>x.id!==id);
-    await dSet(tab.dkey, items);
+    source = items.filter(x => x.id !== id);
+    await dSet(tab.dkey, source);
   }
   renderListPanel(key);
+}
+
+async function checkDbStatus(){
+  const el = document.getElementById('dbStatus');
+  if(!el) return;
+  const dot = el.querySelector('.w-2');
+  const txt = el.querySelector('span:last-child');
+  try{
+    const r = await fetch('database/api.php?action=status', { method:'GET' });
+    const j = await r.json();
+    if(j && j.ok){
+      dot.style.background = '#1a7f37';
+      txt.textContent = 'DB Connected';
+      txt.classList.remove('text-ink-soft');
+      txt.classList.add('text-maroon-deep');
+    } else {
+      dot.style.background = '#b42318';
+      txt.textContent = 'DB Offline';
+    }
+  }catch(e){
+    dot.style.background = '#b42318';
+    txt.textContent = 'DB Offline';
+  }
 }
 
 (async () => {
@@ -515,6 +562,9 @@ async function deleteListItem(key, id){
   }catch(e){
     storageAvailable = true;
   }
+  // Ensure hardcoded defaults exist in the DB so the admin can edit them.
+  if (typeof seedContentIfNeeded === 'function') seedContentIfNeeded();
+  checkDbStatus();
 })();
 </script>
 </body>

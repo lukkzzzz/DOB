@@ -9,91 +9,94 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="tailwind-config.js"></script>
-
-  <link rel="stylesheet" href="styles.css">
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .eyebrow { @apply font-sans font-semibold text-[0.75rem] tracking-[0.12em] uppercase text-brand-red; }
-      .heading-1 { @apply font-serif text-h1 font-semibold tracking-[-0.01em]; }
-      .heading-2 { @apply font-serif text-h2 font-semibold tracking-[-0.01em]; }
-      .heading-3 { @apply font-serif text-h3 font-semibold tracking-[-0.01em]; }
-      .nav-link { @apply font-sans font-medium text-[0.8125rem] uppercase tracking-[0.08em]; }
-      .btn { @apply font-sans font-semibold text-[0.8125rem] uppercase tracking-[0.06em]; }
-    }
-    html { scroll-behavior: smooth; }
-  </style>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { maroon:'#6a1f2b', 'maroon-deep':'#4a0f20', gold:'#b4863f', 'gold-light':'#d9b877',
+      parchment:'#f6f0e4', 'parchment-dark':'#ece2cd', cream:'#fcfaf8', border:'#E7DFD3', ink:'#2a2420', 'ink-soft':'#5c5147', white:'#fffdf9',
+      sidebar:'#4a0f20' },
+    fontFamily: { sans:['Inter','sans-serif'], serif:['Playfair Display','serif'] },
+  }}}
+</script>
+<style>
+  ::-webkit-scrollbar{width:8px} ::-webkit-scrollbar-thumb{background:#b4863f;border-radius:6px}
+  .badge{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
+  .badge { font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 9999px; display: inline-block; }
+  .lucide { stroke-width: 1.5; width: 18px; height: 18px; }
+  .sidebar-section { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem; padding-left: 0.75rem; }
+  .nav-btn { height: 40px; }
+  .nav-btn:focus-visible { outline: 2px solid #b4863f; outline-offset: -2px; }
+</style>
 </head>
-<body class="font-sans bg-brand-white text-brand-black min-h-screen leading-[1.7] overflow-x-hidden">
+<body class="font-sans bg-parchment text-ink min-h-screen">
 
 <!-- ===== Login screen ===== -->
-<div id="loginScreen" class="max-w-[400px] mx-auto mt-24 bg-brand-white border border-brand-tint rounded-xl p-8 shadow-sm">
-  <h1 class="font-sans font-semibold text-brand-black text-xl mb-1">Super Admin Login</h1>
-  <!-- <p id="storageWarning" class="text-brand-black/70 text-sm mb-5 hidden">⚠️ Persistent storage isn't available in this view — you can preview the editor, but changes won't be saved.</p> -->
-  <input id="adminPass" type="password" placeholder="Password" class="w-full border border-brand-tint rounded-md px-3 py-2.5 mb-3 text-sm">
-  <button onclick="tryLogin()" class="w-full bg-brand-red text-brand-white font-semibold text-sm rounded-md py-2.5 hover:bg-brand-red-dark transition">Log In</button>
-  <p class="text-brand-black/70 text-xs mt-3">Hint: boac2026</p>
+<div id="loginScreen" class="max-w-[400px] mx-auto mt-24 bg-white border border-parchment-dark rounded-xl p-8 shadow-sm">
+  <h1 class="font-sans font-semibold text-ink text-xl mb-1">Super Admin Login</h1>
+  <!-- <p id="storageWarning" class="text-ink-soft text-sm mb-5 hidden">⚠️ Persistent storage isn't available in this view — you can preview the editor, but changes won't be saved.</p> -->
+  <input id="adminPass" type="password" placeholder="Password" class="w-full border border-parchment-dark rounded-md px-3 py-2.5 mb-3 text-sm">
+  <button onclick="tryLogin()" class="w-full bg-maroon text-white font-semibold text-sm rounded-md py-2.5 hover:bg-maroon-deep transition">Log In</button>
+  <p class="text-ink-soft text-xs mt-3">Hint: boac2026</p>
 </div>
 
 <!-- ===== Admin shell ===== -->
 <div id="adminScreen" class="hidden flex min-h-screen">
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="w-[256px] shrink-0 bg-brand-black text-parchment-dark flex flex-col fixed h-screen overflow-y-auto z-40 transition-transform -translate-x-full lg:translate-x-0">
-    <div class="flex items-center gap-3 px-5 py-5 border-b border-brand-white/10">
-      <img id="admin-logo" src="images/logo.jpg" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-brand-yellow shadow-md"/>
+  <aside id="sidebar" class="w-[256px] shrink-0 bg-sidebar text-parchment-dark flex flex-col fixed h-screen overflow-y-auto z-40 transition-transform -translate-x-full lg:translate-x-0">
+    <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+      <img id="admin-logo" src="images/logo.jpg" alt="Logo" class="w-10 h-10 sm:w-[46px] sm:h-[46px] rounded-full object-cover shrink-0 border border-gold shadow-md"/>
       <div>
-        <div class="font-serif font-bold text-brand-white text-[0.95rem] leading-tight">Diocese of Boac</div>
-        <div class="text-[0.65rem] tracking-[0.14em] uppercase text-brand-yellow font-semibold">Super Admin</div>
+        <div class="font-serif font-bold text-white text-[0.95rem] leading-tight">Diocese of Boac</div>
+        <div class="text-[0.65rem] tracking-[0.14em] uppercase text-gold-light font-semibold">Super Admin</div>
       </div>
     </div>
 
     <nav class="flex-1 px-3 py-4 text-sm">
       <div class="sidebar-section">Main</div>
-      <button data-tab="dashboard" onclick="selectTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left">
+      <button data-tab="dashboard" onclick="selectTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left">
         <span><i data-lucide="layout-dashboard"></i></span><span>Dashboard</span>
       </button>
 
       <div class="sidebar-section">Pages</div>
-      <button data-tab="home" onclick="selectTab('home')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="home"></i></span><span>Home Hero</span></button>
-      <button data-tab="history" onclick="selectTab('history')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="book-open"></i></span><span>History</span></button>
-      <button data-tab="bishop" onclick="selectTab('bishop')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="user"></i></span><span>Bishop of Boac</span></button>
-      <button data-tab="visionMission" onclick="selectTab('visionMission')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="target"></i></span><span>Vision &amp; Mission</span></button>
-      <button data-tab="formerBishops" onclick="selectTab('formerBishops')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="history"></i></span><span>Former Bishops</span></button>
-      <button data-tab="curia" onclick="selectTab('curia')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="building"></i></span><span>Curia</span></button>
-      <button data-tab="bulletin" onclick="selectTab('bulletin')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="file-text"></i></span><span>Bulletin</span></button>
-      <button data-tab="gallery" onclick="selectTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="image"></i></span><span>Gallery Page</span></button>
-      <button data-tab="contact" onclick="selectTab('contact')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="phone"></i></span><span>Contact</span></button>
-      <button data-tab="privacy" onclick="selectTab('privacy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="shield"></i></span><span>Privacy Policy</span></button>
+      <button data-tab="home" onclick="selectTab('home')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="home"></i></span><span>Home Hero</span></button>
+      <button data-tab="history" onclick="selectTab('history')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="book-open"></i></span><span>History</span></button>
+      <button data-tab="bishop" onclick="selectTab('bishop')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="user"></i></span><span>Bishop of Boac</span></button>
+      <button data-tab="visionMission" onclick="selectTab('visionMission')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="target"></i></span><span>Vision &amp; Mission</span></button>
+      <button data-tab="formerBishops" onclick="selectTab('formerBishops')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="history"></i></span><span>Former Bishops</span></button>
+      <button data-tab="curia" onclick="selectTab('curia')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="building"></i></span><span>Curia</span></button>
+      <button data-tab="bulletin" onclick="selectTab('bulletin')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="file-text"></i></span><span>Bulletin</span></button>
+      <button data-tab="gallery" onclick="selectTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="image"></i></span><span>Gallery Page</span></button>
+      <button data-tab="contact" onclick="selectTab('contact')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="phone"></i></span><span>Contact</span></button>
+      <button data-tab="privacy" onclick="selectTab('privacy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="shield"></i></span><span>Privacy Policy</span></button>
 
       <div class="sidebar-section">Content</div>
-      <button data-tab="news" onclick="selectTab('news')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="megaphone"></i></span><span>Announcements</span></button>
-      <button data-tab="events" onclick="selectTab('events')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="calendar"></i></span><span>Events</span></button>
-      <button data-tab="parishes" onclick="selectTab('parishes')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="map-pin"></i></span><span>Parishes</span></button>
-      <button data-tab="clergy" onclick="selectTab('clergy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-brand-white/10 transition text-left"><span><i data-lucide="users"></i></span><span>Clergy Directory</span></button>
+      <button data-tab="news" onclick="selectTab('news')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="megaphone"></i></span><span>Announcements</span></button>
+      <button data-tab="events" onclick="selectTab('events')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="calendar"></i></span><span>Events</span></button>
+      <button data-tab="parishes" onclick="selectTab('parishes')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="map-pin"></i></span><span>Parishes</span></button>
+      <button data-tab="clergy" onclick="selectTab('clergy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="users"></i></span><span>Clergy Directory</span></button>
     </nav>
 
-    <div class="px-4 py-4 border-t border-brand-white/10">
+    <div class="px-4 py-4 border-t border-white/10">
       <div class="flex items-center gap-3 mb-3">
-        <div class="w-8 h-8 rounded-full bg-brand-yellow/20 flex items-center justify-center text-brand-yellow">🛡️</div>
+        <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold-light">🛡️</div>
         <div>
-          <div class="text-brand-white text-sm font-semibold leading-tight">Super Admin</div>
-          <div class="text-[0.7rem] text-brand-yellow">Super Administrator</div>
+          <div class="text-white text-sm font-semibold leading-tight">Super Admin</div>
+          <div class="text-[0.7rem] text-gold-light">Super Administrator</div>
         </div>
       </div>
-      <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-brand-white/10 transition text-sm text-parchment-dark">
+      <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition text-sm text-parchment-dark">
         <span><i data-lucide="log-out"></i></span><span>Logout</span>
       </button>
-      <a href="index.html" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-brand-white/10 transition text-sm text-parchment-dark mt-1">
+      <a href="index.html" class="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition text-sm text-parchment-dark mt-1">
         <span><i data-lucide="arrow-left"></i></span><span>Back to Site</span>
       </a>
     </div>
   </aside>
 
   <!-- Main content -->
-  <div class="lg:hidden bg-brand-white border-b border-brand-tint p-4 flex items-center justify-between sticky top-0 z-30">
-      <div class="font-serif font-bold text-brand-black text-lg">Diocese of Boac</div>
-      <button onclick="document.getElementById('sidebar').classList.toggle('-translate-x-full')" class="p-2 border border-brand-tint rounded-md text-brand-black/70"><i data-lucide="menu"></i></button>
+  <div class="lg:hidden bg-white border-b border-border p-4 flex items-center justify-between sticky top-0 z-30">
+      <div class="font-serif font-bold text-maroon-deep text-lg">Diocese of Boac</div>
+      <button onclick="document.getElementById('sidebar').classList.toggle('-translate-x-full')" class="p-2 border border-border rounded-md text-ink-soft"><i data-lucide="menu"></i></button>
     </div>
   <main class="flex-1 lg:ml-[256px] p-4 md:p-8">
     <div id="panel"></div>
@@ -154,8 +157,8 @@ function logout(){
 function setActiveNav(key){
   document.querySelectorAll('.nav-btn').forEach(b=>{
     const active = b.dataset.tab === key;
-    b.classList.toggle('bg-brand-red', active);
-    b.classList.toggle('text-brand-white', active);
+    b.classList.toggle('bg-maroon', active);
+    b.classList.toggle('text-white', active);
     b.classList.toggle('font-semibold', active);
   });
 }
@@ -171,7 +174,7 @@ async function selectTab(key){
 
 async function renderDashboard(){
   const panel = document.getElementById('panel');
-  panel.innerHTML = `<p class="text-brand-black/70 text-sm">Loading…</p>`;
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
   const [news, events, parishes, clergy, gallery] = await Promise.all([
     dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy), dGet(DKEYS.gallery)
   ]);
@@ -190,13 +193,13 @@ async function renderDashboard(){
   ].slice(0, 4);
 
   panel.innerHTML = `
-    <div class="mb-6 flex justify-between items-end flex-wrap gap-4 border-b border-brand-tint pb-4">
+    <div class="mb-6 flex justify-between items-end flex-wrap gap-4 border-b border-border pb-4">
       <div>
-        <h1 class="font-sans font-semibold text-brand-black text-[1.5rem] flex items-center gap-2">Dashboard</h1>
-        <p class="text-brand-black/70 text-[0.875rem] mt-1">Overview of all content across the Diocese of Boac website</p>
+        <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">Dashboard</h1>
+        <p class="text-ink-soft text-[0.875rem] mt-1">Overview of all content across the Diocese of Boac website</p>
       </div>
-      <div class="bg-brand-white border border-brand-tint shadow-sm rounded-md px-4 py-2.5 text-[0.875rem] text-brand-black/70 flex items-center gap-2">
-        <span class="font-semibold text-brand-black">CMS Mode</span> <span class="text-brand-tint">|</span>
+      <div class="bg-white border border-border shadow-sm rounded-md px-4 py-2.5 text-[0.875rem] text-ink-soft flex items-center gap-2">
+        <span class="font-semibold text-maroon-deep">CMS Mode</span> <span class="text-border">|</span>
         <span id="dbStatus" class="inline-flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-border inline-block"></span>
           <span>Checking DB…</span>
@@ -212,29 +215,29 @@ async function renderDashboard(){
       ${statCard('<i data-lucide="file-text"></i>', counts.bulletins, 'Bulletins', 'bulletin')}
     </div>
     <div class="mt-6 grid lg:grid-cols-[1.15fr_0.85fr] gap-6">
-      <div class="bg-brand-white border border-brand-tint shadow-sm rounded-xl p-5">
-        <h3 class="font-sans font-semibold text-brand-black mb-4 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-brand-black/70"></i> Recent Updates</h3>
+      <div class="bg-white border border-border shadow-sm rounded-xl p-5">
+        <h3 class="font-sans font-semibold text-ink mb-4 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-ink-soft"></i> Recent Updates</h3>
         <div class="space-y-3">
-          ${recentItems.length ? recentItems.map(item => `<div class="flex justify-between items-center gap-4 border-b border-brand-tint pb-3 last:border-b-0 last:pb-0"><div class="flex items-center gap-3"><i data-lucide="${item.icon}" class="w-4 h-4 text-brand-black/70"></i><span class="text-[0.875rem] text-brand-black">${item.label}</span></div><button onclick="selectTab('${item.tab}')" class="text-xs font-semibold text-brand-red hover:text-brand-red-dark transition">Open</button></div>`).join('') : '<p class="text-[0.875rem] text-brand-black/70">No entries yet. Add content from the sidebar.</p>'}
+          ${recentItems.length ? recentItems.map(item => `<div class="flex justify-between items-center gap-4 border-b border-border pb-3 last:border-b-0 last:pb-0"><div class="flex items-center gap-3"><i data-lucide="${item.icon}" class="w-4 h-4 text-ink-soft"></i><span class="text-[0.875rem] text-ink">${item.label}</span></div><button onclick="selectTab('${item.tab}')" class="text-xs font-semibold text-maroon hover:text-maroon-deep transition">Open</button></div>`).join('') : '<p class="text-[0.875rem] text-ink-soft">No entries yet. Add content from the sidebar.</p>'}
         </div>
       </div>
-      <div class="bg-brand-white border border-brand-tint shadow-sm rounded-xl p-5">
-        <h3 class="font-sans font-semibold text-brand-black mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-brand-black/70"></i> Quick Actions</h3>
+      <div class="bg-white border border-border shadow-sm rounded-xl p-5">
+        <h3 class="font-sans font-semibold text-ink mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-ink-soft"></i> Quick Actions</h3>
         <div class="space-y-2">
-          <button onclick="selectTab('home')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-brand-tint text-[0.875rem] text-brand-black transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="pencil" class="w-4 h-4 text-brand-black/70"></i> Update homepage hero</button>
-          <button onclick="selectTab('news')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-brand-tint text-[0.875rem] text-brand-black transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="megaphone" class="w-4 h-4 text-brand-black/70"></i> Add announcement</button>
-          <button onclick="selectTab('events')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-brand-tint text-[0.875rem] text-brand-black transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="calendar" class="w-4 h-4 text-brand-black/70"></i> Add event</button>
-          <button onclick="selectTab('galleryImages')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-brand-tint text-[0.875rem] text-brand-black transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="image" class="w-4 h-4 text-brand-black/70"></i> Manage gallery</button>
+          <button onclick="selectTab('home')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="pencil" class="w-4 h-4 text-ink-soft"></i> Update homepage hero</button>
+          <button onclick="selectTab('news')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="megaphone" class="w-4 h-4 text-ink-soft"></i> Add announcement</button>
+          <button onclick="selectTab('events')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="calendar" class="w-4 h-4 text-ink-soft"></i> Add event</button>
+          <button onclick="selectTab('galleryImages')" class="w-full flex items-center gap-2 text-left rounded-md px-3 py-2.5 hover:bg-parchment text-[0.875rem] text-ink transition focus-visible:ring-2 focus-visible:ring-gold"><i data-lucide="image" class="w-4 h-4 text-ink-soft"></i> Manage gallery</button>
         </div>
       </div>
     </div>`;
 }
 
 function statCard(icon, value, label, tabKey){
-  return `<button onclick="selectTab('${tabKey}')" class="text-left bg-brand-white border border-brand-tint rounded-xl p-4 md:p-5 hover:border-brand-blue hover:shadow-md transition focus-visible:ring-2 focus-visible:ring-gold group">
-    <div class="w-10 h-10 rounded-md bg-brand-white text-brand-black flex items-center justify-center mb-3 group-hover:bg-brand-yellow/20 transition">${icon}</div>
-    <div class="text-2xl font-semibold text-brand-black">${value}</div>
-    <div class="text-brand-black/70 text-[0.875rem] mt-0.5">${label}</div>
+  return `<button onclick="selectTab('${tabKey}')" class="text-left bg-white border border-border rounded-xl p-4 md:p-5 hover:border-gold hover:shadow-md transition focus-visible:ring-2 focus-visible:ring-gold group">
+    <div class="w-10 h-10 rounded-md bg-parchment text-maroon-deep flex items-center justify-center mb-3 group-hover:bg-gold/10 transition">${icon}</div>
+    <div class="text-2xl font-semibold text-ink">${value}</div>
+    <div class="text-ink-soft text-[0.875rem] mt-0.5">${label}</div>
   </button>`;
 }
 
@@ -251,50 +254,50 @@ function getContentWithDefaults(dkey) {
 async function renderProsePanel(key){
   const tab = PROSE_TABS[key];
   const panel = document.getElementById('panel');
-  panel.innerHTML = `<p class="text-brand-black/70 text-sm">Loading…</p>`;
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
   const existing = await getContentWithDefaults(tab.dkey) || {};
   panel.innerHTML = `
-    <div class="text-sm text-brand-black/70 mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${tab.label}</span></div>
-    <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-brand-tint pb-4">
+    <div class="text-sm text-ink-soft mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${tab.label}</span></div>
+    <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-border pb-4">
       <div>
-        <h1 class="font-sans font-semibold text-brand-black text-[1.5rem] flex items-center gap-2">${tab.label}</h1>
-        <p class="text-brand-black/70 text-[0.875rem] mt-1">${tab.subtitle}</p>
+        <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">${tab.label}</h1>
+        <p class="text-ink-soft text-[0.875rem] mt-1">${tab.subtitle}</p>
       </div>
-      <button onclick="editProse('${key}')" class="bg-brand-white text-brand-black font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-brand-tint transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="pencil" class="w-4 h-4"></i> Edit</button>
+      <button onclick="editProse('${key}')" class="bg-parchment text-maroon-deep font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-parchment-dark transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="pencil" class="w-4 h-4"></i> Edit</button>
     </div>
     
-    <div class="bg-brand-white border border-brand-tint shadow-sm rounded-xl p-6 max-w-[800px] relative">
+    <div class="bg-white border border-border shadow-sm rounded-xl p-6 max-w-[800px] relative">
       <div id="readOnlyView_${key}">
-        <div class="mb-5 rounded-md bg-brand-tint border border-brand-tint p-3 text-[0.8125rem] text-brand-black/70 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> Read-only overview. Click "Edit" to make changes.</div>
+        <div class="mb-5 rounded-md bg-cream border border-border p-3 text-[0.8125rem] text-ink-soft flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> Read-only overview. Click "Edit" to make changes.</div>
         ${tab.fields.map(([k,label])=>`
           <div class="mb-5">
-            <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">${label}</label>
-            <div class="w-full border border-brand-tint rounded-md px-3 py-2.5 text-[0.875rem] text-brand-black bg-brand-tint min-h-[42px]">${safe(existing[k] || '', '—')}</div>
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+            <div class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink bg-cream/50 min-h-[42px]">${safe(existing[k] || '', '—')}</div>
           </div>`).join('')}
       </div>
       
       <div id="editorControls_${key}" class="hidden">
-        <div class="mb-5 rounded-md bg-brand-yellow/20 border border-brand-yellow/40 p-3 text-[0.8125rem] text-brand-black flex items-center gap-2"><i data-lucide="edit-3" class="w-4 h-4"></i> You are in edit mode. Be sure to save your changes.</div>
+        <div class="mb-5 rounded-md bg-gold/10 border border-gold/20 p-3 text-[0.8125rem] text-maroon-deep flex items-center gap-2"><i data-lucide="edit-3" class="w-4 h-4"></i> You are in edit mode. Be sure to save your changes.</div>
         ${tab.fields.map(([k,label])=>`
           <div class="mb-4">
-            <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">${label}</label>
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
             ${['body','subtext','message','visionText','intro','description','address'].includes(k) || k === 'missionItems' ?
-              `<textarea id="f_${k}" rows="5" class="w-full border border-brand-tint rounded-md px-3 py-2.5 text-[0.875rem] text-brand-black focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue transition">${safe(existing[k] || '')}</textarea>` :
+              `<textarea id="f_${k}" rows="5" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>` :
               (['image', 'backgroundImage', 'photo', 'coatOfArms'].includes(k)) 
     ? `<div class="flex gap-2">
-         <input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="flex-1 border border-brand-tint rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-brand-black focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue transition">
-         <label class="bg-brand-white text-brand-black font-semibold text-sm rounded-md px-4 h-[42px] flex items-center gap-2 cursor-pointer hover:bg-brand-tint transition border border-brand-tint">
+         <input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="flex-1 border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">
+         <label class="bg-parchment text-maroon-deep font-semibold text-sm rounded-md px-4 h-[42px] flex items-center gap-2 cursor-pointer hover:bg-parchment-dark transition border border-border">
            <i data-lucide="upload" class="w-4 h-4"></i> Upload
            <input type="file" class="hidden" accept="image/jpeg,image/png,image/webp" onchange="uploadProseFile(this, 'f_${k}')">
          </label>
-       </div><div id="upload_msg_f_${k}" class="text-xs text-brand-black/70 mt-1 hidden"></div>`
-    : `<input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-brand-black focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue transition">`
+       </div><div id="upload_msg_f_${k}" class="text-xs text-ink-soft mt-1 hidden"></div>`
+    : `<input id="f_${k}" value="${(existing[k]||'').replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">`
             }
           </div>`).join('')}
         <div class="flex items-center gap-3 pt-2">
-          <button onclick="saveProse('${key}')" class="bg-brand-red text-brand-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-brand-red-dark transition focus-visible:ring-2 focus-visible:ring-gold">Save Changes</button>
-          <button onclick="cancelProse('${key}')" class="text-brand-black/70 text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-brand-tint rounded-md transition focus-visible:ring-2 focus-visible:ring-gold">Cancel</button>
-          <span id="saveMsg" class="text-[0.875rem] text-brand-green font-medium"></span>
+          <button onclick="saveProse('${key}')" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition focus-visible:ring-2 focus-visible:ring-gold">Save Changes</button>
+          <button onclick="cancelProse('${key}')" class="text-ink-soft text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-parchment rounded-md transition focus-visible:ring-2 focus-visible:ring-gold">Cancel</button>
+          <span id="saveMsg" class="text-[0.875rem] text-green-700 font-medium"></span>
         </div>
       </div>
     </div>`;
@@ -341,39 +344,39 @@ function listSource(items, tab){
 async function renderListPanel(key){
   const tab = LIST_TABS[key];
   const panel = document.getElementById('panel');
-  panel.innerHTML = `<p class="text-brand-black/70 text-sm">Loading…</p>`;
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
   let items = await getContentWithDefaults(tab.dkey) || [];
   items = withListIds(items, tab.dkey);
   const source = listSource(items, tab);
   const countLabel = source.length;
   panel.innerHTML = `
-    <div class="text-sm text-brand-black/70 mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${tab.label}</span></div>
-    <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-brand-tint pb-4">
+    <div class="text-sm text-ink-soft mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>${tab.label}</span></div>
+    <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-border pb-4">
       <div>
-        <h1 class="font-sans font-semibold text-brand-black text-[1.5rem] flex items-center gap-2">${tab.label} Management</h1>
-        <p class="text-brand-black/70 text-[0.875rem] mt-1">${tab.subtitle}</p>
+        <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">${tab.label} Management</h1>
+        <p class="text-ink-soft text-[0.875rem] mt-1">${tab.subtitle}</p>
       </div>
-      <button onclick="openForm('${key}')" class="bg-brand-red text-brand-white font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-brand-red-dark transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="plus"></i> New</button>
+      <button onclick="openForm('${key}')" class="bg-maroon text-white font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-maroon-deep transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="plus"></i> New</button>
     </div>
 
     <!-- Toolbar -->
-    <div class="bg-brand-white border border-brand-tint rounded-xl p-3 mb-4 flex flex-col md:flex-row gap-3 shadow-sm items-center">
+    <div class="bg-white border border-border rounded-xl p-3 mb-4 flex flex-col md:flex-row gap-3 shadow-sm items-center">
       <div class="relative w-full md:w-72">
-        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-brand-black/70 w-4 h-4"></i>
-        <input id="searchFilter_${key}" type="text" placeholder="Search..." class="w-full pl-9 pr-3 h-[40px] border border-brand-tint rounded-md text-sm focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue">
+        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft w-4 h-4"></i>
+        <input id="searchFilter_${key}" type="text" placeholder="Search..." class="w-full pl-9 pr-3 h-[40px] border border-border rounded-md text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold">
       </div>
-      <select id="sortFilter_${key}" class="border border-brand-tint h-[40px] rounded-md px-3 text-sm focus:outline-none focus:border-brand-yellow w-full md:w-auto">
+      <select id="sortFilter_${key}" class="border border-border h-[40px] rounded-md px-3 text-sm focus:outline-none focus:border-gold w-full md:w-auto">
         <option value="name">Sort: Name</option>
         <option value="date">Sort: Date</option>
       </select>
-      <button onclick="applyListControls('${key}')" class="bg-brand-white text-brand-black text-sm font-semibold h-[40px] px-4 rounded-md hover:bg-brand-tint transition">Apply</button>
+      <button onclick="applyListControls('${key}')" class="bg-parchment text-maroon-deep text-sm font-semibold h-[40px] px-4 rounded-md hover:bg-parchment-dark transition">Apply</button>
     </div>
 
     <div id="formSlot"></div>
 
-    <div class="bg-brand-white border border-brand-tint rounded-xl shadow-sm overflow-hidden">
+    <div class="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
       <!-- Desktop Table Header -->
-      <div class="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 px-5 py-3 border-b border-brand-tint text-xs font-semibold text-brand-black/70 uppercase tracking-wider bg-brand-tint">
+      <div class="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 px-5 py-3 border-b border-border text-xs font-semibold text-ink-soft uppercase tracking-wider bg-cream">
          <div>Title</div>
          <div>Category</div>
          <div>Date</div>
@@ -381,7 +384,7 @@ async function renderListPanel(key){
          <div class="text-right">Actions</div>
       </div>
       <div class="flex flex-col" id="itemsList">
-        ${countLabel ? renderManagedItems(key, tab, items) : `<div class="p-8 text-center text-brand-black/70 text-sm">No entries yet.</div>`}
+        ${countLabel ? renderManagedItems(key, tab, items) : `<div class="p-8 text-center text-ink-soft text-sm">No entries yet.</div>`}
       </div>
     </div>`;
 }
@@ -414,35 +417,35 @@ function itemCard(key, tab, item, index = 0){
   const dateText = item.date || '';
   const itemId = item.id || `${key}-${index}-${Date.now()}`;
 
-  return `<div class="border-b border-brand-tint last:border-b-0 p-4 md:p-5 hover:bg-brand-tint transition group relative" data-list-card data-date="${dateText}">
+  return `<div class="border-b border-border last:border-b-0 p-4 md:p-5 hover:bg-cream transition group relative" data-list-card data-date="${dateText}">
     <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 md:gap-4 md:items-center">
       <!-- Title -->
       <div class="min-w-0">
-        <h3 class="font-sans font-semibold text-brand-black text-[0.875rem] truncate">${title}</h3>
-        ${sub ? `<p class="text-brand-black/70 text-xs truncate mt-1">${sub.substring(0, 80)}${sub.length>80?'...':''}</p>` : ''}
+        <h3 class="font-sans font-semibold text-ink text-[0.875rem] truncate">${title}</h3>
+        ${sub ? `<p class="text-ink-soft text-xs truncate mt-1">${sub.substring(0, 80)}${sub.length>80?'...':''}</p>` : ''}
       </div>
       <!-- Category Badge -->
       <div class="hidden md:block">
-         <span class="badge bg-brand-white text-brand-black border border-brand-yellow/40">${tab.label}</span>
+         <span class="badge bg-parchment text-maroon-deep border border-gold/20">${tab.label}</span>
       </div>
       <!-- Date -->
-      <div class="text-[0.875rem] font-sans tabular-nums text-brand-black/70">
+      <div class="text-[0.875rem] font-sans tabular-nums text-ink-soft">
          ${dateText || '—'}
       </div>
       <!-- Status -->
       <div class="hidden md:block">
-         <span class="badge bg-brand-green/10 text-brand-green border border-brand-green/30">Published</span>
+         <span class="badge bg-green-50 text-green-700 border border-green-200">Published</span>
       </div>
       <!-- Actions -->
       <div class="flex justify-end gap-1 relative items-center">
-         <button aria-label="Edit" onclick="openForm('${key}','${itemId}')" class="p-1.5 text-brand-black/70 hover:text-brand-red-dark hover:bg-brand-tint rounded-md transition" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-         <button aria-label="View" onclick="previewManagedItem('${encodeURIComponent(JSON.stringify(item))}')" class="p-1.5 text-brand-black/70 hover:text-brand-red-dark hover:bg-brand-tint rounded-md transition" title="View"><i data-lucide="eye" class="w-4 h-4"></i></button>
+         <button aria-label="Edit" onclick="openForm('${key}','${itemId}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+         <button aria-label="View" onclick="previewManagedItem('${encodeURIComponent(JSON.stringify(item))}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="View"><i data-lucide="eye" class="w-4 h-4"></i></button>
          
          <div class="relative">
-           <button aria-label="More actions" onclick="document.getElementById('menu-${itemId}').classList.toggle('hidden')" class="p-1.5 text-brand-black/70 hover:text-brand-red-dark hover:bg-brand-tint rounded-md transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
-           <div id="menu-${itemId}" class="hidden absolute right-0 top-full mt-1 bg-brand-white border border-brand-tint shadow-md rounded-md w-36 z-20 py-1">
-             <button onclick="duplicateListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-brand-black hover:bg-brand-tint transition flex items-center gap-2"><i data-lucide="copy" class="w-4 h-4"></i> Duplicate</button>
-             <button onclick="if(confirm('Are you sure you want to delete this?')) deleteListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-brand-red hover:bg-brand-red/10 transition flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete</button>
+           <button aria-label="More actions" onclick="document.getElementById('menu-${itemId}').classList.toggle('hidden')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
+           <div id="menu-${itemId}" class="hidden absolute right-0 top-full mt-1 bg-white border border-border shadow-md rounded-md w-36 z-20 py-1">
+             <button onclick="duplicateListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-ink hover:bg-parchment transition flex items-center gap-2"><i data-lucide="copy" class="w-4 h-4"></i> Duplicate</button>
+             <button onclick="if(confirm('Are you sure you want to delete this?')) deleteListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete</button>
            </div>
          </div>
       </div>
@@ -452,8 +455,8 @@ function itemCard(key, tab, item, index = 0){
 function previewManagedItem(jsonItem){
   const item = JSON.parse(decodeURIComponent(jsonItem));
   const panel = document.getElementById('panel');
-  const rows = Object.entries(item).map(([k, v]) => `<div class="mb-3"><span class="font-semibold text-brand-black">${k}:</span> <span>${safe(v, '—')}</span></div>`).join('');
-  panel.insertAdjacentHTML('beforeend', `<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] p-4"><div class="bg-brand-white rounded-xl max-w-[700px] w-full p-6 border border-brand-tint"><div class="flex justify-between items-start gap-3"><div><h3 class="font-sans font-semibold text-brand-black text-xl">Preview</h3><p class="text-brand-black/70 text-sm mt-1">${item.title || item.name || item.alt || 'Item'}</p></div><button onclick="this.closest('.fixed').remove()" class="text-sm text-brand-black/70 font-semibold">Close</button></div><div class="mt-4 max-h-[60vh] overflow-auto text-sm text-brand-black/70">${rows}</div></div></div>`);
+  const rows = Object.entries(item).map(([k, v]) => `<div class="mb-3"><span class="font-semibold text-maroon-deep">${k}:</span> <span>${safe(v, '—')}</span></div>`).join('');
+  panel.insertAdjacentHTML('beforeend', `<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] p-4"><div class="bg-white rounded-xl max-w-[700px] w-full p-6 border border-parchment-dark"><div class="flex justify-between items-start gap-3"><div><h3 class="font-sans font-semibold text-ink text-xl">Preview</h3><p class="text-ink-soft text-sm mt-1">${item.title || item.name || item.alt || 'Item'}</p></div><button onclick="this.closest('.fixed').remove()" class="text-sm text-ink-soft font-semibold">Close</button></div><div class="mt-4 max-h-[60vh] overflow-auto text-sm text-ink-soft">${rows}</div></div></div>`);
 }
 
 async function duplicateListItem(key, id){
@@ -487,22 +490,22 @@ async function openForm(key, id){
   }
   const slot = document.getElementById('formSlot');
   slot.innerHTML = `
-    <div class="bg-brand-white border border-brand-tint shadow-sm rounded-xl p-6 mb-6 relative">
-      <h3 class="font-sans font-semibold text-brand-black mb-4 pb-3 border-b border-brand-tint">${id ? 'Edit' : 'Add New'} ${tab.label.replace(/s$/,'')}</h3>
+    <div class="bg-white border border-border shadow-sm rounded-xl p-6 mb-6 relative">
+      <h3 class="font-sans font-semibold text-ink mb-4 pb-3 border-b border-border">${id ? 'Edit' : 'Add New'} ${tab.label.replace(/s$/,'')}</h3>
       <div class="grid sm:grid-cols-2 gap-4 mb-5">
         ${tab.fields.map(([k,label])=>`
           <div class="${['body','desc','address','description','years'].includes(k) ? 'sm:col-span-2':''}">
-            <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">${label}</label>
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
             ${['body','desc','address','description','years'].includes(k) ?
-              `<textarea id="nf_${k}" rows="4" class="w-full border border-brand-tint rounded-md px-3 py-2.5 text-[0.875rem] text-brand-black focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue transition">${safe(existing[k] || '')}</textarea>` :
-              `<input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-brand-black focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue transition">`
+              `<textarea id="nf_${k}" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>` :
+              `<input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">`
             }
           </div>`).join('')}
       </div>
-      <div class="flex items-center gap-3 pt-2 border-t border-brand-tint mt-4 pt-4">
-        <button onclick="saveListItem('${key}')" class="bg-brand-red text-brand-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-brand-red-dark transition focus-visible:ring-2 focus-visible:ring-gold">${id ? 'Save Changes' : 'Add'}</button>
-        <button onclick="closeForm()" class="text-brand-black/70 text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-brand-tint rounded-md transition focus-visible:ring-2 focus-visible:ring-gold">Cancel</button>
-        <span id="formMsg" class="text-[0.875rem] text-brand-black font-medium"></span>
+      <div class="flex items-center gap-3 pt-2 border-t border-border mt-4 pt-4">
+        <button onclick="saveListItem('${key}')" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition focus-visible:ring-2 focus-visible:ring-gold">${id ? 'Save Changes' : 'Add'}</button>
+        <button onclick="closeForm()" class="text-ink-soft text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-parchment rounded-md transition focus-visible:ring-2 focus-visible:ring-gold">Cancel</button>
+        <span id="formMsg" class="text-[0.875rem] text-maroon-deep font-medium"></span>
       </div>
     </div>`;
   slot.scrollIntoView({behavior:'smooth', block:'center'});
@@ -578,8 +581,8 @@ async function checkDbStatus(){
     if(j && j.ok){
       dot.classList.remove('bg-border'); dot.classList.add('bg-green-500');
       txt.textContent = 'DB Connected';
-      txt.classList.remove('text-brand-black/70');
-      txt.classList.add('text-brand-green'); txt.classList.remove('text-brand-black/70');
+      txt.classList.remove('text-ink-soft');
+      txt.classList.add('text-green-700'); txt.classList.remove('text-ink-soft');
     } else {
       dot.classList.remove('bg-border'); dot.classList.add('bg-red-500');
       txt.textContent = 'DB Offline';
@@ -595,7 +598,7 @@ async function checkDbStatus(){
 
 async function renderBishopsPanel() {
   const panel = document.getElementById('panel');
-  panel.innerHTML = `<p class="text-brand-black/70 text-sm">Loading…</p>`;
+  panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
   try {
     const res = await fetch('database/api_bishops.php');
     const data = await res.json();
@@ -603,18 +606,18 @@ async function renderBishopsPanel() {
     const bishops = data.bishops || [];
     
     panel.innerHTML = `
-      <div class="text-sm text-brand-black/70 mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>Former Bishops</span></div>
-      <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-brand-tint pb-4">
+      <div class="text-sm text-ink-soft mb-2 flex items-center gap-2"><span>Pages</span> <i data-lucide="chevron-right" class="w-3 h-3"></i> <span>Former Bishops</span></div>
+      <div class="flex justify-between items-end mb-6 flex-wrap gap-4 border-b border-border pb-4">
         <div>
-          <h1 class="font-sans font-semibold text-brand-black text-[1.5rem] flex items-center gap-2">Former Bishops Management</h1>
-          <p class="text-brand-black/70 text-[0.875rem] mt-1">Manage the bishop succession records via MySQL</p>
+          <h1 class="font-sans font-semibold text-ink text-[1.5rem] flex items-center gap-2">Former Bishops Management</h1>
+          <p class="text-ink-soft text-[0.875rem] mt-1">Manage the bishop succession records via MySQL</p>
         </div>
-        <button onclick="openBishopForm()" class="bg-brand-red text-brand-white font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-brand-red-dark transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> New</button>
+        <button onclick="openBishopForm()" class="bg-maroon text-white font-semibold text-sm rounded-md px-5 h-[40px] hover:bg-maroon-deep transition whitespace-nowrap focus-visible:ring-2 focus-visible:ring-gold flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> New</button>
       </div>
       <div id="formSlot"></div>
-      <div class="bg-brand-white border border-brand-tint shadow-sm rounded-xl overflow-hidden">
+      <div class="bg-white border border-border shadow-sm rounded-xl overflow-hidden">
         <table class="w-full text-left text-[0.875rem]">
-          <thead class="bg-brand-white text-brand-black/70 font-semibold border-b border-brand-tint">
+          <thead class="bg-parchment text-ink-soft font-semibold border-b border-border">
             <tr>
               <th class="px-5 py-3 font-semibold">Photo</th>
               <th class="px-5 py-3 font-semibold">Name</th>
@@ -626,26 +629,26 @@ async function renderBishopsPanel() {
             ${bishops.map(b => `
               <tr class="hover:bg-cream/30 transition">
                 <td class="px-5 py-3">
-                  <div class="w-10 h-10 bg-brand-white border border-brand-tint rounded overflow-hidden">
-                    ${b.photo ? `<img src="${safe(b.photo)}" class="w-full h-full object-cover">` : `<i data-lucide="user" class="w-5 h-5 mx-auto mt-2.5 text-brand-black/70"></i>`}
+                  <div class="w-10 h-10 bg-parchment border border-border rounded overflow-hidden">
+                    ${b.photo ? `<img src="${safe(b.photo)}" class="w-full h-full object-cover">` : `<i data-lucide="user" class="w-5 h-5 mx-auto mt-2.5 text-ink-soft"></i>`}
                   </div>
                 </td>
-                <td class="px-5 py-3 font-medium text-brand-black">${safe(b.full_name)}</td>
-                <td class="px-5 py-3 text-brand-black/70">${b.start_year} &mdash; ${b.end_year || 'Present'}</td>
+                <td class="px-5 py-3 font-medium text-ink">${safe(b.full_name)}</td>
+                <td class="px-5 py-3 text-ink-soft">${b.start_year} &mdash; ${b.end_year || 'Present'}</td>
                 <td class="px-5 py-3 text-right space-x-3">
-                  <button onclick="openBishopForm(${b.id})" class="text-brand-red font-semibold hover:text-brand-red-dark">Edit</button>
-                  <button onclick="deleteBishop(${b.id})" class="text-brand-red font-semibold hover:text-red-800">Delete</button>
+                  <button onclick="openBishopForm(${b.id})" class="text-maroon font-semibold hover:text-maroon-deep">Edit</button>
+                  <button onclick="deleteBishop(${b.id})" class="text-red-600 font-semibold hover:text-red-800">Delete</button>
                 </td>
               </tr>
             `).join('')}
-            ${bishops.length === 0 ? '<tr><td colspan="4" class="px-5 py-8 text-center text-brand-black/70">No bishops found.</td></tr>' : ''}
+            ${bishops.length === 0 ? '<tr><td colspan="4" class="px-5 py-8 text-center text-ink-soft">No bishops found.</td></tr>' : ''}
           </tbody>
         </table>
       </div>
     `;
     lucide.createIcons();
   } catch(e) {
-    panel.innerHTML = `<p class="text-brand-red">Error: ${e.message}</p>`;
+    panel.innerHTML = `<p class="text-red-600">Error: ${e.message}</p>`;
   }
 }
 
@@ -660,67 +663,67 @@ async function openBishopForm(id = null) {
   }
   
   slot.innerHTML = `
-    <div class="bg-brand-white border border-brand-tint shadow-sm rounded-xl p-6 mb-6 relative">
-      <h3 class="font-sans font-semibold text-brand-black mb-4 pb-3 border-b border-brand-tint">${id ? 'Edit Bishop' : 'Add New Bishop'}</h3>
+    <div class="bg-white border border-border shadow-sm rounded-xl p-6 mb-6 relative">
+      <h3 class="font-sans font-semibold text-ink mb-4 pb-3 border-b border-border">${id ? 'Edit Bishop' : 'Add New Bishop'}</h3>
       <div class="grid sm:grid-cols-2 gap-4 mb-5 text-[0.875rem]">
         <div>
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Full Name *</label>
-          <input id="bf_full_name" value="${safe(b.full_name).replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow focus:ring-1 focus:ring-brand-blue transition">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Full Name *</label>
+          <input id="bf_full_name" value="${safe(b.full_name).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold focus:ring-1 focus:ring-gold transition">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Start Year *</label>
-            <input type="number" id="bf_start_year" value="${b.start_year || ''}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow">
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Start Year *</label>
+            <input type="number" id="bf_start_year" value="${b.start_year || ''}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
           </div>
           <div>
-            <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">End Year</label>
-            <input type="number" id="bf_end_year" value="${b.end_year || ''}" placeholder="Blank if present" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow">
+            <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">End Year</label>
+            <input type="number" id="bf_end_year" value="${b.end_year || ''}" placeholder="Blank if present" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
           </div>
         </div>
         <div>
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Date of Birth</label>
-          <input id="bf_dob" value="${safe(b.dob).replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Date of Birth</label>
+          <input id="bf_dob" value="${safe(b.dob).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
         </div>
         <div>
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Place of Birth</label>
-          <input id="bf_pob" value="${safe(b.pob).replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Place of Birth</label>
+          <input id="bf_pob" value="${safe(b.pob).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
         </div>
         <div>
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Date of Ordination</label>
-          <input id="bf_ordination" value="${safe(b.ordination_date).replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Date of Ordination</label>
+          <input id="bf_ordination" value="${safe(b.ordination_date).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
         </div>
         <div>
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Episcopal Motto</label>
-          <input id="bf_motto" value="${safe(b.episcopal_motto).replace(/"/g,'&quot;')}" class="w-full border border-brand-tint rounded-md px-3 py-2.5 h-[42px] focus:border-brand-yellow">
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Episcopal Motto</label>
+          <input id="bf_motto" value="${safe(b.episcopal_motto).replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] focus:border-gold">
         </div>
         <div class="sm:col-span-1">
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Photo</label>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Photo</label>
 <div class="sm:col-span-1">
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Coat of Arms</label>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Coat of Arms</label>
           <div class="flex items-center gap-4">
             <input type="file" id="bf_coat_file" accept="image/jpeg,image/png,image/webp" class="text-sm">
             <input type="hidden" id="bf_coat_url" value="${safe(b.coat_of_arms)}">
-            ${b.coat_of_arms ? `<img src="${safe(b.coat_of_arms)}" class="h-12 w-12 object-contain rounded border border-brand-tint">` : ''}
+            ${b.coat_of_arms ? `<img src="${safe(b.coat_of_arms)}" class="h-12 w-12 object-contain rounded border border-border">` : ''}
           </div>
         </div>
           <div class="flex items-center gap-4">
             <input type="file" id="bf_photo_file" accept="image/jpeg,image/png,image/webp" class="text-sm">
             <input type="hidden" id="bf_photo_url" value="${safe(b.photo)}">
-            ${b.photo ? `<img src="${safe(b.photo)}" class="h-12 w-12 object-cover rounded border border-brand-tint">` : ''}
+            ${b.photo ? `<img src="${safe(b.photo)}" class="h-12 w-12 object-cover rounded border border-border">` : ''}
           </div>
         </div>
         <div class="sm:col-span-2">
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Biography</label>
-          <textarea id="bf_bio" rows="4" class="w-full border border-brand-tint rounded-md px-3 py-2.5 focus:border-brand-yellow">${safe(b.biography)}</textarea>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Biography</label>
+          <textarea id="bf_bio" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 focus:border-gold">${safe(b.biography)}</textarea>
         </div>
         <div class="sm:col-span-2">
-          <label class="text-[0.8125rem] text-brand-black/70 font-semibold block mb-1.5">Pastoral Contributions</label>
-          <textarea id="bf_contributions" rows="4" class="w-full border border-brand-tint rounded-md px-3 py-2.5 focus:border-brand-yellow">${safe(b.contributions)}</textarea>
+          <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">Pastoral Contributions</label>
+          <textarea id="bf_contributions" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 focus:border-gold">${safe(b.contributions)}</textarea>
         </div>
       </div>
-      <div class="flex items-center gap-3 pt-4 border-t border-brand-tint mt-4">
-        <button onclick="saveBishop()" id="bf_save_btn" class="bg-brand-red text-brand-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-brand-red-dark transition">${id ? 'Save Changes' : 'Add Bishop'}</button>
-        <button onclick="closeForm()" class="text-brand-black/70 text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-brand-tint rounded-md transition">Cancel</button>
+      <div class="flex items-center gap-3 pt-4 border-t border-border mt-4">
+        <button onclick="saveBishop()" id="bf_save_btn" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition">${id ? 'Save Changes' : 'Add Bishop'}</button>
+        <button onclick="closeForm()" class="text-ink-soft text-[0.875rem] font-semibold px-4 h-[40px] hover:bg-parchment rounded-md transition">Cancel</button>
         <span id="bf_msg" class="text-[0.875rem] font-medium ml-2"></span>
       </div>
     </div>`;
@@ -731,7 +734,7 @@ async function saveBishop() {
   const btn = document.getElementById('bf_save_btn');
   const msg = document.getElementById('bf_msg');
   btn.disabled = true;
-  msg.className = 'text-[0.875rem] font-medium ml-2 text-brand-black/70';
+  msg.className = 'text-[0.875rem] font-medium ml-2 text-ink-soft';
   msg.textContent = 'Saving...';
   
   try {
@@ -785,7 +788,7 @@ async function saveBishop() {
     closeForm();
     renderBishopsPanel();
   } catch (e) {
-    msg.className = 'text-[0.875rem] font-medium ml-2 text-brand-red';
+    msg.className = 'text-[0.875rem] font-medium ml-2 text-red-600';
     msg.textContent = e.message;
     btn.disabled = false;
   }
@@ -809,7 +812,7 @@ async function uploadProseFile(input, targetId) {
   if (!input.files || input.files.length === 0) return;
   const msg = document.getElementById('upload_msg_' + targetId);
   msg.classList.remove('hidden');
-  msg.className = 'text-xs text-brand-black/70 mt-1';
+  msg.className = 'text-xs text-ink-soft mt-1';
   msg.textContent = 'Uploading...';
   
   const fd = new FormData();
@@ -820,11 +823,11 @@ async function uploadProseFile(input, targetId) {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     document.getElementById(targetId).value = data.url;
-    msg.className = 'text-xs text-brand-green mt-1';
+    msg.className = 'text-xs text-green-700 mt-1';
     msg.textContent = 'Uploaded successfully!';
     setTimeout(() => msg.classList.add('hidden'), 3000);
   } catch (e) {
-    msg.className = 'text-xs text-brand-red mt-1';
+    msg.className = 'text-xs text-red-600 mt-1';
     msg.textContent = 'Error: ' + e.message;
   }
 }

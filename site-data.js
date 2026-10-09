@@ -15,7 +15,7 @@ const SiteData = {
   site: {
     name: 'Diocese of Boac',
     subtitle: 'Official Diocesan Website',
-    logoUrl: 'https://scontent.fmnl7-1.fna.fbcdn.net/v/t39.30808-6/490021778_4069473220042983_7205200907177214759_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGZ-ubotmnTtGeralBsySXduWcAdAkmU125ZwB0CSZTXeHcXM42VmFEaetIL_d2oZOrGIbDOsKuul1pChEAAYm6&_nc_ohc=xZIoE43t1nUQ7kNvwEGEbmJ&_nc_oc=Ado5kpreyQVB7_2HktJZynzDUeIZFrKyMe85d-fzYYx5dr7RStrCvBq8cHKecNC1WHE&_nc_zt=23&_nc_ht=scontent.fmnl7-1.fna&_nc_gid=5rwExUF7pZD61YXw9KBegg&_nc_ss=7b2a8&oh=00_AQH_ypNEv3DmZNKUGczr2wh_Uv4yERgOM3NjVIbwo0dVsQ&oe=6A714946',
+    logoUrl: 'images/logo.jpg',
     utilityBarAddress: 'Sacred Heart Pastoral Center &middot; Boac, 4900 Marinduque',
     socialLinks: [
       { label: 'Facebook', url: '#' },
@@ -268,7 +268,7 @@ const SiteData = {
 
   /* ── Footer ────────────────────────────────────────────── */
   footer: {
-    logoUrl: 'https://scontent.fmnl7-1.fna.fbcdn.net/v/t39.30808-6/490021778_4069473220042983_7205200907177214759_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGZ-ubotmnTtGeralBsySXduWcAdAkmU125ZwB0CSZTXeHcXM42VmFEaetIL_d2oZOrGIbDOsKuul1pChEAAYm6&_nc_ohc=xZIoE43t1nUQ7kNvwEGEbmJ&_nc_oc=Ado5kpreyQVB7_2HktJZynzDUeIZFrKyMe85d-fzYYx5dr7RStrCvBq8cHKecNC1WHE&_nc_zt=23&_nc_ht=scontent.fmnl7-1.fna&_nc_gid=5rwExUF7pZD61YXw9KBegg&_nc_ss=7b2a8&oh=00_AQH_ypNEv3DmZNKUGczr2wh_Uv4yERgOM3NjVIbwo0dVsQ&oe=6A714946',
+    logoUrl: 'images/logo.jpg',
     name: 'Diocese of Boac',
     addressLine1: 'Sacred Heart Pastoral Center',
     addressLine2: 'Boac, 4900 Marinduque, Philippines',
@@ -355,6 +355,100 @@ const fallbackStorage = {
   }
 };
 
+/* ============================================================
+   MySQL / API storage backend
+   ------------------------------------------------------------
+   When running under XAMPP, site-data.js talks to
+   database/api.php (PHP + MySQL). The whole public website and
+   the admin panel read & write through this same backend, so
+   changes saved in admin.html appear on the live site.
+
+   If the API is unreachable (e.g. opened via file:// or Apache
+   is off), we transparently fall back to localStorage so the
+   site keeps working with its defaults.
+   ============================================================ */
+
+(function () {
+  if (window.__dobApiStorageInstalled) return;
+  window.__dobApiStorageInstalled = true;
+
+  const API_URL = (function () {
+    // Site is served from /DOB/… under htdocs; the API lives in
+    // the sibling /database/ folder. Compute it from the current
+    // script src so it works in dev, subfolders, and file:// too.
+    try {
+      const scripts = document.getElementsByTagName('script');
+      for (let i = 0; i < scripts.length; i++) {
+        const src = scripts[i].getAttribute('src') || '';
+        if (/site-data\.js(\?.*)?$/i.test(src)) {
+          return src.replace(/site-data\.js(\?.*)?$/i, 'database/api.php');
+        }
+      }
+    } catch (e) { /* ignore */ }
+    return 'database/api.php';
+  })();
+
+  // Expose the API URL so the auto-seeder can probe the DB flag directly.
+  window.__dobApiUrl = API_URL;
+
+  const api = {
+    async get(key) {
+      const r = await fetch(API_URL + '?key=' + encodeURIComponent(key), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!r.ok) throw new Error('API get failed: ' + r.status);
+      const j = await r.json();
+      // Found a value in the database → hand it back as a JSON string.
+      // Not found → return null so callers fall back to SiteData defaults.
+      if (j && j.found && j.value !== null && j.value !== undefined) {
+        return { value: typeof j.value === 'string' ? j.value : JSON.stringify(j.value) };
+      }
+      return null;
+    },
+    async set(key, value) {
+      // `value` arrives as a JSON string (dSet JSON.stringifies first).
+      let parsed = value;
+      try { parsed = JSON.parse(value); } catch (e) { /* keep raw string */ }
+      const r = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: key, value: parsed })
+      });
+      if (!r.ok) throw new Error('API set failed: ' + r.status);
+      const j = await r.json();
+      return !!(j && j.ok);
+    },
+    async delete(key) {
+      const r = await fetch(API_URL + '?key=' + encodeURIComponent(key), {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!r.ok) throw new Error('API delete failed: ' + r.status);
+      const j = await r.json();
+      return !!(j && j.ok);
+    }
+  };
+
+  window.storage = {
+    // Always try the database first so DB content is used on the very
+    // first load. If the API is unreachable (file://, Apache off, DB
+    // not installed), fall back to localStorage so the site still works.
+    async get(key) {
+      try { return await api.get(key); } catch (e) { /* fall through */ }
+      return fallbackStorage.get(key);
+    },
+    async set(key, value) {
+      try { return await api.set(key, value); } catch (e) { /* fall through */ }
+      return fallbackStorage.set(key, value);
+    },
+    async delete(key) {
+      try { return await api.delete(key); } catch (e) { /* fall through */ }
+      return fallbackStorage.delete(key);
+    }
+  };
+})();
+
 const appStorage = (window.storage && typeof window.storage.get === 'function') ? window.storage : fallbackStorage;
 
 async function dGet(key){
@@ -382,24 +476,24 @@ const fmtDate = d => {
 };
 
 function newsCardHTML(n){
-  return `<article class="bg-brand-white border border-brand-tint transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col">
-    <div class="h-44 sm:h-48 relative overflow-hidden bg-brand-tint">
+  return `<article class="bg-white border border-parchment-dark transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col">
+    <div class="h-44 sm:h-48 relative overflow-hidden bg-parchment-dark">
       <img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover">
     </div>
     <div class="p-5 flex-1 flex flex-col justify-between">
       <div>
-        <span class="font-sans text-[0.7rem] tracking-[0.06em] text-brand-red uppercase">${fmtDate(n.date)}</span>
-        <h4 class="heading-3 text-brand-black leading-tight text-base sm:text-[1.08rem] my-2">${n.title || ''}</h4>
+        <span class="font-sans text-[0.7rem] tracking-[0.06em] text-gold uppercase">${fmtDate(n.date)}</span>
+        <h4 class="heading-3 text-maroon-deep leading-tight text-base sm:text-[1.08rem] my-2">${n.title || ''}</h4>
       </div>
-      <a href="news.html" class="eyebrow text-brand-red border-b border-brand-yellow self-start mt-3">Read More</a>
+      <a href="news.html" class="eyebrow text-maroon border-b border-gold self-start mt-3">Read More</a>
     </div>
   </article>`;
 }
 
 function newsCardPageHTML(n){
-  return `<article class="border border-brand-tint">
-    <div class="h-40 bg-brand-tint"><img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover"></div>
-    <div class="p-4"><span class="font-sans text-xs text-brand-red uppercase">${fmtDate(n.date)}</span><h4 class="heading-3 text-brand-black my-2">${n.title || ''}</h4></div>
+  return `<article class="border border-parchment-dark">
+    <div class="h-40 bg-parchment-dark"><img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover"></div>
+    <div class="p-4"><span class="font-sans text-xs text-gold uppercase">${fmtDate(n.date)}</span><h4 class="heading-3 text-maroon-deep my-2">${n.title || ''}</h4></div>
   </article>`;
 }
 
@@ -407,11 +501,11 @@ function eventRowHTML(e){
   const d = new Date(e.date+'T00:00:00');
   return `<div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 sm:py-5">
     <div class="font-sans font-semibold text-left sm:text-center shrink-0 sm:w-[70px] flex sm:block items-baseline gap-2 sm:gap-0">
-      <span class="text-2xl sm:text-[1.6rem] font-semibold text-brand-yellow block leading-none">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span>
+      <span class="text-2xl sm:text-[1.6rem] font-semibold text-gold-light block leading-none">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span>
       <span class="text-[0.7rem] tracking-[0.1em] uppercase text-parchment-dark">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span>
     </div>
     <div>
-      <h4 class="font-serif text-h3 text-brand-white leading-[1.25] mb-1">${e.title || ''}</h4>
+      <h4 class="font-serif text-h3 text-white leading-[1.25] mb-1">${e.title || ''}</h4>
       <p class="text-parchment-dark text-sm sm:text-[0.92rem]">${e.description || e.desc || ''}</p>
     </div>
   </div>`;
@@ -421,24 +515,24 @@ function eventRowPageHTML(e){
   const d = new Date(e.date+'T00:00:00');
   const image = safe(e.image, 'https://placehold.co/600x420/ece2cd/4a1420?text=Event+Photo');
   return `<div class="flex flex-col sm:flex-row gap-4 py-5 items-start">
-    <div class="w-full sm:w-[140px] shrink-0 bg-brand-tint overflow-hidden">
+    <div class="w-full sm:w-[140px] shrink-0 bg-parchment-dark overflow-hidden">
       <img src="${image}" alt="${safe(e.title, 'Event photo')}" class="w-full aspect-[16/10] object-cover">
     </div>
     <div class="flex-1 flex items-center gap-6">
-      <div class="font-sans font-semibold text-center shrink-0 w-[70px]"><span class="text-2xl font-semibold text-brand-red block">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span><span class="text-[0.7rem] uppercase text-brand-black/70">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span></div>
-      <div><h4 class="heading-3 text-brand-black">${e.title || ''}</h4><p class="text-small max-w-[65ch]">${e.description || e.desc || ''}</p></div>
+      <div class="font-sans font-semibold text-center shrink-0 w-[70px]"><span class="text-2xl font-semibold text-maroon block">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span><span class="text-[0.7rem] uppercase text-ink-soft">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span></div>
+      <div><h4 class="heading-3 text-maroon-deep">${e.title || ''}</h4><p class="text-small max-w-[65ch]">${e.description || e.desc || ''}</p></div>
     </div>
   </div>`;
 }
 
 function parishCardHTML(p){
   const photo = safe(p.photo, 'https://placehold.co/800x600/ece2cd/4a1420?text=Parish+Photo');
-  return `<div class="border border-brand-tint overflow-hidden bg-brand-white">
-    <div class="h-40 bg-brand-tint"><img src="${photo}" alt="${safe(p.name, 'Parish photo')}" class="w-full h-full object-cover"></div>
+  return `<div class="border border-parchment-dark overflow-hidden bg-white">
+    <div class="h-40 bg-parchment-dark"><img src="${photo}" alt="${safe(p.name, 'Parish photo')}" class="w-full h-full object-cover"></div>
     <div class="p-4">
-      <h4 class="heading-3 text-brand-black">${p.name || ''}</h4>
+      <h4 class="heading-3 text-maroon-deep">${p.name || ''}</h4>
       <p class="text-small max-w-[65ch]">${p.town || ''}${p.vicariate ? ' &middot; ' + p.vicariate : ''}</p>
-      ${p.priest ? `<p class="text-sm text-brand-black/70">Parish Priest: ${p.priest}</p>` : ''}
+      ${p.priest ? `<p class="text-sm text-ink-soft">Parish Priest: ${p.priest}</p>` : ''}
     </div>
   </div>`;
 }
@@ -446,11 +540,11 @@ function parishCardHTML(p){
 function clergyRowHTML(c){
   const photo = safe(c.photo, 'https://placehold.co/600x800/ece2cd/4a1420?text=Clergy+Portrait');
   return `<div class="py-4 flex flex-col sm:flex-row gap-4 items-start">
-    <div class="w-full sm:w-[120px] shrink-0 bg-brand-tint overflow-hidden">
+    <div class="w-full sm:w-[120px] shrink-0 bg-parchment-dark overflow-hidden">
       <img src="${photo}" alt="${safe(c.name, 'Clergy portrait')}" class="w-full aspect-[4/5] object-cover">
     </div>
     <div class="flex-1">
-      <span class="heading-3 text-brand-black block">${c.name || ''}</span>
+      <span class="heading-3 text-maroon-deep block">${c.name || ''}</span>
       <span class="text-sm">${c.role || ''}${c.assignment ? ' — ' + c.assignment : ''}</span>
     </div>
   </div>`;
@@ -497,4 +591,95 @@ async function hydrateHomeNews(){
   const sorted = [...items].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const el = document.getElementById('home-news-list');
   if(el) el.innerHTML = sorted.slice(0,3).map(newsCardHTML).join('');
+}
+
+/* ============================================================
+   Auto-seed: push hardcoded SiteData defaults into the DB
+   ------------------------------------------------------------
+   On first load (when the DB has no rows yet), this copies the
+   default content from SiteData into MySQL so the admin panel
+   can immediately read & edit every piece of content. It only
+   writes keys that are missing — it never overwrites admin edits.
+   ============================================================ */
+
+function defaultContentFor(key) {
+  const map = {
+    [DKEYS.site]: SiteData.site,
+    [DKEYS.navbar]: SiteData.navbar,
+    [DKEYS.footer]: SiteData.footer,
+    [DKEYS.home]: SiteData.homepage,
+    [DKEYS.history]: SiteData.history,
+    [DKEYS.bishop]: SiteData.bishop,
+    [DKEYS.visionMission]: SiteData.visionMission,
+    [DKEYS.formerBishops]: SiteData.formerBishops,
+    [DKEYS.curia]: SiteData.curia,
+    [DKEYS.bulletin]: SiteData.bulletins,
+    [DKEYS.gallery]: SiteData.gallery,
+    [DKEYS.contact]: SiteData.contact,
+    [DKEYS.privacy]: SiteData.privacy,
+    [DKEYS.news]: (SiteData.news && SiteData.news.articles) || [],
+    [DKEYS.events]: (SiteData.events && SiteData.events.events) || [],
+    [DKEYS.parishes]: (SiteData.parishes && SiteData.parishes.parishes) || [],
+    [DKEYS.clergy]: (SiteData.clergy && SiteData.clergy.members) || [],
+  };
+  return (map[key] !== undefined) ? map[key] : null;
+}
+
+// Add stable ids to list items so the admin can edit/delete them.
+function withListIds(value, key) {
+  const prefixMap = {
+    [DKEYS.news]: 'news',
+    [DKEYS.events]: 'event',
+    [DKEYS.parishes]: 'parish',
+    [DKEYS.clergy]: 'clergy',
+  };
+  const nestedMap = {
+    [DKEYS.formerBishops]: { field: 'bishops', prefix: 'bishop' },
+    [DKEYS.curia]: { field: 'offices', prefix: 'office' },
+    [DKEYS.gallery]: { field: 'images', prefix: 'gallery' },
+  };
+
+  const clone = (arr, prefix) => (Array.isArray(arr) ? arr.map((it, i) => ({ id: prefix + '-' + i, ...(it || {}) })) : arr);
+
+  if (prefixMap[key] !== undefined) {
+    return clone(value, prefixMap[key]);
+  }
+  if (nestedMap[key] && value && typeof value === 'object' && !Array.isArray(value)) {
+    const out = { ...value };
+    out[nestedMap[key].field] = clone(out[nestedMap[key].field], nestedMap[key].prefix);
+    return out;
+  }
+  return value;
+}
+
+async function seedContentIfNeeded() {
+  try {
+    // Only seed when the API backend is actually in use.
+    if (!window.__dobApiUrl || !window.__dobApiStorageInstalled) return;
+
+    // Probe the API — if it's offline, skip seeding (site uses defaults anyway).
+    const probe = await fetch(window.__dobApiUrl + '?action=status', { method: 'GET' }).then(r => r.json()).catch(() => null);
+    if (!probe || !probe.ok) return;
+
+    for (const key of Object.keys(DKEYS)) {
+      const value = defaultContentFor(DKEYS[key]);
+      if (value === undefined || value === null) continue;
+      const existing = await dGet(DKEYS[key]);
+      if (existing !== null && existing !== undefined) continue; // never overwrite
+      await dSet(DKEYS[key], withListIds(value, DKEYS[key]));
+    }
+
+    window.__dobSeeded = true;
+  } catch (e) {
+    // Seeding is best-effort — ignore failures (site still renders defaults).
+  }
+}
+
+// Fire once after the storage layer is ready.
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', seedContentIfNeeded);
+  } else {
+    seedContentIfNeeded();
+  }
 }
