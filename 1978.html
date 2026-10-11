@@ -64,8 +64,10 @@
       <button data-tab="visionMission" onclick="selectTab('visionMission')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="target"></i></span><span>Vision &amp; Mission</span></button>
       <button data-tab="formerBishops" onclick="selectTab('formerBishops')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="history"></i></span><span>Former Bishops</span></button>
       <button data-tab="curia" onclick="selectTab('curia')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="building"></i></span><span>Curia</span></button>
+      <button data-tab="curiaOffices" onclick="selectTab('curiaOffices')" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-md mb-1 hover:bg-white/10 transition text-left pl-6 text-xs text-parchment-dark/80"><span><i data-lucide="chevron-right" class="w-3 h-3"></i></span><span>Curia Offices</span></button>
       <button data-tab="bulletin" onclick="selectTab('bulletin')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="file-text"></i></span><span>Bulletin</span></button>
       <button data-tab="gallery" onclick="selectTab('gallery')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="image"></i></span><span>Gallery Page</span></button>
+      <button data-tab="galleryImages" onclick="selectTab('galleryImages')" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-md mb-1 hover:bg-white/10 transition text-left pl-6 text-xs text-parchment-dark/80"><span><i data-lucide="chevron-right" class="w-3 h-3"></i></span><span>Gallery Photos</span></button>
       <button data-tab="contact" onclick="selectTab('contact')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="phone"></i></span><span>Contact</span></button>
       <button data-tab="privacy" onclick="selectTab('privacy')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-md mb-1 hover:bg-white/10 transition text-left"><span><i data-lucide="shield"></i></span><span>Privacy Policy</span></button>
 
@@ -113,24 +115,35 @@ let storageAvailable = true;
 
 const PROSE_TABS = {
   site: { label:'Website Settings', icon:'<i data-lucide="settings"></i>', dkey:DKEYS.site, subtitle:'Edit the site identity, utility bar, and primary links', fields:[['name','Site Name'],['subtitle','Subtitle'],['utilityBarAddress','Utility bar address'],['contactUrl','Contact URL'],['adminUrl','Admin URL']] },
-  home: { label:'Home Hero', icon:'<i data-lucide="home"></i>', dkey:DKEYS.home, subtitle:'Edit the homepage headline, welcome message, and hero imagery', fields:[['headline','Hero Headline'],['subtext','Hero Subtext'],['backgroundImage','Hero Image URL']] },
+  home: { label:'Home Hero', icon:'<i data-lucide="home"></i>', dkey:DKEYS.home, subtitle:'Edit the homepage headline, hero text, buttons, and liturgical strip', fields:[
+    ['eyebrow','Hero Eyebrow'],
+    ['headline','Hero Headline'],
+    ['subtext','Hero Subtext'],
+    ['backgroundImage','Hero Background Image URL'],
+    ['button1Label','Primary Button Label'],
+    ['button1Href','Primary Button Link'],
+    ['button2Label','Secondary Button Label'],
+    ['button2Href','Secondary Button Link'],
+    ['liturgicalDate','Liturgical Date (leave blank for today)'],
+    ['liturgicalSeason','Liturgical Season & Color']
+  ] },
   history: { label:'History', icon:'<i data-lucide="book-open"></i>', dkey:DKEYS.history, subtitle:'Edit the History page banner and story content', fields:[['bannerTitle','Banner Title'],['image','Page Image URL'],['content','Body']] },
   bishop: { label:'Bishop of Boac', icon:'<i data-lucide="user"></i>', dkey:DKEYS.bishop, subtitle:'Edit bishop portrait and biography', fields:[['bannerTitle','Banner Title'],['image','Portrait URL'],['coatOfArms','Coat of Arms URL'],['content','Body']] },
   visionMission: { label:'Vision & Mission', icon:'<i data-lucide="target"></i>', dkey:DKEYS.visionMission, subtitle:'Edit the moral vision and pastoral mission of the diocese', fields:[['bannerTitle','Banner Title'],['visionTitle','Vision Title'],['visionText','Vision Text'],['missionTitle','Mission Title'],['missionItems','Mission Items (one per line)']] },
-  curia: { label:'Curia', icon:'<i data-lucide="building"></i>', dkey:DKEYS.curia, subtitle:'Edit diocesan office summary and introductory text', fields:[['bannerTitle','Banner Title'],['intro','Intro Text'],['offices','Offices (JSON)']] },
-  bulletin: { label:'Bulletin', icon:'<i data-lucide="file-text"></i>', dkey:DKEYS.bulletins, subtitle:"Edit the Bishop's bulletin message and call-to-action", fields:[['bannerTitle','Banner Title'],['image','Bulletin Photo URL'],['message','Message'],['author','Author'],['ctaLabel','CTA Label'],['ctaHref','CTA URL']] },
-  gallery: { label:'Gallery Page', icon:'<i data-lucide="image"></i>', dkey:DKEYS.gallery, subtitle:'Edit the gallery hero image and album image list', fields:[['bannerTitle','Gallery Banner'],['image','Featured Image URL'],['images','Images (JSON array)']] },
-  contact: { label:'Contact', icon:'<i data-lucide="phone"></i>', dkey:DKEYS.contact, subtitle:'Edit contact details shown on the Contact page', fields:[['bannerTitle','Banner Title'],['address','Address'],['email','Email'],['phone','Phone']] },
+  curia: { label:'Curia', icon:'<i data-lucide="building"></i>', dkey:DKEYS.curia, subtitle:'Edit diocesan curia banner and introductory text', fields:[['bannerTitle','Banner Title'],['intro','Intro Text']] },
+  bulletin: { label:'Bulletin', icon:'<i data-lucide="file-text"></i>', dkey:DKEYS.bulletin, subtitle:"Edit the Bishop's bulletin message and call-to-action", fields:[['bannerTitle','Banner Title'],['image','Bulletin Photo URL'],['message','Message'],['author','Author'],['ctaLabel','CTA Label'],['ctaHref','CTA URL']] },
+  gallery: { label:'Gallery Page', icon:'<i data-lucide="image"></i>', dkey:DKEYS.gallery, subtitle:'Edit the gallery hero banner and featured photo', fields:[['bannerTitle','Gallery Banner'],['image','Featured Image URL']] },
+  contact: { label:'Contact', icon:'<i data-lucide="phone"></i>', dkey:DKEYS.contact, subtitle:'Edit contact details shown on the Contact page, top bar, and footer', fields:[['bannerTitle','Banner Title'],['address','Address'],['email','Email'],['phone','Phone']] },
   privacy: { label:'Privacy Policy', icon:'<i data-lucide="shield"></i>', dkey:DKEYS.privacy, subtitle:'Edit the Privacy Policy page content', fields:[['bannerTitle','Banner Title'],['title','Policy Title'],['body','Policy Body']] },
 };
 
 const LIST_TABS = {
-  news: { label:'Announcements', icon:'<i data-lucide="megaphone"></i>', dkey:DKEYS.news, subtitle:'Publish, edit, or delete announcements system-wide', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['body','Body']], titleField:'title', sourceField:null },
-  events: { label:'Events', icon:'<i data-lucide="calendar"></i>', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['desc','Description']], titleField:'title', sourceField:null },
-  parishes: { label:'Parishes', icon:'<i data-lucide="map-pin"></i>', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['address','Address']], titleField:'name', sourceField:null },
-  clergy: { label:'Clergy Directory', icon:'<i data-lucide="users"></i>', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL']], titleField:'name', sourceField:null },
+  news: { label:'Announcements', icon:'<i data-lucide="megaphone"></i>', dkey:DKEYS.news, subtitle:'Publish, edit, or delete announcements system-wide', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['status','Status'],['body','Body']], titleField:'title', sourceField:null },
+  events: { label:'Events', icon:'<i data-lucide="calendar"></i>', dkey:DKEYS.events, subtitle:'Manage the diocesan calendar', fields:[['title','Title'],['date','Date (YYYY-MM-DD)'],['image','Photo URL'],['status','Status'],['desc','Description']], titleField:'title', sourceField:null },
+  parishes: { label:'Parishes', icon:'<i data-lucide="map-pin"></i>', dkey:DKEYS.parishes, subtitle:'Manage the parish directory', fields:[['name','Parish Name'],['town','Town'],['vicariate','Vicariate'],['priest','Parish Priest'],['photo','Photo URL'],['status','Status'],['address','Address']], titleField:'name', sourceField:null },
+  clergy: { label:'Clergy Directory', icon:'<i data-lucide="users"></i>', dkey:DKEYS.clergy, subtitle:'Manage clergy listings and assignments', fields:[['name','Name'],['role','Role'],['assignment','Assignment'],['photo','Photo URL'],['status','Status']], titleField:'name', sourceField:null },
   curiaOffices: { label:'Curia Offices', icon:'<i data-lucide="building"></i>', dkey:DKEYS.curia, subtitle:'Manage office cards within the Curia page', fields:[['name','Office Name'],['description','Description'],['photo','Photo URL']], titleField:'name', sourceField:'offices' },
-  galleryImages: { label:'Gallery Images', icon:'<i data-lucide="image"></i>', dkey:DKEYS.gallery, subtitle:'Manage the gallery photo collection', fields:[['src','Image URL'],['alt','Alt Text']], titleField:'alt', sourceField:'images' },
+  galleryImages: { label:'Gallery Images', icon:'<i data-lucide="image"></i>', dkey:DKEYS.gallery, subtitle:'Manage individual gallery photos', fields:[['src','Photo URL'],['alt','Alt Text / Caption'],['status','Status']], titleField:'alt', sourceField:'images' },
 };
 
 let currentTab = 'dashboard';
@@ -140,18 +153,35 @@ function safe(val, fallback = '') {
   return (val !== undefined && val !== null && val !== '') ? val : fallback;
 }
 
+function checkAdminAuth(){
+  const isAuth = sessionStorage.getItem('dob_super_admin') === 'true';
+  const login = document.getElementById('loginScreen');
+  const admin = document.getElementById('adminScreen');
+  if (isAuth) {
+    login.classList.add('hidden');
+    admin.classList.remove('hidden');
+    admin.classList.add('flex');
+    selectTab(currentTab || 'dashboard');
+  } else {
+    admin.classList.add('hidden');
+    admin.classList.remove('flex');
+    login.classList.remove('hidden');
+    const passInput = document.getElementById('adminPass');
+    if (passInput) passInput.value = '';
+  }
+}
+
 function tryLogin(){
-  if(document.getElementById('adminPass').value === ADMIN_PASS){
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminScreen').classList.remove('hidden');
-    document.getElementById('adminScreen').classList.add('flex');
-    selectTab('dashboard');
+  const pass = document.getElementById('adminPass').value;
+  if(pass === ADMIN_PASS){
+    sessionStorage.setItem('dob_super_admin', 'true');
+    checkAdminAuth();
   } else { alert('Incorrect password.'); }
 }
+
 function logout(){
-  document.getElementById('adminScreen').classList.add('hidden');
-  document.getElementById('adminScreen').classList.remove('flex');
-  document.getElementById('loginScreen').classList.remove('hidden');
+  sessionStorage.removeItem('dob_super_admin');
+  checkAdminAuth();
 }
 
 function setActiveNav(key){
@@ -175,17 +205,20 @@ async function selectTab(key){
 async function renderDashboard(){
   const panel = document.getElementById('panel');
   panel.innerHTML = `<p class="text-ink-soft text-sm">Loading…</p>`;
-  const [news, events, parishes, clergy, gallery] = await Promise.all([
-    dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy), dGet(DKEYS.gallery)
+  const [news, events, parishes, clergy, gallery, bulletin, bishopsRes] = await Promise.all([
+    dGet(DKEYS.news), dGet(DKEYS.events), dGet(DKEYS.parishes), dGet(DKEYS.clergy), dGet(DKEYS.gallery), dGet(DKEYS.bulletin),
+    fetch('database/api_bishops.php').then(r => r.json()).catch(() => ({ bishops: [] }))
   ]);
-  const galleryImages = (gallery && gallery.images) ? gallery.images.length : 0;
+  const galleryImages = (gallery && gallery.images) ? (Array.isArray(gallery.images) ? gallery.images.length : 0) : 0;
+  const bishopsCount = (bishopsRes && bishopsRes.bishops) ? bishopsRes.bishops.length : 0;
   const counts = {
     news: (news || []).length,
     events: (events || []).length,
     parishes: (parishes || []).length,
     clergy: (clergy || []).length,
     gallery: galleryImages,
-    bulletins: 1,
+    bishops: bishopsCount,
+    bulletins: bulletin ? 1 : 0,
   };
   const recentItems = [
     ...(news || []).slice(0, 2).map(item => ({ label: item.title || 'Announcement', tab: 'news', icon: 'megaphone' })),
@@ -206,13 +239,14 @@ async function renderDashboard(){
         </span>
       </div>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
       ${statCard('<i data-lucide="megaphone"></i>', counts.news, 'Announcements', 'news')}
       ${statCard('<i data-lucide="calendar"></i>', counts.events, 'Events', 'events')}
-      ${statCard('<i data-lucide="image"></i>', counts.gallery, 'Gallery', 'gallery')}
-      ${statCard('<i data-lucide="users"></i>', counts.clergy, 'Clergy', 'clergy')}
       ${statCard('<i data-lucide="map-pin"></i>', counts.parishes, 'Parishes', 'parishes')}
-      ${statCard('<i data-lucide="file-text"></i>', counts.bulletins, 'Bulletins', 'bulletin')}
+      ${statCard('<i data-lucide="users"></i>', counts.clergy, 'Clergy', 'clergy')}
+      ${statCard('<i data-lucide="history"></i>', counts.bishops, 'Bishops', 'formerBishops')}
+      ${statCard('<i data-lucide="image"></i>', counts.gallery, 'Gallery', 'galleryImages')}
+      ${statCard('<i data-lucide="file-text"></i>', counts.bulletins, 'Bulletin', 'bulletin')}
     </div>
     <div class="mt-6 grid lg:grid-cols-[1.15fr_0.85fr] gap-6">
       <div class="bg-white border border-border shadow-sm rounded-xl p-5">
@@ -281,7 +315,7 @@ async function renderProsePanel(key){
         ${tab.fields.map(([k,label])=>`
           <div class="mb-4">
             <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
-            ${['body','subtext','message','visionText','intro','description','address'].includes(k) || k === 'missionItems' ?
+            ${['body','subtext','message','visionText','intro','description','address','content'].includes(k) || k === 'missionItems' ?
               `<textarea id="f_${k}" rows="5" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>` :
               (['image', 'backgroundImage', 'photo', 'coatOfArms'].includes(k)) 
     ? `<div class="flex gap-2">
@@ -387,6 +421,7 @@ async function renderListPanel(key){
         ${countLabel ? renderManagedItems(key, tab, items) : `<div class="p-8 text-center text-ink-soft text-sm">No entries yet.</div>`}
       </div>
     </div>`;
+  lucide.createIcons();
 }
 function renderManagedItems(key, tab, items){
   const source = listSource(items, tab);
@@ -416,6 +451,7 @@ function itemCard(key, tab, item, index = 0){
   const sub = item.body || item.desc || item.address || item.description || item.assignment || item.years || '';
   const dateText = item.date || '';
   const itemId = item.id || `${key}-${index}-${Date.now()}`;
+  const isDraft = item.status === 'draft';
 
   return `<div class="border-b border-border last:border-b-0 p-4 md:p-5 hover:bg-cream transition group relative" data-list-card data-date="${dateText}">
     <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 md:gap-4 md:items-center">
@@ -434,16 +470,20 @@ function itemCard(key, tab, item, index = 0){
       </div>
       <!-- Status -->
       <div class="hidden md:block">
-         <span class="badge bg-green-50 text-green-700 border border-green-200">Published</span>
+         ${isDraft ? 
+           `<span class="badge bg-amber-50 text-amber-700 border border-amber-200">Draft</span>` : 
+           `<span class="badge bg-green-50 text-green-700 border border-green-200">Published</span>`}
       </div>
       <!-- Actions -->
       <div class="flex justify-end gap-1 relative items-center">
+         <button aria-label="Toggle Status" onclick="togglePublishStatus('${key}','${itemId}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="${isDraft ? 'Publish' : 'Unpublish'}"><i data-lucide="${isDraft ? 'check-circle' : 'eye-off'}" class="w-4 h-4"></i></button>
          <button aria-label="Edit" onclick="openForm('${key}','${itemId}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></button>
          <button aria-label="View" onclick="previewManagedItem('${encodeURIComponent(JSON.stringify(item))}')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition" title="View"><i data-lucide="eye" class="w-4 h-4"></i></button>
          
          <div class="relative">
            <button aria-label="More actions" onclick="document.getElementById('menu-${itemId}').classList.toggle('hidden')" class="p-1.5 text-ink-soft hover:text-maroon-deep hover:bg-parchment rounded-md transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
            <div id="menu-${itemId}" class="hidden absolute right-0 top-full mt-1 bg-white border border-border shadow-md rounded-md w-36 z-20 py-1">
+             <button onclick="togglePublishStatus('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-ink hover:bg-parchment transition flex items-center gap-2"><i data-lucide="${isDraft ? 'check-circle' : 'eye-off'}" class="w-4 h-4"></i> ${isDraft ? 'Publish' : 'Unpublish'}</button>
              <button onclick="duplicateListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-ink hover:bg-parchment transition flex items-center gap-2"><i data-lucide="copy" class="w-4 h-4"></i> Duplicate</button>
              <button onclick="if(confirm('Are you sure you want to delete this?')) deleteListItem('${key}','${itemId}')" class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete</button>
            </div>
@@ -452,6 +492,33 @@ function itemCard(key, tab, item, index = 0){
     </div>
   </div>`;
 }
+
+async function togglePublishStatus(key, id){
+  const tab = LIST_TABS[key];
+  let items = await getContentWithDefaults(tab.dkey) || [];
+  items = withListIds(items, tab.dkey);
+  const isNested = !!tab.sourceField;
+  let container;
+  if (isNested) {
+    container = Array.isArray(items) ? { [tab.sourceField]: items } : items;
+  } else {
+    container = { _list: items };
+  }
+  const source = isNested ? container[tab.sourceField] : container._list;
+  const item = source.find(x => x.id === id);
+  if (!item) return;
+
+  item.status = (item.status === 'draft') ? 'published' : 'draft';
+
+  if (isNested) {
+    container[tab.sourceField] = source;
+    await dSet(tab.dkey, container);
+  } else {
+    await dSet(tab.dkey, source);
+  }
+  renderListPanel(key);
+}
+
 function previewManagedItem(jsonItem){
   const item = JSON.parse(decodeURIComponent(jsonItem));
   const panel = document.getElementById('panel');
@@ -493,14 +560,41 @@ async function openForm(key, id){
     <div class="bg-white border border-border shadow-sm rounded-xl p-6 mb-6 relative">
       <h3 class="font-sans font-semibold text-ink mb-4 pb-3 border-b border-border">${id ? 'Edit' : 'Add New'} ${tab.label.replace(/s$/,'')}</h3>
       <div class="grid sm:grid-cols-2 gap-4 mb-5">
-        ${tab.fields.map(([k,label])=>`
-          <div class="${['body','desc','address','description','years'].includes(k) ? 'sm:col-span-2':''}">
+        ${tab.fields.map(([k,label])=>{
+          if (k === 'status') {
+            return `<div>
+              <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+              <select id="nf_${k}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">
+                <option value="published" ${existing.status !== 'draft' ? 'selected' : ''}>Published</option>
+                <option value="draft" ${existing.status === 'draft' ? 'selected' : ''}>Draft</option>
+              </select>
+            </div>`;
+          }
+          if (['image', 'photo', 'src'].includes(k)) {
+            return `<div class="sm:col-span-2">
+              <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="flex-1 border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition" placeholder="URL or choose a file to upload">
+                <label class="inline-flex items-center justify-center gap-1.5 bg-parchment text-maroon-deep font-semibold text-xs px-4 h-[42px] rounded-md border border-border hover:bg-parchment-dark cursor-pointer transition whitespace-nowrap">
+                  <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                  <span>Upload</span>
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" onchange="uploadProseFile(this, 'nf_${k}')">
+                </label>
+              </div>
+              <p id="upload_msg_nf_${k}" class="text-xs text-ink-soft mt-1 hidden"></p>
+            </div>`;
+          }
+          if (['body','desc','address','description','years','intro','message'].includes(k)) {
+            return `<div class="sm:col-span-2">
+              <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
+              <textarea id="nf_${k}" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>
+            </div>`;
+          }
+          return `<div>
             <label class="text-[0.8125rem] text-ink-soft font-semibold block mb-1.5">${label}</label>
-            ${['body','desc','address','description','years'].includes(k) ?
-              `<textarea id="nf_${k}" rows="4" class="w-full border border-border rounded-md px-3 py-2.5 text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">${safe(existing[k] || '')}</textarea>` :
-              `<input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">`
-            }
-          </div>`).join('')}
+            <input id="nf_${k}" value="${safe(existing[k] || '').replace(/"/g,'&quot;')}" class="w-full border border-border rounded-md px-3 py-2.5 h-[42px] text-[0.875rem] text-ink focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition">
+          </div>`;
+        }).join('')}
       </div>
       <div class="flex items-center gap-3 pt-2 border-t border-border mt-4 pt-4">
         <button onclick="saveListItem('${key}')" class="bg-maroon text-white font-semibold text-[0.875rem] rounded-md px-6 h-[40px] hover:bg-maroon-deep transition focus-visible:ring-2 focus-visible:ring-gold">${id ? 'Save Changes' : 'Add'}</button>
@@ -508,6 +602,7 @@ async function openForm(key, id){
         <span id="formMsg" class="text-[0.875rem] text-maroon-deep font-medium"></span>
       </div>
     </div>`;
+  lucide.createIcons();
   slot.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
@@ -521,6 +616,7 @@ async function saveListItem(key){
   const data = {};
   tab.fields.forEach(([k])=> data[k] = (document.getElementById('nf_'+k)?.value || '').trim());
   if(!data[tab.fields[0][0]]){ alert('Please fill in the first field.'); return; }
+  if(!data.status) data.status = 'published';
 
   let items = await getContentWithDefaults(tab.dkey) || [];
   items = withListIds(items, tab.dkey);
@@ -557,14 +653,13 @@ async function deleteListItem(key, id){
   let items = await getContentWithDefaults(tab.dkey) || [];
   items = withListIds(items, tab.dkey);
   const isNested = !!tab.sourceField;
-  let source;
   if (isNested) {
-    source = Array.isArray(items) ? items[tab.sourceField] : items[tab.sourceField];
+    let source = items[tab.sourceField] || [];
     source = source.filter(x => x.id !== id);
     const container = Array.isArray(items) ? { [tab.sourceField]: source } : { ...items, [tab.sourceField]: source };
     await dSet(tab.dkey, container);
   } else {
-    source = items.filter(x => x.id !== id);
+    const source = (Array.isArray(items) ? items : []).filter(x => x.id !== id);
     await dSet(tab.dkey, source);
   }
   renderListPanel(key);
@@ -843,6 +938,7 @@ async function uploadProseFile(input, targetId) {
   }catch(e){
     storageAvailable = true;
   }
+  checkAdminAuth();
   // Ensure hardcoded defaults exist in the DB so the admin can edit them.
   if (typeof seedContentIfNeeded === 'function') seedContentIfNeeded();
   checkDbStatus();

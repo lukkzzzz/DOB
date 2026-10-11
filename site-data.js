@@ -23,7 +23,7 @@ const SiteData = {
       { label: 'Instagram', url: '#' },
     ],
     contactUrl: 'contact.html',
-    adminUrl: 'admin.html',
+    adminUrl: '1978.html',
   },
 
   /* ── Navigation ────────────────────────────────────────── */
@@ -307,6 +307,7 @@ const DKEYS = {
   formerBishops: 'content:former-bishops',
   curia: 'content:curia',
   bulletin: 'content:bulletin',
+  bulletins: 'content:bulletin',
   seminaries: 'content:seminaries',
   gallery: 'content:gallery',
   contact: 'content:contact',
@@ -476,24 +477,35 @@ const fmtDate = d => {
 };
 
 function newsCardHTML(n){
+  const detailHref = 'news-detail.html?id=' + encodeURIComponent(n.id || '');
   return `<article class="bg-white border border-parchment-dark transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col">
     <div class="h-44 sm:h-48 relative overflow-hidden bg-parchment-dark">
-      <img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover">
+      <a href="${detailHref}"><img src="${safe(n.image, 'https://placehold.co/600x400/ece2cd/4a1420?text=News')}" alt="${safe(n.title, 'News')}" class="w-full h-full object-cover"></a>
     </div>
     <div class="p-5 flex-1 flex flex-col justify-between">
       <div>
         <span class="font-sans text-[0.7rem] tracking-[0.06em] text-gold uppercase">${fmtDate(n.date)}</span>
-        <h4 class="heading-3 text-maroon-deep leading-tight text-base sm:text-[1.08rem] my-2">${n.title || ''}</h4>
+        <h4 class="heading-3 text-maroon-deep leading-tight text-base sm:text-[1.08rem] my-2"><a href="${detailHref}" class="hover:text-maroon">${safe(n.title)}</a></h4>
       </div>
-      <a href="news.html" class="eyebrow text-maroon border-b border-gold self-start mt-3">Read More</a>
+      <a href="${detailHref}" class="eyebrow text-maroon border-b border-gold self-start mt-3">Read More</a>
     </div>
   </article>`;
 }
 
 function newsCardPageHTML(n){
-  return `<article class="border border-parchment-dark">
-    <div class="h-40 bg-parchment-dark"><img src="${n.image || 'https://placehold.co/600x400/ece2cd/4a1420?text=News'}" alt="${n.title || 'News'}" class="w-full h-full object-cover"></div>
-    <div class="p-4"><span class="font-sans text-xs text-gold uppercase">${fmtDate(n.date)}</span><h4 class="heading-3 text-maroon-deep my-2">${n.title || ''}</h4></div>
+  const detailHref = 'news-detail.html?id=' + encodeURIComponent(n.id || '');
+  return `<article class="border border-parchment-dark bg-white flex flex-col justify-between overflow-hidden hover:shadow-md transition">
+    <div>
+      <div class="h-48 bg-parchment-dark overflow-hidden"><a href="${detailHref}"><img src="${safe(n.image, 'https://placehold.co/600x400/ece2cd/4a1420?text=News')}" alt="${safe(n.title, 'News')}" class="w-full h-full object-cover"></a></div>
+      <div class="p-5">
+        <span class="font-sans text-xs text-gold uppercase tracking-wider">${fmtDate(n.date)}</span>
+        <h4 class="heading-3 text-maroon-deep my-2"><a href="${detailHref}" class="hover:text-maroon">${safe(n.title)}</a></h4>
+        <p class="text-ink-soft text-sm line-clamp-3">${safe(n.body || n.desc || '')}</p>
+      </div>
+    </div>
+    <div class="px-5 pb-5">
+      <a href="${detailHref}" class="eyebrow text-maroon border-b border-gold">Read Full Announcement &rarr;</a>
+    </div>
   </article>`;
 }
 
@@ -505,34 +517,47 @@ function eventRowHTML(e){
       <span class="text-[0.7rem] tracking-[0.1em] uppercase text-parchment-dark">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span>
     </div>
     <div>
-      <h4 class="font-serif text-h3 text-white leading-[1.25] mb-1">${e.title || ''}</h4>
-      <p class="text-parchment-dark text-sm sm:text-[0.92rem]">${e.description || e.desc || ''}</p>
+      <h4 class="font-serif text-h3 text-white leading-[1.25] mb-1">${safe(e.title)}</h4>
+      <p class="text-parchment-dark text-sm sm:text-[0.92rem]">${safe(e.description || e.desc || '')}</p>
     </div>
   </div>`;
 }
 
-function eventRowPageHTML(e){
+function eventRowPageHTML(e, isPast){
   const d = new Date(e.date+'T00:00:00');
   const image = safe(e.image, 'https://placehold.co/600x420/ece2cd/4a1420?text=Event+Photo');
   return `<div class="flex flex-col sm:flex-row gap-4 py-5 items-start">
-    <div class="w-full sm:w-[140px] shrink-0 bg-parchment-dark overflow-hidden">
+    <div class="w-full sm:w-[140px] shrink-0 bg-parchment-dark overflow-hidden rounded">
       <img src="${image}" alt="${safe(e.title, 'Event photo')}" class="w-full aspect-[16/10] object-cover">
     </div>
-    <div class="flex-1 flex items-center gap-6">
-      <div class="font-sans font-semibold text-center shrink-0 w-[70px]"><span class="text-2xl font-semibold text-maroon block">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span><span class="text-[0.7rem] uppercase text-ink-soft">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span></div>
-      <div><h4 class="heading-3 text-maroon-deep">${e.title || ''}</h4><p class="text-small max-w-[65ch]">${e.description || e.desc || ''}</p></div>
+    <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full">
+      <div class="font-sans font-semibold text-left sm:text-center shrink-0 sm:w-[70px]"><span class="text-2xl font-semibold text-maroon block">${isNaN(d)?'--':String(d.getDate()).padStart(2,'0')}</span><span class="text-[0.7rem] uppercase text-ink-soft">${isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short'})}</span></div>
+      <div class="flex-1">
+        <div class="flex items-center gap-2 flex-wrap mb-1">
+          <h4 class="heading-3 text-maroon-deep">${safe(e.title)}</h4>
+          ${isPast ? '<span class="text-[0.65rem] bg-parchment-dark text-ink-soft uppercase font-semibold px-2 py-0.5 rounded">Past Event</span>' : ''}
+        </div>
+        <p class="text-small max-w-[65ch] text-ink-soft">${safe(e.description || e.desc || '')}</p>
+      </div>
     </div>
   </div>`;
 }
 
 function parishCardHTML(p){
   const photo = safe(p.photo, 'https://placehold.co/800x600/ece2cd/4a1420?text=Parish+Photo');
-  return `<div class="border border-parchment-dark overflow-hidden bg-white">
-    <div class="h-40 bg-parchment-dark"><img src="${photo}" alt="${safe(p.name, 'Parish photo')}" class="w-full h-full object-cover"></div>
-    <div class="p-4">
-      <h4 class="heading-3 text-maroon-deep">${p.name || ''}</h4>
-      <p class="text-small max-w-[65ch]">${p.town || ''}${p.vicariate ? ' &middot; ' + p.vicariate : ''}</p>
-      ${p.priest ? `<p class="text-sm text-ink-soft">Parish Priest: ${p.priest}</p>` : ''}
+  const detailHref = 'parish-detail.html?id=' + encodeURIComponent(p.id || '');
+  return `<div class="border border-parchment-dark overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition">
+    <div>
+      <div class="h-44 bg-parchment-dark overflow-hidden"><a href="${detailHref}"><img src="${photo}" alt="${safe(p.name, 'Parish photo')}" class="w-full h-full object-cover"></a></div>
+      <div class="p-5">
+        <h4 class="heading-3 text-maroon-deep mb-1"><a href="${detailHref}" class="hover:text-maroon">${safe(p.name)}</a></h4>
+        <p class="text-small text-ink-soft">${safe(p.town)}${p.vicariate ? ' &middot; ' + safe(p.vicariate) : ''}</p>
+        ${p.priest ? `<p class="text-sm text-ink-soft mt-1.5">Parish Priest: <span class="text-ink font-medium">${safe(p.priest)}</span></p>` : ''}
+        ${p.address ? `<p class="text-xs text-ink-soft mt-1">${safe(p.address)}</p>` : ''}
+      </div>
+    </div>
+    <div class="px-5 pb-5 pt-1">
+      <a href="${detailHref}" class="eyebrow text-maroon border-b border-gold inline-block">View Parish Details &rarr;</a>
     </div>
   </div>`;
 }
@@ -639,7 +664,7 @@ function withListIds(value, key) {
     [DKEYS.gallery]: { field: 'images', prefix: 'gallery' },
   };
 
-  const clone = (arr, prefix) => (Array.isArray(arr) ? arr.map((it, i) => ({ id: prefix + '-' + i, ...(it || {}) })) : arr);
+  const clone = (arr, prefix) => (Array.isArray(arr) ? arr.map((it, i) => ({ id: prefix + '-' + i, status: (it && it.status) ? it.status : 'published', ...(it || {}) })) : arr);
 
   if (prefixMap[key] !== undefined) {
     return clone(value, prefixMap[key]);
